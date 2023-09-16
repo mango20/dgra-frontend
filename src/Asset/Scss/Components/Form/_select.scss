@@ -1,0 +1,66 @@
+@import "../../Abstract/font";
+
+.customSelect {
+  display: flex;
+  margin: 5px 0;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  label {
+    font-family: $lato;
+    font-size: 20px;
+  }
+
+  select {
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.548);
+    border-radius: 3px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.formSelect {
+  label {
+    font-weight: bold;
+    margin: 10px 0;
+    min-width: 200px;
+  }
+
+  select {
+    width: 300px;
+
+    @media screen and (max-width: 768px) {
+      // min-width: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.formSelectModal {
+  display: flex;
+  justify-content: space-between;
+
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  select {
+    width: 267px;
+
+    @media screen and (max-width: 768px) {
+      // min-width: 100%;
+      width: 100%;
+    }
+  }
+}

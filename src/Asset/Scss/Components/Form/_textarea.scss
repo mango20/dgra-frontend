@@ -1,0 +1,54 @@
+@import "../../Abstract/font";
+
+.customTextArea {
+  display: flex;
+  margin: 5px 0;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  label {
+    font-family: $lato;
+    font-size: 20px;
+  }
+
+  .inputMsg {
+    width: 100%;
+    textarea {
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid rgba(128, 128, 128, 0.548);
+      border-radius: 3px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.formTextarea {
+  label {
+    font-weight: bold;
+    margin: 10px 0;
+    min-width: 200px;
+  }
+
+  textarea {
+    width: 100% !important;
+    min-height: 100px !important;
+  }
+}
+
+.formTextareaModal {
+  label {
+    font-weight: bold;
+    margin: 10px 0;
+    min-width: 200px;
+  }
+
+  textarea {
+    width: 100% !important;
+    min-height: 100px !important;
+  }
+}

@@ -1,0 +1,43 @@
+.customTable {
+  width: 100%;
+
+  thead {
+    text-align: center;
+    background-color: grey;
+  }
+
+  button {
+    background: rgb(20, 69, 175);
+    color: white;
+    border-radius: 5px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: white;
+      background: rgb(20, 69, 175);
+    }
+  }
+
+  .centerRow {
+    text-align: center;
+  }
+
+  .red {
+    width: fit-content;
+    background-color: #dc3545;
+  }
+
+  .centerActions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+}
+
+.paginationContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

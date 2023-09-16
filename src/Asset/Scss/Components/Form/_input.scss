@@ -1,0 +1,101 @@
+@import "../../Abstract/font";
+
+.customInput {
+  display: flex;
+  margin: 0;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  label {
+    font-family: $lato;
+    font-size: 20px;
+    min-width: 200px;
+  }
+
+  .inputMsg {
+    input {
+      min-width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid rgba(128, 128, 128, 0.548);
+      border-radius: 3px;
+
+      @media screen and (max-width: 768px) {
+        width: 100%;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.loginField {
+  flex-direction: column;
+  label {
+    font-family: $lato;
+    font-size: 20px;
+  }
+  .inputMsg {
+    margin-bottom: 20px;
+    input {
+      padding: 0;
+      margin: 10px 0;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(128, 128, 128, 0.548);
+      font-size: 20px;
+      border-radius: 0;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.formInput {
+  @media screen and (max-width: 768px) {
+    margin: 0;
+  }
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  .inputMsg {
+    width: 100%;
+
+    input {
+      min-width: 300px;
+
+      @media screen and (max-width: 768px) {
+        min-width: 100%;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.formInputModal {
+  display: flex;
+
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+  .inputMsg {
+    width: 100%;
+  }
+}

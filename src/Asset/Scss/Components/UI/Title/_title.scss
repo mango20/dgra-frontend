@@ -1,0 +1,10 @@
+@import "../../../Abstract/font";
+
+.title {
+  h1 {
+    font-family: $lato;
+    font-size: 20px;
+    color: rgb(0, 121, 219);
+    font-weight: bold;
+  }
+}

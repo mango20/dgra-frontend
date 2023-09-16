@@ -1,0 +1,55 @@
+@import "../../../Abstract/font";
+
+.addSearch {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  button {
+    color: #ffff;
+    // font-size: 20px;
+    background-color: rgb(20, 69, 175);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: $lato;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+      flex-direction: column;
+      //   text-align: center;
+      align-items: center;
+    }
+  }
+
+  .addBtn {
+    @media screen and (max-width: 768px) {
+      margin-bottom: 20px;
+    }
+  }
+
+  .search {
+    display: flex;
+    gap: 3px;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+
+    input {
+      border: 1px solid gray;
+      border-radius: 5px;
+      padding: 5px 10px;
+    }
+
+    .searchBtn {
+      background-color: #ffff;
+      border: 1px solid gray;
+      color: #000;
+    }
+  }
+}

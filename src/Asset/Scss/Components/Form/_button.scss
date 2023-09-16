@@ -1,0 +1,18 @@
+@import "../../Abstract/font";
+
+.customButton {
+  width: 100%;
+  // font-size: 20px;
+  background-color: rgb(20, 69, 175);
+  color: #ffffff;
+  border: none;
+  // padding: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: $lato;
+}
+
+.fitButton {
+  width: fit-content;
+}
