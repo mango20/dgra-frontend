@@ -5,6 +5,7 @@ import AddExpenses from "./Content/AddExpenses";
 import { useLocation, useParams } from "react-router-dom";
 import ExpensesList from "./Content/ExpensesList";
 import CustomButton from "../../Components/Form/Button";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const Expenses = () => {
   const location = useLocation();
@@ -32,7 +33,7 @@ const Expenses = () => {
   };
 
   return (
-    <div>
+    <PageContainer>
       <ContentContainer
         title={`Expenses of ${name}`}
         add={<CustomButton label="Print List" className="fitButton" />}
@@ -46,7 +47,7 @@ const Expenses = () => {
         <ExpensesList searchTerm={searchTerm} />
       </ContentContainer>
       <AddExpenses addExpenses={addExpenses} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

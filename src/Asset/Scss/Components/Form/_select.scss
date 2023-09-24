@@ -64,3 +64,49 @@
     }
   }
 }
+
+.formSelectBlockModal {
+  display: flex;
+  // justify-content: space-between;
+  flex-direction: column;
+
+  label {
+    font-weight: bold;
+    // margin: 15px 0;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  select {
+    width: 100%;
+  }
+}
+
+.reportContent {
+  margin: 30px 0;
+  width: 100%;
+
+  .selectReport {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    label {
+      text-align: center;
+      font-weight: bold;
+    }
+    select {
+      width: 800px;
+
+      @media screen and (max-width: 768px) {
+        width: 300px;
+      }
+
+      @media screen and (max-width: 363px) {
+        width: 100%;
+      }
+    }
+  }
+}

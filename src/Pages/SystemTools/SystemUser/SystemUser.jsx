@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import AddHazard from "./Content/AddHazard";
-import ContentContainer from "../../Layout/Container/ContentContainer";
-import AddSearch from "../../Components/UI/AddSearch/AddSearch";
-import HazardList from "./Content/HazardList";
-import PageContainer from "../../Layout/Container/PageContainer";
+import ContentContainer from "../../../Layout/Container/ContentContainer";
+import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
+import AddUser from "./Content/AddUser";
+import UserList from "./Content/UserList";
+import PageContainer from "../../../Layout/Container/PageContainer";
 
-const SafetyTips = () => {
+const SystemUser = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [addHazard, setAddHazard] = useState(false);
+  const [addUser, setUser] = useState(false);
 
   const handleAdd = () => {
-    setAddHazard(true);
+    setUser(true);
     console.log("Add button clicked");
   };
 
   const closeModal = () => {
-    setAddHazard(false);
+    setUser(false);
   };
 
   const handleSearch = (searchTerm) => {
@@ -29,18 +29,18 @@ const SafetyTips = () => {
   };
   return (
     <PageContainer>
-      <ContentContainer title={"Safety Tips"}>
+      <ContentContainer title={"System User"}>
         <AddSearch
-          addLabel="Add Hazard"
+          addLabel="Add User"
           onAdd={handleAdd}
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <HazardList searchTerm={searchTerm} />
+        <UserList searchTerm={searchTerm} />
       </ContentContainer>
-      <AddHazard addHazard={addHazard} closeModal={closeModal} />
+      <AddUser addUser={addUser} closeModal={closeModal} />
     </PageContainer>
   );
 };
 
-export default SafetyTips;
+export default SystemUser;

@@ -1,11 +1,16 @@
 import React from "react";
 import Title from "../../Components/UI/Title/Title";
 import "../../Asset/Scss/Layout/Container/_contentContainer.scss";
-const ContentContainer = ({ title, children, add }) => {
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+const ContentContainer = ({ title, children, add, hasArrow }) => {
   return (
     <div className="outerContainer">
       <div className="innerContainer">
         <div className="titleContainer">
+          {hasArrow && (
+            <FontAwesomeIcon icon={faArrowRight} className="arrow-icon" />
+          )}
           <Title label={title} />
         </div>
 

@@ -1,0 +1,57 @@
+.navbar {
+  display: flex;
+  @media screen and (max-width: 500px) {
+    padding: 16px 0;
+  }
+
+  .navbarBrand {
+    padding: 0 20px;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    h1 {
+      font-size: 20px;
+    }
+
+    .faBars {
+      cursor: pointer;
+    }
+
+    .brgName {
+      width: 250px;
+      //   background-color: aqua;
+
+      @media screen and (max-width: 1098px) {
+        display: none;
+      }
+    }
+  }
+  .navbarUserInfo {
+    width: fit-content;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+
+    p {
+      @media screen and (max-width: 818px) {
+        display: none;
+      }
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      @media screen and (max-width: 500px) {
+        display: none;
+      }
+    }
+  }
+}

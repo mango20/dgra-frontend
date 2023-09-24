@@ -3,6 +3,7 @@ import BDRRMCList from "./Content/BDRRMCList";
 import AddBDRRMC from "./Content/AddBDRRMC";
 import ContentContainer from "../../Layout/Container/ContentContainer";
 import AddSearch from "../../Components/UI/AddSearch/AddSearch";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const BDRRMC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +28,7 @@ const BDRRMC = () => {
     console.log("View all button clicked");
   };
   return (
-    <div>
+    <PageContainer>
       <ContentContainer title={"BDRRMC Team"}>
         <AddSearch
           addLabel="Add BDRRMC Team"
@@ -38,7 +39,7 @@ const BDRRMC = () => {
         <BDRRMCList searchTerm={searchTerm} />
       </ContentContainer>
       <AddBDRRMC addBDRRMC={addBDRRMC} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

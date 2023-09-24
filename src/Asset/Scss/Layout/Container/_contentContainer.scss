@@ -1,23 +1,32 @@
 .outerContainer {
   padding: 10px;
   background-color: rgb(226, 226, 226);
-  height: 100%;
-  min-height: 100vh;
+  // height: 100%;
+  min-height: calc(100vh - 5.8vh);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  // width: 100%;
 
   .innerContainer {
     background-color: rgb(255, 255, 255);
     border-radius: 5px;
     border: 1px solid rgb(219, 219, 219);
-    min-height: 100vh;
+    // min-height: 100vh;
 
     .titleContainer {
       border-radius: 5px 5px 0px 0px;
       background-color: rgb(248, 248, 248);
       padding: 20px;
       border-bottom: 1px solid rgb(219, 219, 219);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .arrow-icon {
+        color: rgb(0, 121, 219);
+      }
     }
 
     .content {

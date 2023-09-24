@@ -3,6 +3,8 @@ import ContentContainer from "../../Layout/Container/ContentContainer";
 import AddSearch from "../../Components/UI/AddSearch/AddSearch";
 import HouseholdList from "./Content/HouseholdList";
 import AddHousehold from "./Content/AddHousehold";
+import Sidebar from "../../Layout/Sidebar/Sidebar";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const Household = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +30,7 @@ const Household = () => {
   };
 
   return (
-    <div>
+    <PageContainer>
       <ContentContainer title={"Household"}>
         <AddSearch
           addLabel="Add Household"
@@ -39,7 +41,7 @@ const Household = () => {
         <HouseholdList searchTerm={searchTerm} />
       </ContentContainer>
       <AddHousehold addHousehold={addHousehold} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

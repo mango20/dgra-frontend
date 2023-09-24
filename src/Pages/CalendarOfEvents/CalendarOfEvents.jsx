@@ -4,6 +4,7 @@ import AddSearch from "../../Components/UI/AddSearch/AddSearch";
 import EventList from "./Content/EventList";
 import CustomModal from "../../Components/UI/Modal/CustomModal";
 import AddEvent from "./Content/AddEvent";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const CalendarOfEvents = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ const CalendarOfEvents = () => {
   };
 
   return (
-    <div>
+    <PageContainer>
       <ContentContainer title={"Calendar of Events"}>
         <AddSearch
           addLabel="Add Events"
@@ -39,7 +40,7 @@ const CalendarOfEvents = () => {
         <EventList searchTerm={searchTerm} />
       </ContentContainer>
       <AddEvent addEventModal={addEventModal} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

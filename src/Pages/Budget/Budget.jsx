@@ -3,6 +3,7 @@ import ContentContainer from "../../Layout/Container/ContentContainer";
 import AddSearch from "../../Components/UI/AddSearch/AddSearch";
 import BudgetList from "./Content/BudgetList";
 import AddBudget from "./Content/AddBudget";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const Budget = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ const Budget = () => {
   };
 
   return (
-    <div>
+    <PageContainer>
       <ContentContainer title={"Budget"}>
         <AddSearch
           addLabel="Budget"
@@ -39,7 +40,7 @@ const Budget = () => {
         <BudgetList searchTerm={searchTerm} />
       </ContentContainer>
       <AddBudget addBudget={addBudget} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

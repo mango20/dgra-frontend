@@ -13,3 +13,21 @@
     padding: 0 10px;
   }
 }
+
+.reports {
+  min-height: calc(100vh - 5.8vh);
+  padding: 20px;
+  width: 100%;
+  background-color: rgb(248, 248, 248);
+
+  h1 {
+    text-align: center;
+  }
+}
+
+.evacuationForecast {
+  min-height: calc(100vh - 5.8vh);
+  padding: 20px;
+  width: 100%;
+  background-color: rgb(248, 248, 248);
+}

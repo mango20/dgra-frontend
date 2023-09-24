@@ -83,3 +83,20 @@ export const educationTC = [
   { key: "purok", header: "Purok" },
   { key: "editDelete", header: "Actions" },
 ];
+
+export const userTC = [
+  { key: "username", header: "Username" },
+  { key: "purok", header: "Full Name" },
+  { key: "userType", header: "Usertype" },
+  { key: "access", header: "Access" },
+  { key: "status", header: "Status" },
+  { key: "actions", header: "Actions" },
+];
+
+export const financialReportTC = [
+  { key: "accountName", header: "Account Name" },
+  { key: "fiscalYear", header: "Fiscal Year" },
+  { key: "budget", header: "Budget" },
+  { key: "expenses", header: "Expenses" },
+  { key: "balance", header: "Balance" },
+];

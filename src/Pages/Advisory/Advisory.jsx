@@ -3,6 +3,7 @@ import AddAdvisory from "./Content/AddAdvisory";
 import AdvisoryList from "./Content/AdvisoryList";
 import AddSearch from "../../Components/UI/AddSearch/AddSearch";
 import ContentContainer from "../../Layout/Container/ContentContainer";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const Advisory = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +28,7 @@ const Advisory = () => {
     console.log("View all button clicked");
   };
   return (
-    <div>
+    <PageContainer>
       <ContentContainer title={"Advisory"}>
         <AddSearch
           addLabel="Add Advisory Message"
@@ -38,7 +39,7 @@ const Advisory = () => {
         <AdvisoryList searchTerm={searchTerm} />
       </ContentContainer>
       <AddAdvisory addAdvisory={addAdvisory} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

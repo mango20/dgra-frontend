@@ -74,11 +74,13 @@ const CustomTable = ({
         </tbody>
       </Table>
       <div className="paginationContainer">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={Math.ceil(data.length / itemsPerPage)}
-          onPageChange={handlePageChange}
-        />
+        {itemsPerPage && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(data.length / itemsPerPage)}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </>
   );

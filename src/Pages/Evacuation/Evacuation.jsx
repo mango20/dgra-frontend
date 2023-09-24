@@ -3,6 +3,7 @@ import ContentContainer from "../../Layout/Container/ContentContainer";
 import AddEvacuation from "./Content/AddEvacuation";
 import AddSearch from "../../Components/UI/AddSearch/AddSearch";
 import EvacuationList from "./Content/EvacuationList";
+import PageContainer from "../../Layout/Container/PageContainer";
 
 const Evacuation = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ const Evacuation = () => {
   };
 
   return (
-    <div>
+    <PageContainer>
       <ContentContainer title={"Evacuation Center"}>
         <AddSearch
           addLabel="Evacuation Center"
@@ -39,7 +40,7 @@ const Evacuation = () => {
         <EvacuationList searchTerm={searchTerm} />
       </ContentContainer>
       <AddEvacuation addEvacuation={addEvacuation} closeModal={closeModal} />
-    </div>
+    </PageContainer>
   );
 };
 

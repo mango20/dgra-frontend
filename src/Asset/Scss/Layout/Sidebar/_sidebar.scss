@@ -1,0 +1,46 @@
+.sidebar {
+  width: 350px;
+  padding: 10px 20px;
+  background-color: rgb(20, 69, 175);
+  color: #fff;
+
+  @media screen and (max-width: 818px) {
+    display: none;
+  }
+
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .menuContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+
+    .menu {
+      display: flex;
+      gap: 5px;
+      flex-direction: column;
+
+      .menuItems {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+
+      .highlighted {
+        color: yellow;
+      }
+
+      .subLabel {
+        padding: 0px 20px;
+      }
+
+      .highlighted {
+        color: yellow;
+      }
+    }
+  }
+}
