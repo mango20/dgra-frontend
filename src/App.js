@@ -2,26 +2,30 @@ import React from "react";
 import Login from "./Pages/Login/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "../src/Asset/Scss/main.scss";
-import BarangayProfile from "./Pages/BarangayProfile/BarangayProfile";
-import CalendarOfEvents from "./Pages/CalendarOfEvents/CalendarOfEvents";
-import Household from "./Pages/Household/Household";
-import Advisory from "./Pages/Advisory/Advisory";
-import SafetyTips from "./Pages/SafetyTips/SafetyTips";
-import BDRRMC from "./Pages/BDRRMC/BDRRMC";
-import Evacuation from "./Pages/Evacuation/Evacuation";
-import Budget from "./Pages/Budget/Budget";
-import Expenses from "./Pages/Budget/Expenses";
+import Advisory from "./Pages/DisasterAdmin/Advisory/Advisory";
+import SafetyTips from "./Pages/DisasterAdmin/SafetyTips/SafetyTips";
+import BDRRMC from "./Pages/DisasterAdmin/BDRRMC/BDRRMC";
+import BDRRMCTeamMember from "./Pages/DisasterAdmin/BDRRMCTeamMember/BDRRMCTeamMember";
+import Evacuation from "./Pages/DisasterAdmin/Evacuation/Evacuation";
+import PreparednessKit from "./Pages/DisasterAdmin/PreparednessKit/PreparednessKit";
+import Budget from "./Pages/Financial/Budget/Budget";
+import Expenses from "./Pages/Financial/Budget/Expenses";
 import Education from "./Pages/Education/Education";
-import SystemUser from "./Pages/SystemTools/SystemUser/SystemUser";
-import ChangePassword from "./Pages/SystemTools/ChangePassword/ChangePassword";
 import EducationReport from "./Pages/Report/EducationReport/EducationReport";
 import FinancialReport from "./Pages/Report/FinancialReport/FinancialReport";
-import BarangayProfileReport from "./Pages/Report/BaragayProfileReport/BarangayProfileReport";
 import DisasterRelated from "./Pages/Report/DisasterRelated/DisasterRelated";
-import RiskArea from "./Pages/Forecast/RiskArea/RiskArea";
 import Relief from "./Pages/Forecast/Relief/Relief";
+import RiskArea from "./Pages/Forecast/RiskArea/RiskArea";
 import DisasterFund from "./Pages/Forecast/DisasterFund/DisasterFund";
 import EvacuationCenter from "./Pages/Forecast/EvacuationCenter/EvacuationCenter";
+import SystemUser from "./Pages/SystemTools/SystemUser/SystemUser";
+import ChangePassword from "./Pages/SystemTools/ChangePassword/ChangePassword";
+import AboutBarangay from "./Pages/BarangayProfile/AboutBarangay/AboutBarangay";
+import CalendarOfEvents from "./Pages/BarangayProfile/CalendarOfEvents/CalendarOfEvents";
+import Household from "./Pages/ResidentProfile/Household/Household";
+import HouseholdMembers from "./Pages/ResidentProfile/HouseholdMembers/HouseholdMembers";
+import BarangayProfileReport from "./Pages/Report/BaragayProfileReport/BarangayProfileReport";
+
 const App = () => {
   return (
     <div className="App">
@@ -30,19 +34,31 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route
             path="/barangay-profile/about-barangay"
-            element={<BarangayProfile />}
+            element={<AboutBarangay />}
           />
           <Route
             path="/barangay-profile/calendar-of-events"
             element={<CalendarOfEvents />}
           />
           <Route path="/resident-profile/household" element={<Household />} />
+          <Route
+            path="/resident-profile/household-members"
+            element={<HouseholdMembers />}
+          />
           <Route path="/disaster-admin/advisory" element={<Advisory />} />
           <Route path="/disaster-admin/safety-tips" element={<SafetyTips />} />
           <Route path="/disaster-admin/bdrrmc-team" element={<BDRRMC />} />
           <Route
+            path="/disaster-admin/bdrrmc-team-members"
+            element={<BDRRMCTeamMember />}
+          />
+          <Route
             path="/disaster-admin/evacuation-center"
             element={<Evacuation />}
+          />
+          <Route
+            path="/disaster-admin/preparedness-kit"
+            element={<PreparednessKit />}
           />
           <Route path="/financial/budget" element={<Budget />} />
           <Route path="/expenses/:id" element={<Expenses />} />

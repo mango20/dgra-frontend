@@ -44,8 +44,8 @@ const ChangePassword = () => {
   return (
     <>
       <PageContainer>
-        <div className="changePassword">
-          <ContentContainer title={"Change Password"}>
+        <ContentContainer title={"Change Password"}>
+          <div className="changePassword">
             <form onSubmit={handleSubmit(onSubmit)}>
               <h1>Enter User Password</h1>
               <CustomInput
@@ -75,8 +75,8 @@ const ChangePassword = () => {
                 </Button>
               </div>
             </form>
-          </ContentContainer>
-        </div>
+          </div>
+        </ContentContainer>
       </PageContainer>
     </>
   );
