@@ -21,8 +21,13 @@ const Sidebar = ({ show, handleClose }) => {
     setSublabelClicked(true);
   };
 
+  console.log(show);
+
   return (
-    <div className={`sidebar ${sublabelClicked ? "highlighted" : ""}`}>
+    <div
+      className={`sidebar ${sublabelClicked ? "highlighted" : ""}`}
+      style={{ display: show ? "block" : "none" }}
+    >
       <div className="menuContainer">
         {menu.map((val, index) => {
           return (

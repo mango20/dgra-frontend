@@ -12,10 +12,10 @@ export const hazardTC = [
 
 export const eventTC = [
   { key: "eventName", header: "Event Name" },
-  { key: "when", header: "When" },
-  { key: "where", header: "Where" },
-  { key: "type", header: "Type" },
-  { key: "status", header: "Status" },
+  { key: "eventDate", header: "When" },
+  { key: "eventLocation", header: "Where" },
+  { key: "eventType", header: "Type" },
+  { key: "eventStatus", header: "Status" },
   { key: "actions", header: "Actions" },
 ];
 
@@ -26,6 +26,7 @@ export const householdTC = [
   { key: "members", header: "Number of Family Members" },
   { key: "lastUser", header: "Last User" },
   { key: "lastUpdate", header: "Last Update" },
+  { key: "status", header: "Status" },
   { key: "actions", header: "Actions" },
 ];
 
@@ -79,14 +80,14 @@ export const expensesTC = [
 ];
 
 export const educationTC = [
-  { key: "name", header: "School Name" },
+  { key: "schoolName", header: "School Name" },
   { key: "purok", header: "Purok" },
   { key: "editDelete", header: "Actions" },
 ];
 
 export const userTC = [
   { key: "username", header: "Username" },
-  { key: "purok", header: "Full Name" },
+  { key: "fullname", header: "Full Name" },
   { key: "userType", header: "Usertype" },
   { key: "access", header: "Access" },
   { key: "status", header: "Status" },
@@ -99,4 +100,13 @@ export const financialReportTC = [
   { key: "budget", header: "Budget" },
   { key: "expenses", header: "Expenses" },
   { key: "balance", header: "Balance" },
+];
+
+export const householdMemberTC = [
+  { key: "id", header: "Household Identification Number" },
+  { key: "name", header: "Name of Resident" },
+  { key: "age", header: "Age" },
+  { key: "gender", header: "Gender" },
+  { key: "status", header: "Status" },
+  { key: "actions", header: "Actions" },
 ];

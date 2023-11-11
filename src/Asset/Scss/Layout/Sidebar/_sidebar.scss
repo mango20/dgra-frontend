@@ -1,11 +1,21 @@
 .sidebar {
+  display: block;
   width: 350px;
   padding: 10px 20px;
   background-color: rgb(20, 69, 175);
   color: #fff;
 
   @media screen and (max-width: 818px) {
-    display: none;
+    position: fixed;
+    top: 12%;
+    // bottom: 0;
+    // left: 0;
+    z-index: 999;
+    height: 100vh;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 100%;
   }
 
   a {
@@ -44,3 +54,7 @@
     }
   }
 }
+
+// .hide {
+//   display: none;
+// }

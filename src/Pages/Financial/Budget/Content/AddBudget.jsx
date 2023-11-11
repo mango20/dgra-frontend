@@ -2,10 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomModal from "../../../Components/UI/Modal/CustomModal";
-import CustomInput from "../../../Components/Form/Input";
-import Select from "../../../Components/Form/Select";
-import landClassification from "../../../Data/landClassification.json";
+import landClassification from "../../../../Data/landClassification.json";
+import CustomModal from "../../../../Components/UI/Modal/CustomModal";
+import Select from "../../../../Components/Form/Select";
+import CustomInput from "../../../../Components/Form/Input";
 const AddBudget = ({ addBudget, closeModal }) => {
   const schema = z.object({
     year: z.string().nonempty("Year is required"),

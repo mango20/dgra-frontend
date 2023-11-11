@@ -5,7 +5,7 @@ import {
   faPlus,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import Evacuation from "../../../Data/SampleData/Evacuation.json";
+import Education from "../../../Data/SampleData/Education.json";
 import CustomTable from "../../../Components/UI/Table/Table";
 import { educationTC } from "../../../Utils/TableColumns";
 import SearchFilter from "../../../Utils/SearchFilter";
@@ -35,7 +35,7 @@ const EducationList = ({ searchTerm }) => {
     return actions;
   };
 
-  const dataFiltered = SearchFilter(Evacuation, searchTerm);
+  const dataFiltered = SearchFilter(Education, searchTerm);
 
   return (
     <div>

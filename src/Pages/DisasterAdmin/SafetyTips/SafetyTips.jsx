@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import AddHazard from "./Content/AddHazard";
-import ContentContainer from "../../Layout/Container/ContentContainer";
-import AddSearch from "../../Components/UI/AddSearch/AddSearch";
+import PageContainer from "../../../Layout/Container/PageContainer";
+import ContentContainer from "../../../Layout/Container/ContentContainer";
+import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
 import HazardList from "./Content/HazardList";
-import PageContainer from "../../Layout/Container/PageContainer";
+import AddHazard from "./Content/AddHazard";
 
 const SafetyTips = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addHazard, setAddHazard] = useState(false);
+  const [editHazardModal, setEditHazardModal] = useState(false);
+  const [selectedHazard, setSelectedHazard] = useState(null);
 
   const handleAdd = () => {
     setAddHazard(true);
-    console.log("Add button clicked");
+    setSelectedHazard(null); // Clear any previously selected event for editing
+  };
+
+  const handleEdit = (event) => {
+    setSelectedHazard(event);
+    setEditHazardModal(true);
+    setAddHazard(true);
   };
 
   const closeModal = () => {
     setAddHazard(false);
+    setEditHazardModal(false);
+    setSelectedHazard(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -36,9 +46,14 @@ const SafetyTips = () => {
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <HazardList searchTerm={searchTerm} />
+        <HazardList searchTerm={searchTerm} onEdit={handleEdit} />
       </ContentContainer>
-      <AddHazard addHazard={addHazard} closeModal={closeModal} />
+      <AddHazard
+        addHazard={addHazard}
+        closeModal={closeModal}
+        editHazardModal={editHazardModal}
+        selectedHazard={selectedHazard}
+      />
     </PageContainer>
   );
 };

@@ -8,14 +8,24 @@ import AddAdvisory from "./Content/AddAdvisory";
 const Advisory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addAdvisory, setAddAdvisory] = useState(false);
+  const [editAdvisoryModal, setEditAdvisoryModal] = useState(false);
+  const [selectedAdvisory, setSelectedAdvisory] = useState(null);
 
   const handleAdd = () => {
     setAddAdvisory(true);
-    console.log("Add button clicked");
+    setSelectedAdvisory(null);
+  };
+
+  const handleEdit = (event) => {
+    setSelectedAdvisory(event);
+    setEditAdvisoryModal(true);
+    setAddAdvisory(true);
   };
 
   const closeModal = () => {
     setAddAdvisory(false);
+    setEditAdvisoryModal(false);
+    setSelectedAdvisory(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -36,9 +46,14 @@ const Advisory = () => {
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <AdvisoryList searchTerm={searchTerm} />
+        <AdvisoryList searchTerm={searchTerm} onEdit={handleEdit} />
       </ContentContainer>
-      <AddAdvisory addAdvisory={addAdvisory} closeModal={closeModal} />
+      <AddAdvisory
+        addAdvisory={addAdvisory}
+        closeModal={closeModal}
+        editAdvisoryModal={editAdvisoryModal}
+        selectedAdvisory={selectedAdvisory}
+      />
     </PageContainer>
   );
 };

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ContentContainer from "../../Layout/Container/ContentContainer";
-import AddSearch from "../../Components/UI/AddSearch/AddSearch";
-import BudgetList from "./Content/BudgetList";
+import PageContainer from "../../../Layout/Container/PageContainer";
+import ContentContainer from "../../../Layout/Container/ContentContainer";
+import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
 import AddBudget from "./Content/AddBudget";
-import PageContainer from "../../Layout/Container/PageContainer";
+import BudgetList from "./Content/BudgetList";
 
 const Budget = () => {
   const [searchTerm, setSearchTerm] = useState("");

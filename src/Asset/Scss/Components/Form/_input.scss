@@ -89,12 +89,117 @@
 
   label {
     font-weight: bold;
-    margin: 15px 0;
+    margin: 12px 0;
+    max-width: 200px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    // margin-right: 10px;
 
     @media screen and (max-width: 768px) {
       margin: 0;
     }
   }
+
+  .inputMsg {
+    width: 100%;
+  }
+}
+
+.formInputModalHousehold {
+  display: flex;
+
+  @media screen and (max-width: 992px) {
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin: 12px 0;
+    min-width: 350px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 10px;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  .inputMsg {
+    width: 100%;
+  }
+}
+
+.formInputModalHouseholdCharacteristics {
+  display: flex;
+
+  @media screen and (max-width: 992px) {
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin: 12px 0;
+    min-width: 500px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 10px;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  .inputMsg {
+    width: 100%;
+  }
+}
+
+.formInputModalAddHouseholdMember {
+  display: flex;
+
+  @media screen and (max-width: 992px) {
+    flex-direction: column;
+  }
+
+  label {
+    font-weight: bold;
+    margin: 12px 0;
+    min-width: 500px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 15px;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  .inputMsg {
+    width: 100%;
+  }
+}
+
+.formInputModalHouseholdMemberName {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  label {
+    font-weight: bold;
+    // margin: 12px 0;
+    // max-width: 200px;
+    width: 100%;
+    // background-color: aqua;
+    word-wrap: break-word;
+    white-space: pre-line;
+    // margin-right: 10px;
+    margin: 0;
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
   .inputMsg {
     width: 100%;
   }

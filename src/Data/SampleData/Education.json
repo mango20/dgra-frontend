@@ -1,0 +1,26 @@
+[
+  {
+    "schoolName": "Green Valley Elementary School",
+    "barangay": "Valencia",
+    "purok": "10",
+    "status": "Active",
+    "schoolYear": 2020,
+    "category": "Elementary"
+  },
+  {
+    "schoolName": "Rosewood Primary School",
+    "barangay": "Riverside",
+    "purok": "4",
+    "status": "Active",
+    "schoolYear": 2020,
+    "category": "Elementary"
+  },
+  {
+    "schoolName": "Pinecrest Elementary",
+    "barangay": "Hillside",
+    "purok": "7",
+    "status": "Active",
+    "schoolYear": 2020,
+    "category": "Elementary"
+  }
+]

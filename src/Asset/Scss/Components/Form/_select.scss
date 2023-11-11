@@ -56,7 +56,62 @@
   }
 
   select {
+    // background-color: aqua;
     width: 267px;
+
+    @media screen and (max-width: 768px) {
+      // min-width: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.formSelectModalHouseholdCharacteristics {
+  display: flex;
+  // justify-content: space-between;
+
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+    min-width: 500px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 10px;
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  select {
+    width: 215px;
+
+    // width: calc(100px - 70px);
+
+    @media screen and (max-width: 768px) {
+      // min-width: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.formSelectModalAddHouseholdMember {
+  display: flex;
+  // justify-content: space-between;
+
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+    min-width: 500px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 15px;
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  select {
+    width: 250px;
 
     @media screen and (max-width: 768px) {
       // min-width: 100%;

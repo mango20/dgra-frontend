@@ -2,6 +2,7 @@ import React from "react";
 import { useFormContext } from "react-hook-form";
 import CustomInput from "../../../../Components/Form/Input";
 import CustomContainer from "../../../../Layout/Container/CustomContainer";
+import Map from "../../../../Utils/Map";
 
 const GeneralInformation = () => {
   const {
@@ -11,6 +12,8 @@ const GeneralInformation = () => {
 
   return (
     <CustomContainer title={"General Information"}>
+      {/* <Map /> */}
+      <div style={{ height: "500px" }}></div>
       <CustomInput
         label="Barangay"
         errors={errors}

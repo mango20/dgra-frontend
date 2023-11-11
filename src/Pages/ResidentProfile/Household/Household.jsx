@@ -8,14 +8,24 @@ import AddHousehold from "./Content/AddHousehold";
 const Household = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addHousehold, setAddHousehold] = useState(false);
+  const [editHouseholdModal, setEditHouseholdModal] = useState(false);
+  const [selectedHousehold, setSelectedHousehold] = useState(null);
 
   const handleAdd = () => {
     setAddHousehold(true);
-    console.log("Add button clicked");
+    setSelectedHousehold(null);
+  };
+
+  const handleEdit = (event) => {
+    setSelectedHousehold(event);
+    setEditHouseholdModal(true);
+    setAddHousehold(true);
   };
 
   const closeModal = () => {
     setAddHousehold(false);
+    setEditHouseholdModal(false);
+    setSelectedHousehold(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -37,9 +47,14 @@ const Household = () => {
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <HouseholdList searchTerm={searchTerm} />
+        <HouseholdList searchTerm={searchTerm} onEdit={handleEdit} />
       </ContentContainer>
-      <AddHousehold addHousehold={addHousehold} closeModal={closeModal} />
+      <AddHousehold
+        addHousehold={addHousehold}
+        closeModal={closeModal}
+        editHouseholdModal={editHouseholdModal}
+        selectedHousehold={selectedHousehold}
+      />
     </PageContainer>
   );
 };

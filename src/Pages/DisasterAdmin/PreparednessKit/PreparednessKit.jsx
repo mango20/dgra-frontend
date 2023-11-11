@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PageContainer from "../../Layout/Container/PageContainer";
-import ContentContainer from "../../Layout/Container/ContentContainer";
 import { Editor } from "react-draft-wysiwyg";
 import {
   EditorState,
@@ -10,7 +8,9 @@ import {
 } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Button } from "react-bootstrap";
-import "../../Asset/Scss/Pages/DisasterAdmin/_preparednessKit.scss";
+import "../../../Asset/Scss/Pages/DisasterAdmin/_preparednessKit.scss";
+import PageContainer from "../../../Layout/Container/PageContainer";
+import ContentContainer from "../../../Layout/Container/ContentContainer";
 const PreparednessKit = () => {
   const [editorState, setEditorState] = useState(() => {
     // Load editor content from localStorage on initial render
@@ -55,7 +55,7 @@ const PreparednessKit = () => {
   return (
     <PageContainer>
       <ContentContainer title={"Preparedness Kit"}>
-        <h2>Simple Word Editor</h2>
+        <h2 className="getAKitTitle">Get a Kit</h2>
         <Editor
           editorState={editorState}
           onEditorStateChange={(newEditorState) =>

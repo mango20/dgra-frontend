@@ -8,11 +8,13 @@ import { Button } from "react-bootstrap";
 import "../../../Asset/Scss/Pages/SystemUser/ChangePassword/_changePassword.scss";
 import Sidebar from "../../../Layout/Sidebar/Sidebar";
 import PageContainer from "../../../Layout/Container/PageContainer";
+import { postReq } from "../../../Service/API";
+import { useSelector } from "react-redux";
 
 const ChangePassword = () => {
   const schema = z
     .object({
-      oldPassword: z.string().nonempty("Old is required"),
+      userPassword: z.string().nonempty("Old Password is required"),
       newPassword: z.string().nonempty("New Password is required"),
       confirmPassword: z.string().nonempty("Confirm Password is required"),
     })
@@ -33,10 +35,27 @@ const ChangePassword = () => {
     handleSubmit,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const userEmail = useSelector((state) => state.reducer.auth?.authUser.email);
+  // console.log(userEmail);
+  const onSubmit = async (data) => {
+    // console.log(data);
+
+    try {
+      const { confirmPassword, ...newData } = data;
+      const payload = {
+        email: userEmail,
+        ...newData,
+      };
+      // console.log(payload);
+      const response = await postReq("/api/auth/updatePass", payload);
+      console.log("changePass response: ", response);
+    } catch (error) {
+      console.log("Error changing password:", error);
+    }
+
+    // reset();
   };
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -53,7 +72,7 @@ const ChangePassword = () => {
                 className="formInputModal"
                 errors={errors}
                 type="password"
-                {...register("oldPassword")}
+                {...register("userPassword")}
               />
               <CustomInput
                 label="New Password"

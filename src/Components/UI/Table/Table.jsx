@@ -20,57 +20,73 @@ const CustomTable = ({
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const sortedData = data.slice().reverse();
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <>
       <Table className="customTable" striped bordered responsive>
         <thead>
           <tr>
-            {columns.map((column) => (
-              <th key={column.key}>{column.header}</th>
-            ))}
+            {columns.map((column) => {
+              return <th key={column.key}>{column.header}</th>;
+            })}
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((row, rowIndex) => (
-            <tr key={rowIndex} className={`customTableRow ${tableRowClass}`}>
-              {columns.map((column, columnIndex) => (
-                <td key={column.key}>
-                  {column.key === "actions" ? (
-                    <DropdownButton
-                      id={`dropdown-actions-${rowIndex}`}
-                      title="Actions"
-                      className="actionDrop centerActions"
-                      variant="none"
-                    >
-                      {getActions(row).map((action, actionIndex) => (
-                        <Dropdown.Item
-                          key={actionIndex}
-                          onClick={action.handler}
-                        >
-                          <FontAwesomeIcon icon={action.icon} /> {action.label}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-                  ) : column.key === "household" ? (
-                    <div>
-                      <p>{row[column.key].familyName}</p>
-                      <p>Address: {row[column.key].Address}</p>
-                      <p>Contact: {row[column.key].Contact}</p>
-                    </div>
-                  ) : column.key === "editDelete" ? (
-                    <div className="centerActions">
-                      <CustomButton label="Edit" className="fitButton" />
-                      <CustomButton label="Delete" className="red" />
-                    </div>
-                  ) : (
-                    row[column.key]
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {currentItems.map((row, rowIndex) => {
+            const isDeleted = row.status === "Deleted";
+            return (
+              <tr
+                key={rowIndex}
+                className={`customTableRow ${tableRowClass} ${
+                  isDeleted ? "redRow" : ""
+                }`}
+              >
+                {columns.map((column, columnIndex) => (
+                  <td key={column.key}>
+                    {column.key === "actions" ? (
+                      <DropdownButton
+                        id={`dropdown-actions-${rowIndex}`}
+                        title="Actions"
+                        className="actionDrop centerActions"
+                        variant="none"
+                      >
+                        {getActions(row).map((action, actionIndex) => (
+                          <Dropdown.Item
+                            key={actionIndex}
+                            onClick={action.handler}
+                          >
+                            <FontAwesomeIcon icon={action.icon} />{" "}
+                            {action.label}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                    ) : column.key === "fullname" ? (
+                      <>
+                        <p>
+                          {row.lastName}, {row.firstName} {row.middleName}
+                        </p>
+                      </>
+                    ) : column.key === "household" ? (
+                      <div>
+                        <p>{row[column.key].familyName}</p>
+                        <p>Address: {row[column.key].address}</p>
+                        <p>Contact: {row[column.key].contact}</p>
+                      </div>
+                    ) : column.key === "editDelete" ? (
+                      <div className="centerActions">
+                        <CustomButton label="Edit" className="fitButton" />
+                        <CustomButton label="Delete" className="red" />
+                      </div>
+                    ) : (
+                      row[column.key]
+                    )}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
       <div className="paginationContainer">

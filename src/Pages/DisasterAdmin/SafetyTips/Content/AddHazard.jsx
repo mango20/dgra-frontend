@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomTextArea from "../../../Components/Form/TextArea";
-import CustomModal from "../../../Components/UI/Modal/CustomModal";
 import { useForm } from "react-hook-form";
-import Select from "../../../Components/Form/Select";
-import hazard from "../../../Data/hazard.json";
+import hazard from "../../../../Data/hazard.json";
+import CustomModal from "../../../../Components/UI/Modal/CustomModal";
+import CustomTextArea from "../../../../Components/Form/TextArea";
+import Select from "../../../../Components/Form/Select";
 
-const AddHazard = ({ addHazard, closeModal }) => {
+const AddHazard = ({
+  addHazard,
+  closeModal,
+  editHazardModal,
+  selectedHazard,
+}) => {
   const schema = z.object({
     hazard: z.string().nonempty("Hazard is required"),
     description: z.string().nonempty("Description is required"),
@@ -21,21 +26,40 @@ const AddHazard = ({ addHazard, closeModal }) => {
   const {
     register,
     reset,
+    setValue,
     formState: { errors },
     handleSubmit,
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = (data) => {
-    console.log(data);
+    if (selectedHazard) {
+      // Logic to update the existing event
+      console.log("Edit event data:", data);
+    } else {
+      // Logic to add a new event
+      console.log("Add event data:", data);
+    }
     reset();
     closeModal();
   };
 
+  useEffect(() => {
+    if (selectedHazard) {
+      // If editing an event, set form values using setValue
+      setValue("hazard", selectedHazard.hazard);
+      setValue("description", selectedHazard.description);
+      setValue("facts", selectedHazard.facts); // Make sure it's in the correct format
+      setValue("safetyTips", selectedHazard.safetyTip);
+      setValue("before", selectedHazard.before);
+      setValue("during", selectedHazard.during);
+      setValue("after", selectedHazard.after);
+    }
+  }, [selectedHazard, setValue]);
   return (
     <CustomModal
-      show={addHazard}
+      show={addHazard || editHazardModal}
       handleClose={closeModal}
-      title="Add Hazard"
+      title={selectedHazard ? "Edit Hazard" : "Add Hazard"}
       handleAction={handleSubmit(onSubmit)}
     >
       <form>

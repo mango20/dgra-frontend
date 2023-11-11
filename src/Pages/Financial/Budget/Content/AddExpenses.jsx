@@ -2,8 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomModal from "../../../Components/UI/Modal/CustomModal";
-import CustomInput from "../../../Components/Form/Input";
+import CustomModal from "../../../../Components/UI/Modal/CustomModal";
+import CustomInput from "../../../../Components/Form/Input";
 
 const AddExpenses = ({ addExpenses, closeModal }) => {
   const schema = z.object({

@@ -10,6 +10,7 @@ const CustomModal = ({
   title,
   children,
 }) => {
+  const isEditMode = title.includes("Edit");
   return (
     <Modal
       show={show}
@@ -24,7 +25,7 @@ const CustomModal = ({
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
         <Button variant="success" onClick={handleAction} type="submit">
-          Add
+          {isEditMode ? "Save" : "Add"}
         </Button>
         <Button variant="danger" onClick={handleClose}>
           Close

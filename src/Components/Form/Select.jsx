@@ -15,7 +15,7 @@ const Select = React.forwardRef(
             <option value="" disabled>
               {defaultOptionLabel}
             </option>
-            {data.map((val) => (
+            {data?.map((val) => (
               <option key={val.key} value={val.value}>
                 {val.value}
               </option>

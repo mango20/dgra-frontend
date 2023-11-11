@@ -9,6 +9,10 @@
   flex: 1;
   width: calc(100% - 350px);
 
+  @media screen and (max-width: 818px) {
+    margin: 59px 0;
+  }
+
   .innerContainer {
     background-color: rgb(255, 255, 255);
     border-radius: 5px;

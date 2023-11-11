@@ -8,13 +8,24 @@ import AddTeamMember from "./Content/AddTeamMember";
 const BDRRMCTeamMember = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addTeamMemberModal, setTeamMemberModal] = useState(false);
+  const [editTeamMemberModal, setEditTeamMemberModal] = useState(false);
+  const [selectedTeamMember, setSelectedTeamMember] = useState(null);
+
   const handleAdd = () => {
     setTeamMemberModal(true);
-    console.log("Add button clicked");
+    setSelectedTeamMember(null); // Clear any previously selected event for editing
+  };
+
+  const handleEdit = (event) => {
+    setSelectedTeamMember(event);
+    setEditTeamMemberModal(true);
+    setTeamMemberModal(true);
   };
 
   const closeModal = () => {
     setTeamMemberModal(false);
+    setEditTeamMemberModal(false);
+    setSelectedTeamMember(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -36,11 +47,13 @@ const BDRRMCTeamMember = () => {
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <TeamMemberList searchTerm={searchTerm} />
+        <TeamMemberList searchTerm={searchTerm} onEdit={handleEdit} />
       </ContentContainer>
       <AddTeamMember
         addTeamMemberModal={addTeamMemberModal}
         closeModal={closeModal}
+        editTeamMemberModal={editTeamMemberModal}
+        selectedTeamMember={selectedTeamMember}
       />
     </PageContainer>
   );

@@ -7,7 +7,7 @@ import Select from "../../../../Components/Form/Select";
 import hazard from "../../../../Data/hazard.json";
 import CustomInput from "../../../../Components/Form/Input";
 
-const AddUser = ({ addUser, closeModal }) => {
+const AddUser = ({ addUser, closeModal, editEventModal, selectedEvent }) => {
   const schema = z.object({
     username: z.string().nonempty("Username is required"),
     firstName: z.string().nonempty("First Name is required"),
@@ -27,6 +27,10 @@ const AddUser = ({ addUser, closeModal }) => {
 
   const onSubmit = (data) => {
     console.log(data);
+    if (selectedEvent) {
+    } else {
+    }
+
     reset();
     closeModal();
   };

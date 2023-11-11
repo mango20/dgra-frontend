@@ -1,0 +1,24 @@
+@import "../../Abstract/font";
+
+.inputImg {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  label {
+    font-family: $lato;
+    font-size: 20px;
+    min-width: 200px;
+    font-weight: bold;
+  }
+  .inputImgContent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0 30px;
+    img {
+      width: 100px;
+    }
+  }
+}

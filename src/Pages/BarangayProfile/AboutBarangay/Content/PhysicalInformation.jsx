@@ -7,6 +7,7 @@ import Message from "../../../../Components/UI/Message/Message";
 import Checkbox from "../../../../Components/Form/Checkbox";
 import CustomContainer from "../../../../Layout/Container/CustomContainer";
 import CustomTextArea from "../../../../Components/Form/TextArea";
+import InputImg from "../../../../Components/Form/InputImg";
 const PhysicalInformation = () => {
   const {
     register,
@@ -93,6 +94,7 @@ const PhysicalInformation = () => {
           </div>
         </div>
       </div>
+      <InputImg label="Logo Image" />
       <CustomTextArea
         label="Vision"
         errors={errors}

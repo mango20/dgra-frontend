@@ -1,9 +1,23 @@
 .customTable {
   width: 100%;
+  // min-height: 500px;
+  text-align: center;
 
   thead {
     text-align: center;
     background-color: grey;
+
+    th {
+      background-color: rgb(184, 184, 184);
+      white-space: nowrap;
+      min-width: 100px;
+      text-align: center;
+      padding: 10px 20px;
+    }
+  }
+
+  tr.redRow td {
+    background-color: #ff959f;
   }
 
   button {
