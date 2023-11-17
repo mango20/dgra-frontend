@@ -1,29 +1,67 @@
-import { GoogleMap } from "@react-google-maps/api";
-import React, { useState } from "react";
-
-const containerStyle = {
-  width: "100%",
-  height: "400px",
+import React, { useEffect, useState } from "react";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+const libraries = ["places"];
+const mapContainerStyle = {
+  height: "500px",
+  marginBottom: "25px",
 };
+const defaultCenter = {
+  lat: 0, // default latitude
+  lng: 0, // default longitude
+};
+const MapContainer = ({ coordinates, onLocationChange }) => {
+  const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const [mapZoom, setMapZoom] = useState(10);
 
-const Map = () => {
-  const coordinates = useState({ lat: 14.6090537, lng: 121.0222565 });
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: "AIzaSyBlApZPTcG_IhHgjWCLdp-PKMiiM4xBAAM", // Replace with your API key
+    libraries,
+  });
 
-  const [getBy, setGetBy] = useState("Address");
+  const setCoordinates = (coords) => {
+    setMapCenter(coords);
+  };
 
-  function handleChange(e) {
-    setGetBy(e.target.value);
+  useEffect(() => {
+    if (coordinates) {
+      setCoordinates(coordinates);
+      setMapZoom(14); // Adjust zoom level as needed
+    }
+  }, [coordinates]);
+
+  if (loadError) {
+    return <div>Error loading maps</div>;
   }
 
+  if (!isLoaded) {
+    return <div>Loading maps</div>;
+  }
+
+  const onMarkerDragEnd = (event) => {
+    const { latLng } = event;
+    const lat = latLng.lat();
+    const lng = latLng.lng();
+    onLocationChange({ lat, lng });
+    setCoordinates({ lat, lng });
+  };
+
   return (
-    <>
+    <div>
       <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={coordinates}
-        zoom={10}
-      ></GoogleMap>
-    </>
+        mapContainerStyle={mapContainerStyle}
+        zoom={mapZoom}
+        center={mapCenter}
+      >
+        {coordinates && (
+          <Marker
+            position={coordinates}
+            draggable={true}
+            onDragEnd={onMarkerDragEnd}
+          />
+        )}
+      </GoogleMap>
+    </div>
   );
 };
 
-export default Map;
+export default MapContainer;

@@ -14,6 +14,7 @@ import {
   loginStart,
   loginSuccess,
 } from "../../Service/Action/AuthSlice";
+import { setUserInfo } from "../../Service/Action/UserInfo";
 
 const Login = () => {
   // useNavigate
@@ -41,19 +42,23 @@ const Login = () => {
   const onSubmit = async (data) => {
     setErrorMsg("");
     dispatch(loginStart());
+
     try {
-      const response = await postReq("/api/auth/login", data);
-      console.log(response);
-      dispatch(loginSuccess(response));
+      const loginResponse = await postReq("/api/auth/login", data);
+      dispatch(loginSuccess(loginResponse));
+
+      const profileResponse = await postReq("/api/auth/getInfo", {
+        email: loginResponse.email,
+      });
+
+      console.log("profileResponse :", profileResponse);
+      dispatch(setUserInfo(profileResponse.user));
       navigate("/barangay-profile/about-barangay");
     } catch (error) {
       setErrorMsg(error.response.statusText);
-
       dispatch(loginFailure());
-      console.log("Error login:", error);
+      console.error("Error login:", error);
     }
-
-    //
   };
 
   return (

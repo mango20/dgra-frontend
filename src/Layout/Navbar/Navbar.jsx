@@ -4,25 +4,25 @@ import React, { useEffect, useState } from "react";
 import "../../Asset/Scss/Layout/Navbar/_navbar.scss";
 import moment from "moment/moment";
 import Sidebar from "../Sidebar/Sidebar";
-const CustomNavbar = ({ setShowSidebar }) => {
+import { useSelector } from "react-redux";
+const CustomNavbar = ({ setShowSidebar, show }) => {
   const [currentDate, setCurrentDate] = useState("");
+  const username = useSelector(
+    (state) => state.reducer.userInfo?.userInfo.username
+  );
 
-  // Function to update the current date
   const updateCurrentDate = () => {
     const formattedDate = moment().format("M/D/YYYY, h:mm:ss A");
     setCurrentDate(formattedDate);
   };
 
-  // Update the current date on component mount
   useEffect(() => {
     updateCurrentDate();
 
-    // Set interval to update the date every second
     const interval = setInterval(() => {
       updateCurrentDate();
     }, 1000);
 
-    // Clear the interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
@@ -33,16 +33,20 @@ const CustomNavbar = ({ setShowSidebar }) => {
   return (
     <div className="navbar">
       <div className="navbarBrand">
-        <h1 className="brgName">Barangay Tanza 2</h1>
+        <h1 className="brgName" style={{ display: show ? "block" : "none" }}>
+          Barangay Tanza 2
+        </h1>
+
         <FontAwesomeIcon
           icon={faBars}
           className="faBars"
           onClick={toggleSidebar}
         />
-        <h1>Disaster Get-Ready Application</h1>
+        <img src={require("../../Asset/Image/dgra.png")}></img>
+        {/* <h1>Disaster Get-Ready Application</h1> */}
       </div>
       <div className="navbarUserInfo">
-        <p>Welcome, tanza2chairman</p>
+        <p>Welcome, {username}</p>
         <p>{currentDate}</p>
         <img src={require("../../Asset/Image/sampleImg.png")} alt="img" />
       </div>

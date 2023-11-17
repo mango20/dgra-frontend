@@ -4,20 +4,35 @@ import "../../Asset/Scss/Components/Form/_select.scss";
 
 const Select = React.forwardRef(
   (
-    { name, label, errors, defaultOptionLabel, data, className, ...props },
+    {
+      name,
+      label,
+      errors,
+      defaultOptionLabel,
+      data,
+      className,
+      onChange,
+      ...props
+    },
     ref
   ) => {
     return (
       <div className={`customSelect ${className}`}>
-        <label>{label}</label>
+        <label>{label} </label>
         <div className="inputMsg">
-          <select defaultValue="" name={name} ref={ref} {...props}>
+          <select
+            defaultValue=""
+            name={name}
+            ref={ref}
+            {...props}
+            onChange={onChange}
+          >
             <option value="" disabled>
               {defaultOptionLabel}
             </option>
             {data?.map((val) => (
-              <option key={val.key} value={val.value}>
-                {val.value}
+              <option key={val.key || val} value={val.value || val}>
+                {val.value || val}
               </option>
             ))}
           </select>

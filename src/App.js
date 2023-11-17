@@ -25,6 +25,7 @@ import CalendarOfEvents from "./Pages/BarangayProfile/CalendarOfEvents/CalendarO
 import Household from "./Pages/ResidentProfile/Household/Household";
 import HouseholdMembers from "./Pages/ResidentProfile/HouseholdMembers/HouseholdMembers";
 import BarangayProfileReport from "./Pages/Report/BaragayProfileReport/BarangayProfileReport";
+import Supply from "./Pages/Financial/Supplies/Supplies";
 
 const App = () => {
   return (
@@ -61,6 +62,7 @@ const App = () => {
             element={<PreparednessKit />}
           />
           <Route path="/financial/budget" element={<Budget />} />
+          <Route path="/financial/supplies" element={<Supply />} />
           <Route path="/expenses/:id" element={<Expenses />} />
           <Route path="/education" element={<Education />} />
           <Route

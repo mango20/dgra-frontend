@@ -5,7 +5,7 @@ export const hazardTC = [
   { key: "during", header: "During" },
   { key: "after", header: "After" },
   { key: "facts", header: "Facts" },
-  { key: "safetyTip", header: "Safety Tip" },
+  { key: "safetyTips", header: "Safety Tip" },
   { key: "status", header: "Status" },
   { key: "actions", header: "Actions" },
 ];
@@ -60,10 +60,10 @@ export const evacuationTC = [
 ];
 
 export const budgetTC = [
-  { key: "year", header: "Fiscal Year" },
-  { key: "code", header: "Account code" },
-  { key: "name", header: "Account Name" },
-  { key: "budget", header: "Budget" },
+  { key: "fiscalYear", header: "Fiscal Year" },
+  { key: "accountCode", header: "Account code" },
+  { key: "accountName", header: "Account Name" },
+  { key: "fundingAmount", header: "Budget" },
   { key: "expenses", header: "Expenses" },
   { key: "balance", header: "Balance" },
   { key: "status", header: "Status" },
@@ -109,4 +109,25 @@ export const householdMemberTC = [
   { key: "gender", header: "Gender" },
   { key: "status", header: "Status" },
   { key: "actions", header: "Actions" },
+];
+
+export const BDRRMCTeamMember = [
+  { key: "fullname", header: "BDRRMC Member Name" },
+  { key: "team", header: "Team" },
+  { key: "contactNumber", header: "Contact Number" },
+  { key: "from", header: "From" },
+  { key: "to", header: "To" },
+  { key: "status", header: "Status" },
+  { key: "actions", header: "Actions" },
+];
+
+export const supplyTC = [
+  { key: "itemNumber", header: "Item Number" },
+  { key: "category", header: "Category" },
+  { key: "description", header: "Description" },
+  { key: "unitCost", header: "Unit Cost" },
+  { key: "quantity", header: "Quantity" },
+  { key: "totalCost", header: "Total Cost" },
+  { key: "stockOut", header: "Stock Out" },
+  { key: "stockIn", header: "Stock In" },
 ];

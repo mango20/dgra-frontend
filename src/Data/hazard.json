@@ -1,4 +1,5 @@
 [
   { "key": 1, "value": "Storm Surge" },
-  { "key": 2, "value": "Etc" }
+  { "key": 2, "value": "Drought" },
+  { "key": 3, "value": "Flood" }
 ]

@@ -5,12 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CustomModal from "../../../../Components/UI/Modal/CustomModal";
 import CustomInput from "../../../../Components/Form/Input";
 import CustomTextArea from "../../../../Components/Form/TextArea";
+import { patchReq, postReq } from "../../../../Service/API";
 
 const AddBDRRMC = ({
   addBDRRMC,
   closeModal,
   editBDRRMCModal,
   selectedBDRRMC,
+  alertMsg,
+  onItemAddedOrUpdated,
 }) => {
   const schema = z.object({
     name: z.string().nonempty("Name is required"),
@@ -20,19 +23,35 @@ const AddBDRRMC = ({
 
   const {
     register,
+    reset,
+    setValue,
     formState: { errors },
     handleSubmit,
-    setValue,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    if (selectedBDRRMC) {
-      // Logic to update the existing event
-      console.log("Edit event data:", data);
-    } else {
-      // Logic to add a new event
-      console.log("Add event data:", data);
+  const onSubmit = async (data) => {
+    const endpoint = selectedBDRRMC
+      ? "/api/disasterAdmin/bdrrmcteam"
+      : "/api/disasterAdmin/bdrrmcteam";
+
+    const payload = selectedBDRRMC
+      ? { _id: selectedBDRRMC._id, ...data }
+      : { ...data };
+
+    console.log(payload);
+
+    try {
+      const response = selectedBDRRMC
+        ? await patchReq(endpoint, payload)
+        : await postReq(endpoint, payload);
+
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.error("Error Adding User", error);
     }
+
+    reset();
     closeModal();
   };
 

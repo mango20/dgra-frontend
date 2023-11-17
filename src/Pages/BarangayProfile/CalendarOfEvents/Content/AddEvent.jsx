@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CustomModal from "../../../../Components/UI/Modal/CustomModal";
 import CustomInput from "../../../../Components/Form/Input";
 import { patchReq, postReq } from "../../../../Service/API";
+import { useSelector } from "react-redux";
+import { generateFullName } from "../../../../Utils/Fullname";
 
 const AddEvent = ({
   addEventModal,
@@ -14,20 +16,19 @@ const AddEvent = ({
   eventMsg,
   onEventAddedOrUpdated,
 }) => {
+  const currentUser = useSelector((state) => state.reducer.userInfo?.userInfo);
+
   const schema = z.object({
     eventType: z.string().nonempty("Type is required"),
     eventName: z.string().nonempty("Name is required"),
-    eventDate: z.string().refine(
-      (dateString) => {
-        const date = new Date(dateString);
-        return !isNaN(date.getTime());
-      },
-      { message: "Invalid Date" }
-    ),
+    eventDate: z
+      .string()
+      .refine((dateString) => !isNaN(new Date(dateString).getTime()), {
+        message: "Invalid Date",
+      }),
     eventLocation: z.string().nonempty("Location is required"),
   });
 
-  // console.log(defaultValues);
   const {
     register,
     setValue,
@@ -36,48 +37,38 @@ const AddEvent = ({
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
-    if (selectedEvent) {
-      const payload = {
-        _id: selectedEvent._id,
-        ...data,
-      };
+    const endpoint = selectedEvent
+      ? "/api/barangayprofile/calendarofevents/update"
+      : "/api/barangayprofile/calendarofevents";
 
-      console.log(payload);
-      try {
-        const response = await patchReq(
-          "/api/barangayprofile/calendarofevents/update",
-          payload
-        );
-        console.log(response);
-        eventMsg(response.message);
-        onEventAddedOrUpdated();
-      } catch (error) {
-        console.log("Error Post Even", error);
-      }
-    } else {
-      try {
-        const response = await postReq(
-          "/api/barangayprofile/calendarofevents",
-          data
-        );
-        console.log(response);
-        eventMsg(response.message);
-        onEventAddedOrUpdated();
-      } catch (error) {
-        console.log("Error Post Even", error);
-      }
+    const fullname = generateFullName(currentUser);
+    const payload = selectedEvent
+      ? { _id: selectedEvent._id, ...data }
+      : { assignedUser: fullname, ...data };
 
-      console.log("Add event data:", data);
+    console.log(payload);
+    console.log({ assignedUser: fullname, ...data });
+    try {
+      const response = selectedEvent
+        ? await patchReq(endpoint, payload)
+        : await postReq(endpoint, payload);
+
+      eventMsg(response.message);
+      onEventAddedOrUpdated();
+    } catch (error) {
+      console.error("Error Posting Event", error);
     }
+
     closeModal();
   };
 
   useEffect(() => {
     if (editEventModal && selectedEvent) {
-      setValue("eventType", selectedEvent.eventType);
-      setValue("eventName", selectedEvent.eventName);
-      setValue("eventDate", selectedEvent.eventDate);
-      setValue("eventLocation", selectedEvent.eventLocation);
+      const { eventType, eventName, eventDate, eventLocation } = selectedEvent;
+      setValue("eventType", eventType);
+      setValue("eventName", eventName);
+      setValue("eventDate", eventDate);
+      setValue("eventLocation", eventLocation);
     } else {
       setValue("eventType", "");
       setValue("eventName", "");
@@ -86,11 +77,13 @@ const AddEvent = ({
     }
   }, [editEventModal, selectedEvent, setValue]);
 
+  const title = selectedEvent ? "Edit Event" : "Add Event";
+
   return (
     <CustomModal
       show={addEventModal || editEventModal}
       handleClose={closeModal}
-      title={selectedEvent ? "Edit Event" : "Add Event"}
+      title={title}
       handleAction={handleSubmit(onSubmit)}
     >
       <form>

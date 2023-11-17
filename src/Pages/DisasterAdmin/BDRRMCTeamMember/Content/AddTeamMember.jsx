@@ -1,58 +1,124 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomModal from "../../../../Components/UI/Modal/CustomModal";
 import CustomInput from "../../../../Components/Form/Input";
 import Select from "../../../../Components/Form/Select";
-
+import { getReq, patchReq, postReq } from "../../../../Service/API";
+import genderOption from "../../../../Data/gender.json";
 const AddTeamMember = ({
   addTeamMemberModal,
   closeModal,
   editTeamMemberModal,
   selectedTeamMember,
+  alertMsg,
+  onItemAddedOrUpdated,
 }) => {
+  const [team, setTeams] = useState([]);
+  const [teamObject, setTeamObject] = useState(null);
   const schema = z.object({
-    type: z.string().nonempty("Type is required"),
-    firstName: z.string().nonempty("Name is required"),
-    birthday: z.string().refine(
+    firstName: z.string().nonempty("First Name is required"),
+    middleName: z.string(),
+    lastName: z.string().nonempty("Last Name is required"),
+    gender: z.string().nonempty("Gender is required"),
+    birthdate: z.string().refine(
       (dateString) => {
         const date = new Date(dateString);
         return !isNaN(date.getTime());
       },
       { message: "Invalid Date" }
     ),
-    where: z.string().nonempty("Location is required"),
+    team: z.string().nonempty("Team is required"),
+    from: z.string(), // Assuming you want to validate the date format
+    to: z.string(), // Assuming you want to validate the date format
+    contactNumber: z.string(), // You might want to add more specific validation for the contactNumber field
   });
-
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue,
+    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    if (selectedTeamMember) {
-      // Logic to update the existing event
-      console.log("Edit event data:", data);
-    } else {
-      // Logic to add a new event
-      console.log("Add event data:", data);
+  const handleTeamSelection = (selectedTeamName) => {
+    const selectedTeam = teamObject.find(
+      (team) => team.name === selectedTeamName
+    );
+    setTeamObject(selectedTeam);
+  };
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    const endpoint = selectedTeamMember
+      ? "/api/disasterAdmin/bdrrmcteammember"
+      : "/api/disasterAdmin/bdrrmcteammember";
+
+    const payload = selectedTeamMember
+      ? { _id: selectedTeamMember?._id, ...data }
+      : { ...data, period: { from: data.from, to: data.to }, team: teamObject };
+
+    console.log(payload);
+
+    try {
+      const response = selectedTeamMember
+        ? await patchReq(endpoint, payload)
+        : await postReq(endpoint, payload);
+
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.error("Error Adding User", error);
     }
+
+    reset();
     closeModal();
   };
 
   useEffect(() => {
-    if (selectedTeamMember) {
+    if (editTeamMemberModal && selectedTeamMember) {
       // If editing an event, set form values using setValue
-      setValue("type", selectedTeamMember.type);
-      setValue("eventName", selectedTeamMember.eventName);
-      setValue("when", selectedTeamMember.when); // Make sure it's in the correct format
-      setValue("where", selectedTeamMember.where);
+      setValue("firstName", selectedTeamMember.firstName);
+      setValue("middleName", selectedTeamMember.middleName);
+      setValue("lastName", selectedTeamMember.lastName); // Make sure it's in the correct format
+      setValue("gender", selectedTeamMember.gender);
+      setValue("birthdate", selectedTeamMember.birthdate);
+      setValue("team", selectedTeamMember.team.name);
+      setValue("to", selectedTeamMember.period.to);
+      setValue("from", selectedTeamMember.period.from);
+      setValue("contactNumber", selectedTeamMember.contactNumber);
+    } else {
+      setValue("firstName", "");
+      setValue("middleName", "");
+      setValue("lastName", ""); // Make sure it's in the correct format
+      setValue("gender", "");
+      setValue("birthdate", "");
+      setValue("team", "");
+      setValue("to", "");
+      setValue("from", "");
+      setValue("contactNumber", "");
     }
   }, [selectedTeamMember, setValue]);
 
+  useEffect(() => {
+    getBDRRMCTeam();
+  }, []);
+
+  const getBDRRMCTeam = async () => {
+    try {
+      const response = await getReq("/api/disasteradmin/bdrrmcteamnames");
+      console.log(response.teams);
+      setTeamObject(response.teams); // store in payload if one of the array selected
+      const teamNames = response.teams.map((team) => team.name);
+      console.log(teamNames);
+      setTeams(teamNames);
+    } catch (error) {
+      console.log("Error Get User", error);
+    }
+  };
+
+  console.log(team);
   return (
     <CustomModal
       show={addTeamMemberModal || editTeamMemberModal}
@@ -87,7 +153,7 @@ const AddTeamMember = ({
           label="Gender"
           errors={errors}
           defaultOptionLabel="Select Gender"
-          // data={landClassification}
+          data={genderOption}
           {...register("gender")}
           className="formSelectModal"
         />
@@ -96,35 +162,36 @@ const AddTeamMember = ({
           className="formInputModal"
           type="date"
           errors={errors}
-          {...register("birthday")}
+          {...register("birthdate")}
         />
         <Select
           label="Team"
           errors={errors}
           defaultOptionLabel="Select Team"
-          // data={landClassification}
+          data={team}
           {...register("team")}
           className="formSelectModal"
+          onChange={(e) => handleTeamSelection(e.target.value)}
         />
         <CustomInput
           label="Period From"
           className="formInputModal"
           type="date"
           errors={errors}
-          {...register("periodFrom")}
+          {...register("from")}
         />
         <CustomInput
           label="Period To"
           className="formInputModal"
           type="date"
           errors={errors}
-          {...register("periodTo")}
+          {...register("to")}
         />
         <CustomInput
           label="Contact"
           className="formInputModal"
           errors={errors}
-          {...register("contact")}
+          {...register("contactNumber")}
         />
       </form>
     </CustomModal>

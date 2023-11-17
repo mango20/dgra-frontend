@@ -62,6 +62,7 @@ const CalendarOfEvents = () => {
         <EventList
           searchTerm={searchTerm}
           onEdit={handleEdit}
+          eventMsg={(label) => setEventLabel(label)}
           onEventAddedOrUpdated={() => {}}
         />
       </ContentContainer>

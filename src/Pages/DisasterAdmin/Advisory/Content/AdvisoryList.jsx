@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Advisory from "../../../../Data/SampleData/Advisory.json";
 import {
@@ -13,9 +13,47 @@ import {
 import { advisoryTC } from "../../../../Utils/TableColumns";
 import SearchFilter from "../../../../Utils/SearchFilter";
 import CustomTable from "../../../../Components/UI/Table/Table";
+import { deleteReq, getReq, patchReq } from "../../../../Service/API";
+import { useDispatch } from "react-redux";
 
-const AdvisoryList = ({ searchTerm, onEdit }) => {
+const AdvisoryList = ({
+  searchTerm,
+  onEdit,
+  onItemAddedOrUpdated,
+  alertMsg,
+}) => {
   const tableColumns = advisoryTC;
+  // const dispatch = useDispatch();
+  const [advisoryList, setAdvisoryList] = useState([]);
+
+  const restoreAdvisory = async (id) => {
+    try {
+      const response = await patchReq("/api/system-tools/systemTools/restore", {
+        _id: id,
+      });
+
+      console.log(response);
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.log("Error Restoring User", error);
+    }
+  };
+
+  // Pending
+  const deleteAdvisory = async (id) => {
+    try {
+      const response = await deleteReq("/api/disasterAdmin/disasteradvisory", {
+        _id: id,
+      });
+
+      console.log(response);
+      alertMsg(response.message);
+      getAdvisoryList();
+    } catch (error) {
+      console.log("Error Deleting User", error);
+    }
+  };
 
   const getActionsForRow = (row) => {
     const actions = [];
@@ -25,7 +63,7 @@ const AdvisoryList = ({ searchTerm, onEdit }) => {
         label: "Restore",
         icon: faRotate, // Add your specific icon here
         handler: () => {
-          // Your restore logic goes here
+          restoreAdvisory(row._id);
         },
       });
     } else {
@@ -49,7 +87,7 @@ const AdvisoryList = ({ searchTerm, onEdit }) => {
         label: "Delete",
         icon: faTrash,
         handler: () => {
-          console.log("Deleted");
+          deleteAdvisory(row._id);
         },
       });
     }
@@ -57,7 +95,20 @@ const AdvisoryList = ({ searchTerm, onEdit }) => {
     return actions;
   };
 
-  const dataFiltered = SearchFilter(Advisory, searchTerm);
+  useEffect(() => {
+    getAdvisoryList();
+  }, [onItemAddedOrUpdated]);
+
+  const getAdvisoryList = async () => {
+    try {
+      const response = await getReq("/api/disasterAdmin/disasteradvisory");
+      console.log("Advisory List : ", response.disasterAdvisories);
+      setAdvisoryList(response.disasterAdvisories);
+    } catch (error) {
+      console.log("Error Advisory list", error);
+    }
+  };
+  const dataFiltered = SearchFilter(advisoryList, searchTerm);
 
   return (
     <div>

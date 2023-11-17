@@ -26,7 +26,7 @@
   .menuContainer {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 13px;
     justify-content: center;
 
     .menu {
@@ -38,6 +38,7 @@
         display: flex;
         justify-content: space-between;
         cursor: pointer;
+        font-size: 23px;
       }
 
       .highlighted {
@@ -46,6 +47,7 @@
 
       .subLabel {
         padding: 0px 20px;
+        font-size: 23px;
       }
 
       .highlighted {

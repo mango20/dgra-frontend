@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomModal from "../../../../Components/UI/Modal/CustomModal";
 import CustomInput from "../../../../Components/Form/Input";
+import { patchReq, postReq } from "../../../../Service/API";
+import { useLocation, useParams } from "react-router-dom";
 
-const AddExpenses = ({ addExpenses, closeModal }) => {
+const AddExpenses = ({
+  addExpenses,
+  closeModal,
+  editExpensesModal,
+  selectedExpenses,
+  alertMsg,
+  onItemAddedOrUpdated,
+}) => {
+  const location = useLocation();
+  const { id } = useParams();
+
   const schema = z.object({
     amount: z.string().nonempty("Amount is required"),
     particular: z.string().nonempty("Particular is required"),
@@ -16,6 +28,7 @@ const AddExpenses = ({ addExpenses, closeModal }) => {
       },
       { message: "Invalid Date" }
     ),
+    amount: z.string(),
     remarks: z.string().nonempty("Remarks is required"),
   });
 
@@ -23,17 +36,59 @@ const AddExpenses = ({ addExpenses, closeModal }) => {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
+    reset,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const endpoint = selectedExpenses
+      ? "/api/financial/expense"
+      : "/api/financial/expense";
+
+    const payload = selectedExpenses
+      ? { ...data, _id: selectedExpenses._id }
+      : {
+          ...data,
+          _id: id,
+        };
+
+    console.log(payload);
+
+    try {
+      const response = selectedExpenses
+        ? await patchReq(endpoint, payload)
+        : await postReq(endpoint, payload);
+      console.log(response);
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.error("Error Adding User", error);
+    }
+
+    reset();
     closeModal();
   };
+
+  useEffect(() => {
+    if (editExpensesModal && selectedExpenses) {
+      setValue("date", selectedExpenses.date);
+      setValue("particular", selectedExpenses.particular);
+      setValue("amount", selectedExpenses.amount);
+      setValue("remarks", selectedExpenses.remarks);
+    } else {
+      console.log("first");
+      setValue("date", "");
+      setValue("particular", "");
+      setValue("amount", "");
+      setValue("remarks", "");
+    }
+  }, [selectedExpenses, setValue]);
+
   return (
     <CustomModal
-      show={addExpenses}
+      show={addExpenses || editExpensesModal}
       handleClose={closeModal}
-      title="Add Expenses"
+      title={selectedExpenses ? "Edit Expenses" : "Add Expenses"}
       handleAction={handleSubmit(onSubmit)}
     >
       <form>

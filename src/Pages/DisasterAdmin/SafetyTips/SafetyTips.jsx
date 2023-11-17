@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageContainer from "../../../Layout/Container/PageContainer";
 import ContentContainer from "../../../Layout/Container/ContentContainer";
 import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
 import HazardList from "./Content/HazardList";
 import AddHazard from "./Content/AddHazard";
+import CustomAlert from "../../../Components/UI/Alert/Alert";
 
 const SafetyTips = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addHazard, setAddHazard] = useState(false);
   const [editHazardModal, setEditHazardModal] = useState(false);
   const [selectedHazard, setSelectedHazard] = useState(null);
+  const [alertLabel, setAlertLabel] = useState("");
 
   const handleAdd = () => {
     setAddHazard(true);
@@ -37,6 +39,16 @@ const SafetyTips = () => {
     setSearchTerm("");
     console.log("View all button clicked");
   };
+
+  useEffect(() => {
+    if (alertLabel) {
+      const timer = setTimeout(() => {
+        setAlertLabel("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alertLabel]);
   return (
     <PageContainer>
       <ContentContainer title={"Safety Tips"}>
@@ -45,14 +57,22 @@ const SafetyTips = () => {
           onAdd={handleAdd}
           onSearch={handleSearch}
           onViewAll={handleViewAll}
+        />{" "}
+        {alertLabel && <CustomAlert label={alertLabel} />}
+        <HazardList
+          searchTerm={searchTerm}
+          onEdit={handleEdit}
+          alertMsg={(label) => setAlertLabel(label)}
+          onItemAddedOrUpdated={() => {}}
         />
-        <HazardList searchTerm={searchTerm} onEdit={handleEdit} />
       </ContentContainer>
       <AddHazard
         addHazard={addHazard}
         closeModal={closeModal}
         editHazardModal={editHazardModal}
         selectedHazard={selectedHazard}
+        alertMsg={(label) => setAlertLabel(label)}
+        onItemAddedOrUpdated={() => {}}
       />
     </PageContainer>
   );

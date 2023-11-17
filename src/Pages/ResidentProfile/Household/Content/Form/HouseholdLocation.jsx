@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import CustomInput from "../../../../../Components/Form/Input";
-
+import MapContainer from "../../../../../Utils/Map";
+import "../../../../../Asset/Scss/Pages/ResidenceProfile/_householdLocation.scss";
 const HouseholdLocation = ({ selectedHousehold }) => {
   const {
     register,
@@ -23,6 +24,13 @@ const HouseholdLocation = ({ selectedHousehold }) => {
     }
   }, [selectedHousehold, setValue]);
 
+  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
+
+  useEffect(() => {
+    // Fetch coordinates from an API or any other source
+    // For demonstration purposes, using static values
+    setCoordinates({ lat: 37.7749, lng: -122.4194 });
+  }, []);
   return (
     <div>
       <h4>A. Household Location</h4>
@@ -64,6 +72,8 @@ const HouseholdLocation = ({ selectedHousehold }) => {
           {...register("houseIdentificationNumber")}
         />
         {/* Map */}
+        <label id="a7Label">A.7 Coordinates</label>
+        <MapContainer coordinates={coordinates} />
         <CustomInput
           label="A.8 Name of Respondent"
           className="formInputModalHousehold"

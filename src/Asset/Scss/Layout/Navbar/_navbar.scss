@@ -1,5 +1,6 @@
 .navbar {
   display: flex;
+  --bs-navbar-padding-y: 0;
 
   @media screen and (max-width: 818px) {
     position: fixed;
@@ -29,6 +30,10 @@
 
     .faBars {
       cursor: pointer;
+    }
+
+    img {
+      width: 250px;
     }
 
     .brgName {

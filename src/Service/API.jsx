@@ -39,14 +39,23 @@ export const patchReq = async (route, payload) => {
   }
 };
 
-export const deletePost = async (postId) => {
+export const deleteReq = async (route, payload) => {
   try {
-    const response = await APIService.delete(`/posts/${postId}`);
+    const response = await APIService.delete(route, payload);
     return response.data;
   } catch (error) {
-    console.error("Error deleting post:", error);
+    console.error("Error deleting :", error);
     throw error;
   }
 };
 
+export const putReq = async (route, payload) => {
+  try {
+    const response = await APIService.put(route, payload);
+    return response.data;
+  } catch (error) {
+    console.error("Error put :", error);
+    throw error;
+  }
+};
 export default APIService;

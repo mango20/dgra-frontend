@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../Asset/Scss/Components/UI/Table/_table.scss";
 import Pagination from "../Pagination/Pagination";
 import CustomButton from "../../Form/Button";
+import { formatDate } from "../../../Utils/FormatDate";
 
 const CustomTable = ({
   data,
@@ -62,10 +63,26 @@ const CustomTable = ({
                           </Dropdown.Item>
                         ))}
                       </DropdownButton>
+                    ) : column.key === "before" ||
+                      column.key === "during" ||
+                      column.key === "after" ? (
+                      <>{row.whatToDo?.[column.key]}</>
+                    ) : column.key === "team" ? (
+                      <>
+                        <p>{row[column.key].name}</p>
+
+                        {/* Render other team properties as needed */}
+                      </>
+                    ) : column.key === "from" || column.key === "to" ? (
+                      <>{formatDate(row.period?.[column.key])}</>
+                    ) : column.key === "from" || column.key === "to" ? (
+                      <>{formatDate(row.period?.[column.key])}</>
                     ) : column.key === "fullname" ? (
                       <>
                         <p>
-                          {row.lastName}, {row.firstName} {row.middleName}
+                          {row.lastname || row.lastName},{" "}
+                          {row.firstname || row.firstName}{" "}
+                          {row.middlename || row.lastName}
                         </p>
                       </>
                     ) : column.key === "household" ? (

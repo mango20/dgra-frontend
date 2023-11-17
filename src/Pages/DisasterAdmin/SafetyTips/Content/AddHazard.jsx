@@ -6,13 +6,20 @@ import hazard from "../../../../Data/hazard.json";
 import CustomModal from "../../../../Components/UI/Modal/CustomModal";
 import CustomTextArea from "../../../../Components/Form/TextArea";
 import Select from "../../../../Components/Form/Select";
+import { patchReq, postReq } from "../../../../Service/API";
+import { useSelector } from "react-redux";
+import { generateFullName } from "../../../../Utils/Fullname";
 
 const AddHazard = ({
   addHazard,
   closeModal,
   editHazardModal,
   selectedHazard,
+  alertMsg,
+  onItemAddedOrUpdated,
 }) => {
+  const currentUser = useSelector((state) => state.reducer.userInfo?.userInfo);
+
   const schema = z.object({
     hazard: z.string().nonempty("Hazard is required"),
     description: z.string().nonempty("Description is required"),
@@ -31,30 +38,66 @@ const AddHazard = ({
     handleSubmit,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    if (selectedHazard) {
-      // Logic to update the existing event
-      console.log("Edit event data:", data);
-    } else {
-      // Logic to add a new event
-      console.log("Add event data:", data);
+  const onSubmit = async (data) => {
+    const endpoint = selectedHazard
+      ? "/api/disasterAdmin/safetytips"
+      : "/api/disasterAdmin/safetytips";
+
+    const fullname = generateFullName(currentUser);
+
+    const whatToDo = {
+      before: data.before,
+      during: data.during,
+      after: data.after,
+    };
+
+    const payload = selectedHazard
+      ? { ...data, whatToDo, _id: selectedHazard._id }
+      : {
+          ...data,
+          whatToDo,
+          assignedChairman: fullname,
+        };
+
+    console.log(payload);
+
+    try {
+      const response = selectedHazard
+        ? await patchReq(endpoint, payload)
+        : await postReq(endpoint, payload);
+
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.error("Error Adding User", error);
     }
+
     reset();
     closeModal();
   };
 
   useEffect(() => {
-    if (selectedHazard) {
-      // If editing an event, set form values using setValue
+    if (editHazardModal && selectedHazard) {
+      console.log("fdsfsdf");
       setValue("hazard", selectedHazard.hazard);
       setValue("description", selectedHazard.description);
-      setValue("facts", selectedHazard.facts); // Make sure it's in the correct format
-      setValue("safetyTips", selectedHazard.safetyTip);
-      setValue("before", selectedHazard.before);
-      setValue("during", selectedHazard.during);
-      setValue("after", selectedHazard.after);
+      setValue("facts", selectedHazard.facts);
+      setValue("safetyTips", selectedHazard.safetyTips);
+      setValue("before", selectedHazard.whatToDo.before);
+      setValue("during", selectedHazard.whatToDo.during);
+      setValue("after", selectedHazard.whatToDo.after);
+    } else {
+      console.log("first");
+      setValue("hazard", "");
+      setValue("description", "");
+      setValue("facts", "");
+      setValue("safetyTips", "");
+      setValue("before", "");
+      setValue("during", "");
+      setValue("after", "");
     }
   }, [selectedHazard, setValue]);
+
   return (
     <CustomModal
       show={addHazard || editHazardModal}

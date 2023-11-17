@@ -1,12 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { faPencil, faRotate, faTrash } from "@fortawesome/free-solid-svg-icons";
 import BDRRMC from "../../../../Data/SampleData/BDRRMC.json";
 import { BDRRMCTC } from "../../../../Utils/TableColumns";
 import SearchFilter from "../../../../Utils/SearchFilter";
 import CustomTable from "../../../../Components/UI/Table/Table";
+import { deleteReq, getReq, putReq } from "../../../../Service/API";
 
-const BDRRMCList = ({ searchTerm, onEdit }) => {
+const BDRRMCList = ({ searchTerm, onEdit, onItemAddedOrUpdated, alertMsg }) => {
   const tableColumns = BDRRMCTC;
+  const [bdrrmcteam, setBdrrmcteam] = useState([]);
+
+  const restoreUser = async (id) => {
+    try {
+      const response = await putReq(`/api/disasterAdmin/bdrrmcteam`, {
+        _id: id,
+      });
+
+      console.log(response);
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.log("Error Restoring User", error);
+    }
+  };
+  const deleteBdrrmc = async (id) => {
+    try {
+      const response = await deleteReq(
+        `/api/disasterAdmin/bdrrmcteam?_id=${id}`
+      );
+
+      console.log(response);
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.log("Error Deleting Users", error);
+    }
+  };
 
   const getActionsForRow = (row) => {
     const actions = [];
@@ -15,9 +44,7 @@ const BDRRMCList = ({ searchTerm, onEdit }) => {
       actions.push({
         label: "Restore",
         icon: faRotate, // Add your specific icon here
-        handler: () => {
-          // Your restore logic goes here
-        },
+        handler: () => restoreUser(row._id),
       });
     } else {
       actions.push({
@@ -31,16 +58,28 @@ const BDRRMCList = ({ searchTerm, onEdit }) => {
       actions.push({
         label: "Delete",
         icon: faTrash,
-        handler: () => {
-          console.log("Deleted");
-        },
+        handler: () => deleteBdrrmc(row._id),
       });
     }
 
     return actions;
   };
 
-  const dataFiltered = SearchFilter(BDRRMC, searchTerm);
+  useEffect(() => {
+    getBdrrmcList();
+  }, [onItemAddedOrUpdated]);
+
+  const getBdrrmcList = async () => {
+    try {
+      const response = await getReq("/api/disasterAdmin/bdrrmcteam");
+      console.log("System User : ", response);
+      setBdrrmcteam(response.teams);
+    } catch (error) {
+      console.log("Error Get User", error);
+    }
+  };
+
+  const dataFiltered = SearchFilter(bdrrmcteam, searchTerm);
 
   return (
     <div>

@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PageContainer from "../../../Layout/Container/PageContainer";
 import ContentContainer from "../../../Layout/Container/ContentContainer";
 import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
 import AddBDRRMC from "./Content/AddBDRRMC";
 import BDRRMCList from "./Content/BDRRMCList";
+import CustomAlert from "../../../Components/UI/Alert/Alert";
 
 const BDRRMC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [addBDRRMC, setAddBDRRMC] = useState(false);
   const [editBDRRMCModal, setEditBDRRMCModal] = useState(false);
   const [selectedBDRRMC, setSelectedBDRRMC] = useState(null);
+  const [alertLabel, setAlertLabel] = useState("");
 
   const handleAdd = () => {
     setAddBDRRMC(true);
@@ -36,6 +38,17 @@ const BDRRMC = () => {
     setSearchTerm("");
     console.log("View all button clicked");
   };
+
+  useEffect(() => {
+    if (alertLabel) {
+      const timer = setTimeout(() => {
+        setAlertLabel("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alertLabel]);
+
   return (
     <PageContainer>
       <ContentContainer title={"BDRRMC Team"}>
@@ -45,13 +58,21 @@ const BDRRMC = () => {
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <BDRRMCList searchTerm={searchTerm} onEdit={handleEdit} />
+        {alertLabel && <CustomAlert label={alertLabel} />}
+        <BDRRMCList
+          searchTerm={searchTerm}
+          onEdit={handleEdit}
+          alertMsg={(label) => setAlertLabel(label)}
+          onItemAddedOrUpdated={() => {}}
+        />
       </ContentContainer>
       <AddBDRRMC
         addBDRRMC={addBDRRMC}
         closeModal={closeModal}
         editBDRRMCModal={editBDRRMCModal}
         selectedBDRRMC={selectedBDRRMC}
+        alertMsg={(label) => setAlertLabel(label)}
+        onItemAddedOrUpdated={() => {}}
       />
     </PageContainer>
   );

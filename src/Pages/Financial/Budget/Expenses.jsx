@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useLocation, useParams } from "react-router-dom";
 import PageContainer from "../../../Layout/Container/PageContainer";
@@ -7,20 +7,33 @@ import CustomButton from "../../../Components/Form/Button";
 import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
 import ExpensesList from "./Content/ExpensesList";
 import AddExpenses from "./Content/AddExpenses";
+import CustomAlert from "../../../Components/UI/Alert/Alert";
 
 const Expenses = () => {
   const location = useLocation();
   const name = location.state ? location.state.name : "";
+  const getId = location.state ? location.state.id : "";
   const [searchTerm, setSearchTerm] = useState("");
   const [addExpenses, setExpenses] = useState(false);
+  const [editExpensesModal, setEditExpensesModal] = useState(false);
+  const [selectedExpenses, setSelectedExpenses] = useState(null);
+  const [alertLabel, setAlertLabel] = useState("");
 
   const handleAdd = () => {
     setExpenses(true);
-    console.log("Add button clicked");
+    setSelectedExpenses(null); // Clear any previously selected event for editing
+  };
+
+  const handleEdit = (event) => {
+    setSelectedExpenses(event);
+    setEditExpensesModal(true);
+    setExpenses(true);
   };
 
   const closeModal = () => {
     setExpenses(false);
+    setEditExpensesModal(false);
+    setSelectedExpenses(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -32,6 +45,16 @@ const Expenses = () => {
     setSearchTerm("");
     console.log("View all button clicked");
   };
+
+  useEffect(() => {
+    if (alertLabel) {
+      const timer = setTimeout(() => {
+        setAlertLabel("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alertLabel]);
 
   return (
     <PageContainer>
@@ -45,9 +68,25 @@ const Expenses = () => {
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-        <ExpensesList searchTerm={searchTerm} />
+        {alertLabel && <CustomAlert label={alertLabel} />}
+        <ExpensesList
+          searchTerm={searchTerm}
+          onEdit={handleEdit}
+          editExpensesModal={editExpensesModal}
+          selectedExpenses={selectedExpenses}
+          alertMsg={(label) => setAlertLabel(label)}
+          onItemAddedOrUpdated={() => {}}
+          getId={getId}
+        />
       </ContentContainer>
-      <AddExpenses addExpenses={addExpenses} closeModal={closeModal} />
+      <AddExpenses
+        addExpenses={addExpenses}
+        closeModal={closeModal}
+        editExpensesModal={editExpensesModal}
+        selectedExpenses={selectedExpenses}
+        alertMsg={(label) => setAlertLabel(label)}
+        onItemAddedOrUpdated={() => {}}
+      />
     </PageContainer>
   );
 };

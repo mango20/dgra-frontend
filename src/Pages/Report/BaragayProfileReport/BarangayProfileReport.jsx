@@ -2,43 +2,51 @@ import React from "react";
 import PageContainer from "../../../Layout/Container/PageContainer";
 import ContentContainer from "../../../Layout/Container/ContentContainer";
 import CustomTab from "../../../Components/UI/Tabs/CustomTab";
+import GeneralInformation from "./Content/GeneralInformation";
+import Demography from "./Content/Demography";
+import SocioEconomic from "./Content/SocioEconomic";
+import Health from "./Content/Health";
+import WaterSanitation from "./Content/WaterSanitation";
+import Shelter from "./Content/Shelter";
+import BasicInformation from "./Content/BasicEducation";
+import BasicEducation from "./Content/BasicEducation";
 
 const BarangayProfileReport = () => {
   const tabsData = [
     {
       eventKey: "general",
       title: "General Information",
-      content: "Tab content for Home",
+      content: <GeneralInformation />,
     },
     {
       eventKey: "demography",
       title: "Demography",
-      content: "Tab content for Profile",
+      content: <Demography />,
     },
     {
       eventKey: "socio",
       title: "Socio-Economic Profile",
-      content: "Tab content for Profile",
+      content: <SocioEconomic />,
     },
     {
       eventKey: "health",
       title: "Health",
-      content: "Tab content for Profile",
+      content: <Health />,
     },
     {
       eventKey: "waterSanitation",
       title: "Water Sanitation",
-      content: "Tab content for Profile",
+      content: <WaterSanitation />,
     },
     {
       eventKey: "shelter",
       title: "Shelter",
-      content: "Tab content for Shelter",
+      content: <Shelter />,
     },
     {
       eventKey: "basicEd",
       title: "Basic Education",
-      content: "Tab content for Basic Education",
+      content: <BasicEducation />,
     },
   ];
   return (

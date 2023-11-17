@@ -7,17 +7,24 @@ import CustomInput from "../../../../Components/Form/Input";
 import CustomTextArea from "../../../../Components/Form/TextArea";
 import Select from "../../../../Components/Form/Select";
 import advisoryTypeOption from "../../../../Data/advisoryType.json";
+import { useSelector } from "react-redux";
+import { generateFullName } from "../../../../Utils/Fullname";
+import { patchReq, postReq } from "../../../../Service/API";
 const AddAdvisory = ({
   addAdvisory,
   closeModal,
   editAdvisoryModal,
   selectedAdvisory,
+  alertMsg,
+  onItemAddedOrUpdated,
 }) => {
   const schema = z.object({
     subject: z.string().nonempty("Subject is required"),
     type: z.string().nonempty("Type is required"),
     message: z.string().nonempty("Message is required"),
   });
+
+  const currentUser = useSelector((state) => state.reducer.userInfo?.userInfo);
 
   const {
     register,
@@ -27,8 +34,30 @@ const AddAdvisory = ({
     handleSubmit,
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const endpoint = selectedAdvisory
+      ? "/api/disasterAdmin/disasteradvisory"
+      : "/api/disasterAdmin/disasteradvisory";
+
+    const fullname = generateFullName(currentUser);
+
+    const payload = selectedAdvisory
+      ? { _id: selectedAdvisory._id, ...data }
+      : { lastUser: fullname, ...data };
+
+    console.log(payload);
+
+    try {
+      const response = selectedAdvisory
+        ? await patchReq(endpoint, payload)
+        : await postReq(endpoint, payload);
+
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.error("Error Adding User", error);
+    }
+
     reset();
     closeModal();
   };

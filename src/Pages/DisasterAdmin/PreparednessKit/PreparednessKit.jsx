@@ -11,9 +11,13 @@ import { Button } from "react-bootstrap";
 import "../../../Asset/Scss/Pages/DisasterAdmin/_preparednessKit.scss";
 import PageContainer from "../../../Layout/Container/PageContainer";
 import ContentContainer from "../../../Layout/Container/ContentContainer";
+import { getReq, patchReq } from "../../../Service/API";
+import CustomAlert from "../../../Components/UI/Alert/Alert";
+
 const PreparednessKit = () => {
+  const [alertLabel, setAlertLabel] = useState("");
+
   const [editorState, setEditorState] = useState(() => {
-    // Load editor content from localStorage on initial render
     const savedContent = localStorage.getItem("editorContent");
     if (savedContent) {
       const contentState = convertFromRaw(JSON.parse(savedContent));
@@ -22,19 +26,46 @@ const PreparednessKit = () => {
     return EditorState.createEmpty();
   });
 
-  // Function to handle the "Update" button click
-  const handleUpdateClick = () => {
+  const handleUpdateClick = async () => {
     const contentState = editorState.getCurrentContent();
     const contentAsJSON = convertToRaw(contentState);
     const contentAsString = JSON.stringify(contentAsJSON);
 
-    // Store the content in localStorage
     localStorage.setItem("editorContent", contentAsString);
-    console.log("Updated Text:", contentAsJSON);
+    console.log("Content as ", contentAsJSON);
+    try {
+      // Call the patchReq function to update data
+      const response = await patchReq("/api/disasterAdmin/preparednesskit", {
+        information: contentAsJSON,
+      });
+      setAlertLabel("Preparedness Kit Updated Successfully");
+      console.log("Update Response:", response);
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
   };
 
   useEffect(() => {
-    // Update the editor state when localStorage changes (e.g., from another tab)
+    const fetchData = async () => {
+      try {
+        const response = await getReq("/api/disasterAdmin/safetytips");
+
+        if (response && response.information) {
+          try {
+            const contentState = convertFromRaw(response.information);
+            setEditorState(EditorState.createWithContent(contentState));
+          } catch (conversionError) {
+            console.error("Error converting data:", conversionError);
+            // Handle the error (e.g., set default content)
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+
     const handleStorageChange = (e) => {
       if (e.key === "editorContent") {
         const savedContent = e.newValue;
@@ -52,9 +83,20 @@ const PreparednessKit = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (alertLabel) {
+      const timer = setTimeout(() => {
+        setAlertLabel("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [alertLabel]);
+
   return (
     <PageContainer>
       <ContentContainer title={"Preparedness Kit"}>
+        {alertLabel && <CustomAlert label={alertLabel} />}
         <h2 className="getAKitTitle">Get a Kit</h2>
         <Editor
           editorState={editorState}
