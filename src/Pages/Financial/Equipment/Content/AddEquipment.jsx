@@ -2,16 +2,15 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import landClassification from "../../../../Data/landClassification.json";
 import CustomModal from "../../../../Components/UI/Modal/CustomModal";
-import Select from "../../../../Components/Form/Select";
 import CustomInput from "../../../../Components/Form/Input";
 import { patchReq, postReq } from "../../../../Service/API";
-const AddSupply = ({
-  addSupply,
+
+const AddEquipment = ({
+  addEquipment,
   closeModal,
-  editSupplyModal,
-  selectedSupply,
+  editEquipmentModal,
+  selectedEquipment,
   alertMsg,
   onItemAddedOrUpdated,
 }) => {
@@ -20,10 +19,8 @@ const AddSupply = ({
     category: z.string().nonempty("Category is required"),
     description: z.string().nonempty("Description is required"),
     unitCost: z.string().nonempty("Unit Cost is required"),
-    quantity: z.string().nonempty("Quantity is required"),
-    totalCost: z.string().nonempty("Total Cost is required"),
-    stockOut: z.string().nonempty("Stock Out is required"),
-    stockIn: z.string().nonempty("Stock In is required"),
+    propertyNumber: z.string().nonempty("Property Number is required"),
+    location: z.string().nonempty("Location is required"),
   });
 
   const {
@@ -35,20 +32,18 @@ const AddSupply = ({
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
-    const endpoint = selectedSupply
-      ? "/api/financial/supplies"
-      : "/api/financial/supplies";
+    const endpoint = selectedEquipment
+      ? "/api/financial/equipment"
+      : "/api/financial/equipment";
 
-    // const fullname = generateFullName(currentUser);
-
-    const payload = selectedSupply
-      ? { _id: selectedSupply._id, ...data }
-      : { ...data };
+    const payload = selectedEquipment
+      ? { _id: selectedEquipment._id, ...data }
+      : { ...data, status: "Active" };
 
     console.log(payload);
 
     try {
-      const response = selectedSupply
+      const response = selectedEquipment
         ? await patchReq(endpoint, payload)
         : await postReq(endpoint, payload);
 
@@ -61,34 +56,29 @@ const AddSupply = ({
     closeModal();
   };
 
-  const title = selectedSupply ? "Edit Supply" : "Add Supply";
+  const title = selectedEquipment ? "Edit Equipment" : "Add Equipment";
 
   useEffect(() => {
-    console.log(editSupplyModal && selectedSupply);
-    if (editSupplyModal && selectedSupply) {
-      setValue("itemNumber", selectedSupply.itemNumber);
-      setValue("category", selectedSupply.category);
-      setValue("description", selectedSupply.description);
-      setValue("unitCost", selectedSupply.unitCost);
-      setValue("quantity", selectedSupply.quantity);
-      setValue("totalCost", selectedSupply.totalCost);
-      setValue("stockOut", selectedSupply.stockOut);
-      setValue("stockIn", selectedSupply.stockIn);
+    if (editEquipmentModal && selectedEquipment) {
+      setValue("itemNumber", selectedEquipment.itemNumber);
+      setValue("category", selectedEquipment.category);
+      setValue("description", selectedEquipment.description);
+      setValue("unitCost", selectedEquipment.unitCost);
+      setValue("propertyNumber", selectedEquipment.propertyNumber);
+      setValue("location", selectedEquipment.location);
     } else {
       setValue("itemNumber", "");
       setValue("category", "");
-      setValue("description ", "");
-      setValue("unitCost ", "");
-      setValue("quantity ", "");
-      setValue("totalCost ", "");
-      setValue("stockOut ", "");
-      setValue("stockIn ", "");
+      setValue("description", "");
+      setValue("unitCost", "");
+      setValue("propertyNumber", "");
+      setValue("location", "");
     }
-  }, [selectedSupply, setValue]);
+  }, [selectedEquipment, setValue]);
 
   return (
     <CustomModal
-      show={addSupply || editSupplyModal}
+      show={addEquipment || editEquipmentModal}
       handleClose={closeModal}
       title={title}
       handleAction={handleSubmit(onSubmit)}
@@ -119,32 +109,20 @@ const AddSupply = ({
           {...register("unitCost")}
         />
         <CustomInput
-          label="Quatity"
+          label="Property Number"
           className="formInputModal"
           errors={errors}
-          {...register("quantity")}
+          {...register("propertyNumber")}
         />
         <CustomInput
-          label="Total Cost"
+          label="Location"
           className="formInputModal"
           errors={errors}
-          {...register("totalCost")}
-        />
-        <CustomInput
-          label="Stock Out"
-          className="formInputModal"
-          errors={errors}
-          {...register("stockOut")}
-        />
-        <CustomInput
-          label="Stock In"
-          className="formInputModal"
-          errors={errors}
-          {...register("stockIn")}
+          {...register("location")}
         />
       </form>
     </CustomModal>
   );
 };
 
-export default AddSupply;
+export default AddEquipment;

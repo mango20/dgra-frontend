@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   faEye,
   faPencil,
@@ -9,10 +9,16 @@ import Education from "../../../Data/SampleData/Education.json";
 import CustomTable from "../../../Components/UI/Table/Table";
 import { educationTC } from "../../../Utils/TableColumns";
 import SearchFilter from "../../../Utils/SearchFilter";
+import { getReq } from "../../../Service/API";
 
-const EducationList = ({ searchTerm }) => {
+const EducationList = ({
+  searchTerm,
+  onEdit,
+  onItemAddedOrUpdated,
+  alertMsg,
+}) => {
   const tableColumns = educationTC;
-
+  const [budget, setBudget] = useState([]);
   const getActionsForRow = (row) => {
     const actions = [];
 
@@ -20,7 +26,7 @@ const EducationList = ({ searchTerm }) => {
       label: "Edit",
       icon: faPencil,
       handler: () => {
-        // Implement your edit logic here
+        onEdit(row);
       },
     });
 
@@ -35,7 +41,21 @@ const EducationList = ({ searchTerm }) => {
     return actions;
   };
 
-  const dataFiltered = SearchFilter(Education, searchTerm);
+  useEffect(() => {
+    getBudget();
+  }, [onItemAddedOrUpdated]);
+
+  const getBudget = async () => {
+    try {
+      const response = await getReq("/api/financial/education");
+      console.log("Budget : ", response);
+      // setBudget(response.education);
+    } catch (error) {
+      console.log("Error Get User", error);
+    }
+  };
+
+  const dataFiltered = SearchFilter(budget, searchTerm);
 
   return (
     <div>

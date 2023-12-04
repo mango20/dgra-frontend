@@ -1,0 +1,9 @@
+[
+  { "key": 1, "value": "Single" },
+  { "key": 2, "value": "Married" },
+  { "key": 3, "value": "Widowed" },
+  { "key": 4, "value": "Divorced/ Separated" },
+  { "key": 5, "value": "Annulled" },
+  { "key": 6, "value": "Common-law/Live-in" },
+  { "key": 7, "value": "Unknown" }
+]

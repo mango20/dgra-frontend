@@ -3,32 +3,32 @@ import PageContainer from "../../../Layout/Container/PageContainer";
 import ContentContainer from "../../../Layout/Container/ContentContainer";
 import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
 import CustomAlert from "../../../Components/UI/Alert/Alert";
-import BudgetList from "./Content/SuppliesList";
-import AddBudget from "./Content/AddSupply";
+import AddSupply from "./Content/AddSupply";
+import SuppliesList from "./Content/SuppliesList";
 
 const Supply = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [addSupply, setBudget] = useState(false);
-  const [editSupplyModal, setEditBudgetModal] = useState(false);
-  const [selectedSupply, setSelectedBudget] = useState(null);
+  const [addSupply, setSupplies] = useState(false);
+  const [editSupplyModal, setEditSupplies] = useState(false);
+  const [selectedSupply, setSelectSupplies] = useState(null);
   const [alertLabel, setAlertLabel] = useState("");
 
   const handleAdd = () => {
-    setBudget(true);
-    setSelectedBudget(null);
+    setSupplies(true);
+    setSelectSupplies(null);
     console.log("Add button clicked");
   };
 
   const handleEdit = (event) => {
-    setSelectedBudget(event);
-    setEditBudgetModal(true);
-    setBudget(true);
+    setSelectSupplies(event);
+    setEditSupplies(true);
+    setSupplies(true);
   };
 
   const closeModal = () => {
-    setBudget(false);
-    setEditBudgetModal(false);
-    setSelectedBudget(null);
+    setSupplies(false);
+    setEditSupplies(false);
+    setSelectSupplies(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -61,14 +61,14 @@ const Supply = () => {
           onViewAll={handleViewAll}
         />
         {alertLabel && <CustomAlert label={alertLabel} />}
-        <BudgetList
+        <SuppliesList
           searchTerm={searchTerm}
           onEdit={handleEdit}
           alertMsg={(label) => setAlertLabel(label)}
           onItemAddedOrUpdated={() => {}}
         />
       </ContentContainer>
-      <AddBudget
+      <AddSupply
         addSupply={addSupply}
         closeModal={closeModal}
         editSupplyModal={editSupplyModal}

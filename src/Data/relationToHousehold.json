@@ -1,0 +1,12 @@
+[
+  { "key": 1, "value": "Head" },
+  { "key": 2, "value": "Spouse" },
+  { "key": 3, "value": "Son/Daughter" },
+  { "key": 4, "value": "Brother/Sister" },
+  { "key": 5, "value": "Son/Daughter-in-law" },
+  { "key": 6, "value": "Grandchildren" },
+  { "key": 7, "value": "Parents" },
+  { "key": 8, "value": "Other Relative" },
+  { "key": 9, "value": "Housemaid/boy" },
+  { "key": 10, "value": "Friends" }
+]

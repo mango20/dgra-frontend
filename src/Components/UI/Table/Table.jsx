@@ -5,6 +5,7 @@ import "../../../Asset/Scss/Components/UI/Table/_table.scss";
 import Pagination from "../Pagination/Pagination";
 import CustomButton from "../../Form/Button";
 import { formatDate } from "../../../Utils/FormatDate";
+import moment from "moment";
 
 const CustomTable = ({
   data,
@@ -13,6 +14,9 @@ const CustomTable = ({
   itemsPerPage,
   tableRowClass,
 }) => {
+  console.log("Data:", data);
+  console.log("Columns:", columns);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (pageNumber) => {
@@ -87,16 +91,28 @@ const CustomTable = ({
                       </>
                     ) : column.key === "household" ? (
                       <div>
-                        <p>{row[column.key].familyName}</p>
-                        <p>Address: {row[column.key].address}</p>
-                        <p>Contact: {row[column.key].contact}</p>
+                        <p>{row.nameOfRespondent}</p>
+                        <p>Address: {row.barangay}</p>
+                        <p>Contact: {row.contactNo}</p>
                       </div>
-                    ) : column.key === "editDelete" ? (
-                      <div className="centerActions">
-                        <CustomButton label="Edit" className="fitButton" />
-                        <CustomButton label="Delete" className="red" />
-                      </div>
+                    ) : column.key === "noFamilies" ? (
+                      <>
+                        <p>
+                          {row.householdCharacteristics.length > 0 &&
+                            row.householdCharacteristics[0].noFamilies}
+                        </p>
+                      </>
+                    ) : column.key === "updatedAt" ? (
+                      <>
+                        <p>{moment(row.updatedAt).format("MM-DD-YYYY")}</p>
+                      </>
                     ) : (
+                      // : column.key === "editDelete" ? (
+                      //   <div className="centerActions">
+                      //     <CustomButton label="Edit" className="fitButton" />
+                      //     <CustomButton label="Delete" className="red" />
+                      //   </div>
+                      // )
                       row[column.key]
                     )}
                   </td>

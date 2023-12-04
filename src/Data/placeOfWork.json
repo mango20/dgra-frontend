@@ -1,0 +1,15 @@
+[
+  { "key": 1, "value": "Worked for Private Household" },
+  { "key": 2, "value": "Worked for Private Establishment" },
+  { "key": 3, "value": "Worked for government/non-government corporation" },
+  { "key": 4, "value": "Self-Employed without any paid employee" },
+  { "key": 5, "value": "Employer in own family-operated farm or business" },
+  {
+    "key": 6,
+    "value": "Worked with pay in own family-operated farm or business"
+  },
+  {
+    "key": 7,
+    "value": "Worked without pay in own family-operated farm or business"
+  }
+]

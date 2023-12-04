@@ -3,6 +3,10 @@ export const handleLogout = (navigate) => {
   navigate("/");
 };
 
+export const handleEducation = (navigate) => {
+  navigate("/education");
+};
+
 const menu = [
   {
     label: "Barangay Profile",
@@ -25,10 +29,11 @@ const menu = [
   },
   {
     label: "Financial",
-    subLabel: ["Budget", "Supplies", "Equiptment"],
+    subLabel: ["Budget", "Supplies", "Equipment"],
   },
   {
     label: "Education",
+    onClick: handleEducation,
     route: "/education",
   },
   {

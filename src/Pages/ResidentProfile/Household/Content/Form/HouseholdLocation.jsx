@@ -3,6 +3,8 @@ import { useFormContext } from "react-hook-form";
 import CustomInput from "../../../../../Components/Form/Input";
 import MapContainer from "../../../../../Utils/Map";
 import "../../../../../Asset/Scss/Pages/ResidenceProfile/_householdLocation.scss";
+import { fromLatLng, setKey, geocode, RequestType } from "react-geocode";
+setKey("AIzaSyBlApZPTcG_IhHgjWCLdp-PKMiiM4xBAAM");
 const HouseholdLocation = ({ selectedHousehold }) => {
   const {
     register,
@@ -12,25 +14,45 @@ const HouseholdLocation = ({ selectedHousehold }) => {
 
   useEffect(() => {
     if (selectedHousehold) {
-      // If editing an event, set form values using setValue
       setValue("province", selectedHousehold.province);
-      setValue("municipality", selectedHousehold.municipality);
+      setValue("cityOrMunicipality", selectedHousehold.cityOrMunicipality);
       setValue("barangay", selectedHousehold.barangay);
-      setValue("purok", selectedHousehold.purok);
+      setValue("purokOrSitio", selectedHousehold.purokOrSitio);
       setValue("street", selectedHousehold.street);
-      setValue("houseIdentificationNumber", selectedHousehold.id);
-      setValue("respondentName", selectedHousehold.lastUser);
-      setValue("contactNumber", selectedHousehold.household.contact);
+      setValue("householdNo", selectedHousehold.id);
+      setValue("nameOfRespondent", selectedHousehold.lastUser);
+      setValue("contactNo", selectedHousehold.household.contact);
     }
   }, [selectedHousehold, setValue]);
 
   const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
-    // Fetch coordinates from an API or any other source
     // For demonstration purposes, using static values
-    setCoordinates({ lat: 37.7749, lng: -122.4194 });
+    setCoordinates({ lat: 14.6090537, lng: 121.0222565 });
   }, []);
+
+  const handleLocationChange = ({ lat, lng }) => {
+    setValue("latitude", lat.toString()); // Change "lat" to "latitude"
+    setValue("longitude", lng.toString());
+
+    fromLatLng(lat.toString(), lng.toString())
+      .then((response) => {
+        const address = response.results[0].formatted_address;
+        setValue("address", address);
+
+        geocode(RequestType.LATLNG, `${lat},${lng}`)
+          .then(({ results }) => {
+            const addressFromLatLng = results[0].formatted_address;
+            console.log(addressFromLatLng);
+          })
+          .catch(console.error);
+      })
+      .catch((error) => {
+        console.error("Error fetching address:", error);
+      });
+  };
+  console.log(errors);
   return (
     <div>
       <h4>A. Household Location</h4>
@@ -45,7 +67,7 @@ const HouseholdLocation = ({ selectedHousehold }) => {
           label="A.2 Municipality"
           className="formInputModalHousehold"
           errors={errors}
-          {...register("municipality")}
+          {...register("cityOrMunicipality")}
         />
         <CustomInput
           label="A.3 Barangay"
@@ -57,7 +79,7 @@ const HouseholdLocation = ({ selectedHousehold }) => {
           label="A.4 Purok/Sitio"
           className="formInputModalHousehold"
           errors={errors}
-          {...register("purok")}
+          {...register("purokOrSitio")}
         />
         <CustomInput
           label="A.5 Street"
@@ -69,22 +91,37 @@ const HouseholdLocation = ({ selectedHousehold }) => {
           label="A.6 House Identification Number"
           className="formInputModalHousehold"
           errors={errors}
-          {...register("houseIdentificationNumber")}
+          {...register("householdNo")}
         />
         {/* Map */}
         <label id="a7Label">A.7 Coordinates</label>
-        <MapContainer coordinates={coordinates} />
+        <MapContainer
+          coordinates={coordinates}
+          onLocationChange={handleLocationChange}
+        />
+        <CustomInput
+          label="Latitude"
+          className="formInputModalHousehold"
+          errors={errors}
+          {...register("latitude")}
+        />
+        <CustomInput
+          label="Longitude"
+          className="formInputModalHousehold"
+          errors={errors}
+          {...register("longitude")}
+        />
         <CustomInput
           label="A.8 Name of Respondent"
           className="formInputModalHousehold"
           errors={errors}
-          {...register("respondentName")}
+          {...register("nameOfRespondent")}
         />
         <CustomInput
           label="A.9 Household Contact Number add"
           className="formInputModalHousehold"
           errors={errors}
-          {...register("contactNumber")}
+          {...register("contactNo")}
         />
       </div>
     </div>

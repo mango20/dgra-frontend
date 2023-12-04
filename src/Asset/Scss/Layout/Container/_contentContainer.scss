@@ -10,7 +10,8 @@
   width: calc(100% - 350px);
 
   @media screen and (max-width: 818px) {
-    margin: 59px 0;
+    margin: 80px 0;
+    // height: 100vh;
   }
 
   .innerContainer {

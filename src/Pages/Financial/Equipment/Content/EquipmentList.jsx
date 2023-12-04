@@ -8,24 +8,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Budget from "../../../../Data/SampleData/Budget.json";
 import { useNavigate } from "react-router-dom";
-import { supplyTC } from "../../../../Utils/TableColumns";
+import { equipmentTC, supplyTC } from "../../../../Utils/TableColumns";
 import SearchFilter from "../../../../Utils/SearchFilter";
 import CustomTable from "../../../../Components/UI/Table/Table";
 import { deleteReq, getReq, patchReq, putReq } from "../../../../Service/API";
 
-const SuppliesList = ({
+const EquipmentList = ({
   searchTerm,
   onEdit,
   onItemAddedOrUpdated,
   alertMsg,
 }) => {
   // const navigate = useNavigate();
-  const tableColumns = supplyTC;
-  const [supplies, setSupplies] = useState([]);
+  const tableColumns = equipmentTC;
+  const [equipments, setEquipment] = useState([]);
 
   const restoreBudget = async (id) => {
     try {
-      const response = await putReq("/api/financial/supplies", {
+      const response = await putReq("/api/financial/equipment", {
         _id: id,
       });
 
@@ -39,7 +39,7 @@ const SuppliesList = ({
 
   const deleteSupply = async (id) => {
     try {
-      const response = await deleteReq(`/api/financial/supplies?_id=${id}`);
+      const response = await deleteReq(`/api/financial/equipment?_id=${id}`);
 
       console.log(response);
       alertMsg(response.message);
@@ -90,20 +90,20 @@ const SuppliesList = ({
   };
 
   useEffect(() => {
-    getSupplies();
+    getEquipment();
   }, [onItemAddedOrUpdated]);
 
-  const getSupplies = async () => {
+  const getEquipment = async () => {
     try {
-      const response = await getReq("/api/financial/supplies");
+      const response = await getReq("/api/financial/equipment");
       console.log("Budget : ", response);
-      setSupplies(response.supplies);
+      setEquipment(response.equipments);
     } catch (error) {
       console.log("Error Get User", error);
     }
   };
 
-  const dataFiltered = SearchFilter(supplies, searchTerm);
+  const dataFiltered = SearchFilter(equipments, searchTerm);
 
   return (
     <div>
@@ -117,4 +117,4 @@ const SuppliesList = ({
   );
 };
 
-export default SuppliesList;
+export default EquipmentList;

@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from "react";
-import ContentContainer from "../../Layout/Container/ContentContainer";
-import AddSearch from "../../Components/UI/AddSearch/AddSearch";
-import AddEducation from "./Content/AddEducation";
-import EducationList from "./Content/EducationList";
-import PageContainer from "../../Layout/Container/PageContainer";
-import CustomAlert from "../../Components/UI/Alert/Alert";
+import PageContainer from "../../../Layout/Container/PageContainer";
+import ContentContainer from "../../../Layout/Container/ContentContainer";
+import AddSearch from "../../../Components/UI/AddSearch/AddSearch";
+import CustomAlert from "../../../Components/UI/Alert/Alert";
+import AddSupply from "./Content/AddEquipment";
+import SuppliesList from "./Content/EquipmentList";
 
-const Education = () => {
+const Supply = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [addEducation, setEducation] = useState(false);
-  const [editEducationModal, setEditAdvisoryModal] = useState(false);
-  const [selectedEducation, setSelectedAdvisory] = useState(null);
+  const [addSupply, setSupplies] = useState(false);
+  const [editSupplyModal, setEditSupplies] = useState(false);
+  const [selectedSupply, setSelectSupplies] = useState(null);
   const [alertLabel, setAlertLabel] = useState("");
 
   const handleAdd = () => {
-    setEducation(true);
-    setSelectedAdvisory(null);
+    setSupplies(true);
+    setSelectSupplies(null);
     console.log("Add button clicked");
   };
 
   const handleEdit = (event) => {
-    setSelectedAdvisory(event);
-    setEditAdvisoryModal(true);
-    setEducation(true);
+    setSelectSupplies(event);
+    setEditSupplies(true);
+    setSupplies(true);
   };
 
   const closeModal = () => {
-    setEducation(false);
-    setEditAdvisoryModal(false);
-    setSelectedAdvisory(null);
+    setSupplies(false);
+    setEditSupplies(false);
+    setSelectSupplies(null);
   };
 
   const handleSearch = (searchTerm) => {
@@ -50,30 +50,29 @@ const Education = () => {
       return () => clearTimeout(timer);
     }
   }, [alertLabel]);
+
   return (
     <PageContainer>
-      <ContentContainer title={"Education"}>
+      <ContentContainer title={"Supplies"}>
         <AddSearch
-          addLabel="Add Education"
+          addLabel="Add Supply"
           onAdd={handleAdd}
           onSearch={handleSearch}
           onViewAll={handleViewAll}
         />
-
         {alertLabel && <CustomAlert label={alertLabel} />}
-        <EducationList
+        <SuppliesList
           searchTerm={searchTerm}
           onEdit={handleEdit}
           alertMsg={(label) => setAlertLabel(label)}
           onItemAddedOrUpdated={() => {}}
         />
       </ContentContainer>
-
-      <AddEducation
-        addEvacuation={addEducation}
+      <AddSupply
+        addSupply={addSupply}
         closeModal={closeModal}
-        editEducationModal={editEducationModal}
-        selectedEducation={selectedEducation}
+        editSupplyModal={editSupplyModal}
+        selectedSupply={selectedSupply}
         alertMsg={(label) => setAlertLabel(label)}
         onItemAddedOrUpdated={() => {}}
       />
@@ -81,4 +80,4 @@ const Education = () => {
   );
 };
 
-export default Education;
+export default Supply;

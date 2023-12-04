@@ -1,0 +1,13 @@
+[
+  { "key": 1, "value": "Own use faucet" },
+  { "key": 2, "value": "Community water system" },
+  { "key": 3, "value": "Shared faucet" },
+  { "key": 4, "value": "Own use tubed/piped deep well" },
+  { "key": 5, "value": "Shared tubed/piped deep well" },
+  { "key": 6, "value": "Tubed/piped shallow well" },
+  { "key": 7, "value": "Dug well" },
+  { "key": 8, "value": "Protected spring" },
+  { "key": 9, "value": "Peddler" },
+  { "key": 10, "value": "Bottled water" },
+  { "key": 11, "value": "Lake, river, rain, and others" }
+]

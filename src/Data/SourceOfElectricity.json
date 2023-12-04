@@ -1,0 +1,8 @@
+[
+  { "key": 1, "value": "Electric Company" },
+  { "key": 2, "value": "Generator" },
+  { "key": 3, "value": "Solar" },
+  { "key": 4, "value": "Battery" },
+  { "key": 5, "value": "Others" },
+  { "key": 6, "value": "None" }
+]

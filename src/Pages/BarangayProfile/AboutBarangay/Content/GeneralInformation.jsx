@@ -20,13 +20,12 @@ const GeneralInformation = () => {
   const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
-    // For demonstration purposes, using static values
     setCoordinates({ lat: 14.6090537, lng: 121.0222565 });
   }, []);
 
   const handleLocationChange = ({ lat, lng }) => {
-    setValue("lat", lat.toString());
-    setValue("long", lng.toString());
+    setValue("latitude", lat.toString()); // Change "lat" to "latitude"
+    setValue("longitude", lng.toString());
 
     fromLatLng(lat.toString(), lng.toString())
       .then((response) => {
@@ -62,14 +61,14 @@ const GeneralInformation = () => {
       <CustomInput
         label="Geographical Location"
         errors={errors}
-        {...register("lat")}
+        {...register("latitude")}
         type="text"
         className="formInput"
       />
       <CustomInput
         // label="Geographical Location"
         errors={errors}
-        {...register("long")}
+        {...register("longitude")}
         type="text"
         className="formInput"
       />

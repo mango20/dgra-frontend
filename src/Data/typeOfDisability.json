@@ -1,0 +1,18 @@
+[
+  { "key": 1, "value": "Total Blindness" },
+  { "key": 2, "value": "Partial Blindness" },
+  { "key": 3, "value": "Low Vision" },
+  { "key": 4, "value": "Totally Deaf" },
+  { "key": 5, "value": "Partially Deaf" },
+  { "key": 6, "value": "Oral Defect" },
+  { "key": 7, "value": "One Hand" },
+  { "key": 8, "value": "No Hands" },
+  { "key": 9, "value": "One Leg" },
+  { "key": 10, "value": "No Legs" },
+  { "key": 11, "value": "Mild Cerebral Palsy" },
+  { "key": 12, "value": "Severe Cerebral Palsy" },
+  { "key": 13, "value": "Retarded" },
+  { "key": 14, "value": "Mentally Ill" },
+  { "key": 15, "value": "Mental Retardation" },
+  { "key": 16, "value": "Multiple Impairment" }
+]

@@ -6,6 +6,11 @@ import CustomModal from "../../../../../Components/UI/Modal/CustomModal";
 import Select from "../../../../../Components/Form/Select";
 import landClassification from "../../../../../Data/landClassification.json";
 import CustomInput from "../../../../../Components/Form/Input";
+import YesNo from "../../../../../Data/YesNo.json";
+import civilStatus from "../../../../../Data/civilStatus.json";
+import placeOfWork from "../../../../../Data/placeOfWork.json";
+import typeOfDisability from "../../../../../Data/typeOfDisability.json";
+import relationToHousehold from "../../../../../Data/relationToHousehold.json";
 import "../../../../../Asset/Scss/Pages/ResidenceProfile/_addHouseholdMember.scss";
 const AddHouseholdMember = ({
   addHouseholdMember,
@@ -74,40 +79,40 @@ const AddHouseholdMember = ({
         <Select
           label="C.3 What is the relation to the household head?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Relation"
+          data={relationToHousehold}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.4 What is his/her civil status?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Status"
+          data={civilStatus}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.5 Is the member Deleted or Active?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.7 Is he/she currently staying on the same address?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.8 Is this family member attending school?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
@@ -130,32 +135,32 @@ const AddHouseholdMember = ({
         <Select
           label="C.11 If Active, is she pregnant?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.12 Is the family have children?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.13 Is solo parent?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
         <Select
           label="C.14 Does the family member have a disability?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
@@ -163,7 +168,7 @@ const AddHouseholdMember = ({
           label="C.15 [If Yes in in Question C.14]. What type of disability?"
           errors={errors}
           defaultOptionLabel="Choose Category"
-          data={landClassification}
+          data={typeOfDisability}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
@@ -176,24 +181,22 @@ const AddHouseholdMember = ({
         <Select
           label="C.17 Is the family member employed?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={YesNo}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />
-        <Select
+        <CustomInput
           label="C.18 What is the occupation of the family member?"
+          className="formInputModalAddHouseholdMember"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
-          {...register("barangayCategory")}
-          className="formSelectModalAddHouseholdMember"
+          {...register("province")}
         />
         <Select
           label="C.19 Where the  family member work?"
           errors={errors}
-          defaultOptionLabel="Choose Category"
-          data={landClassification}
+          defaultOptionLabel="Choose Option"
+          data={placeOfWork}
           {...register("barangayCategory")}
           className="formSelectModalAddHouseholdMember"
         />

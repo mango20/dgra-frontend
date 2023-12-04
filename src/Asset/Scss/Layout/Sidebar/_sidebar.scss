@@ -1,13 +1,13 @@
 .sidebar {
   display: block;
-  width: 350px;
+  min-width: 350px !important;
   padding: 10px 20px;
   background-color: rgb(20, 69, 175);
   color: #fff;
 
   @media screen and (max-width: 818px) {
     position: fixed;
-    top: 12%;
+    top: 8.7%;
     // bottom: 0;
     // left: 0;
     z-index: 999;

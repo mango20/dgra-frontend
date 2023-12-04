@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faEye,
   faPencil,
@@ -6,15 +6,22 @@ import {
   faRotate,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import Households from "../../../../Data/SampleData/Households.json";
+// import Households from "../../../../Data/SampleData/Households.json";
 import { householdTC } from "../../../../Utils/TableColumns";
 import SearchFilter from "../../../../Utils/SearchFilter";
 import CustomTable from "../../../../Components/UI/Table/Table";
 import AddHouseholdMember from "./Action/AddHouseholdMember";
+import { getReq } from "../../../../Service/API";
 
-const HouseholdList = ({ searchTerm, onEdit }) => {
+const HouseholdList = ({
+  searchTerm,
+  onEdit,
+  onItemAddedOrUpdated,
+  alertMsg,
+}) => {
   const [isAddHouseholdMemberModalOpen, setAddHouseholdMemberModalOpen] =
     useState(false);
+  const [households, setHouseholds] = useState([]);
 
   const closeModal = () => {
     setAddHouseholdMemberModalOpen(false);
@@ -86,7 +93,21 @@ const HouseholdList = ({ searchTerm, onEdit }) => {
     return actions;
   };
 
-  const dataFiltered = SearchFilter(Households, searchTerm);
+  useEffect(() => {
+    getHouseholdList();
+  }, [onItemAddedOrUpdated]);
+
+  const getHouseholdList = async () => {
+    try {
+      const response = await getReq("/api/household");
+      console.log("Budget : ", response);
+      setHouseholds(response.household);
+    } catch (error) {
+      console.log("Error Get User", error);
+    }
+  };
+
+  const dataFiltered = SearchFilter(households, searchTerm);
 
   return (
     <div>

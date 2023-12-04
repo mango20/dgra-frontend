@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import landClassification from "../../../../Data/landClassification.json";
 import CustomInput from "../../../../Components/Form/Input";
@@ -8,9 +8,16 @@ import Checkbox from "../../../../Components/Form/Checkbox";
 import CustomContainer from "../../../../Layout/Container/CustomContainer";
 import CustomTextArea from "../../../../Components/Form/TextArea";
 import InputImg from "../../../../Components/Form/InputImg";
-const PhysicalInformation = () => {
+const PhysicalInformation = ({ base64Img }) => {
+  const [imageData, setImageData] = useState({
+    base64textString: "",
+    imageName: "",
+    showImage: false,
+  });
+
   const {
     register,
+    setValue,
     formState: { errors },
   } = useFormContext();
 
@@ -29,6 +36,32 @@ const PhysicalInformation = () => {
     { label: "Commercial", value: "commercial" },
     { label: "Others", value: "others" },
   ];
+
+  const convertToBase64 = (event) => {
+    const file = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      const base64textString = reader.result;
+      const imageName = file.name;
+
+      setImageData({
+        base64textString,
+        imageName,
+        showImage: true,
+      });
+      // setValue("brgyLogo", base64textString);
+      base64Img(base64textString);
+      console.log("Image Base64 String:", base64textString);
+      console.log("Image Name:", imageName);
+    };
+
+    reader.onerror = (error) => {
+      console.log("Error: ", error);
+    };
+  };
   return (
     <CustomContainer title={"Physical Information"}>
       <CustomInput
@@ -94,7 +127,11 @@ const PhysicalInformation = () => {
           </div>
         </div>
       </div>
-      <InputImg label="Logo Image" />
+      <InputImg
+        label="Logo Image"
+        onChange={convertToBase64}
+        imageData={imageData}
+      />
       <CustomTextArea
         label="Vision"
         errors={errors}

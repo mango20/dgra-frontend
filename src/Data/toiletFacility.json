@@ -1,0 +1,9 @@
+[
+  { "key": 1, "value": "Owned" },
+  { "key": 2, "value": "Shared" },
+  { "key": 3, "value": "Open Pit" },
+  { "key": 4, "value": "Closed Pit" },
+  { "key": 5, "value": "Drop/Overhang" },
+  { "key": 6, "value": "Pail System" },
+  { "key": 7, "value": "No Toilet/Field/Bush" }
+]
