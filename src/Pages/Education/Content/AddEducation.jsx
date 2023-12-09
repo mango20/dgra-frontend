@@ -21,7 +21,8 @@ const AddEducation = ({
     name: z.string().nonempty("Type is required"),
     barangay: z.string().nonempty("Name is required"),
     purok: z.string().nonempty("Location is required"),
-    schoolYear: z.string(), // Depending on your validation rules
+    schoolYear: z.string(),
+    category: z.array(z.string()),
   });
 
   const {
@@ -95,8 +96,9 @@ const AddEducation = ({
 
     const { MaximumCapacity = 0, NumberOfEnrolled = 0 } = gradeData;
 
-    return MaximumCapacity - NumberOfEnrolled;
+    return parseInt(MaximumCapacity) - parseInt(NumberOfEnrolled) || 0;
   };
+
   const setMissingToZero = (value) => (value ? parseInt(value) : "0");
   const getAdjustedIndex = (category, gradeIndex) => {
     if (category === "Elementary") return gradeIndex;
@@ -118,10 +120,12 @@ const AddEducation = ({
       barangay: data.barangay || "",
       purok: data.purok || "",
       schoolYear: data.schoolYear || "",
-      category: data.category || "",
-      // Grade levels 1-12
+      category: "Elementary",
+      // category: data.category || "",
       ...generateGradePayload(data),
     };
+
+    console.log(data);
     console.log(payload);
     try {
       const response = selectedEducation
@@ -134,63 +138,30 @@ const AddEducation = ({
       console.error("Error Adding Users", error);
     }
   };
+  // ... (other code remains unchanged)
 
-  const generateGradePayload = (data) => {
+  const generateGradePayload = () => {
     let gradePayload = {};
 
     for (let i = 1; i <= 12; i++) {
       const keyPrefix = `g${i}`;
+      const gradeData = gradesData[i - 1] || {}; // Adjust index
+
       gradePayload[`${keyPrefix}MaximumCapacity`] = setMissingToZero(
-        data[`${keyPrefix}MaximumCapacity`]
-      );
+        gradeData.MaximumCapacity
+      ).toString(); // Convert to string
       gradePayload[`${keyPrefix}NumberOfEnrolled`] = setMissingToZero(
-        data[`${keyPrefix}NumberOfEnrolled`]
-      );
+        gradeData.NumberOfEnrolled
+      ).toString(); // Convert to string
       gradePayload[`${keyPrefix}AvailableSlots`] = setMissingToZero(
-        data[`${keyPrefix}AvailableSlots`]
-      );
+        gradeData.AvailableSlots
+      ).toString(); // Convert to string
     }
 
     return gradePayload;
   };
-  // Function to generate payload fields based on the selected category and grades
-  const getGradePayload = (data, category) => {
-    let gradePayload = {};
 
-    if (category === "Elementary") {
-      for (let i = 1; i <= 6; i++) {
-        const keyPrefix = `g${i}`;
-        gradePayload[`${keyPrefix}MaximumCapacity`] =
-          data[`${keyPrefix}MaximumCapacity`];
-        gradePayload[`${keyPrefix}NumberOfEnrolled`] =
-          data[`${keyPrefix}NumberOfEnrolled`];
-        gradePayload[`${keyPrefix}AvailableSlots`] =
-          data[`${keyPrefix}AvailableSlots`];
-      }
-    } else if (category === "Junior High School") {
-      for (let i = 7; i <= 10; i++) {
-        const keyPrefix = `g${i}`;
-        gradePayload[`${keyPrefix}MaximumCapacity`] =
-          data[`${keyPrefix}MaximumCapacity`];
-        gradePayload[`${keyPrefix}NumberOfEnrolled`] =
-          data[`${keyPrefix}NumberOfEnrolled`];
-        gradePayload[`${keyPrefix}AvailableSlots`] =
-          data[`${keyPrefix}AvailableSlots`];
-      }
-    } else if (category === "Senior High School") {
-      for (let i = 11; i <= 12; i++) {
-        const keyPrefix = `g${i}`;
-        gradePayload[`${keyPrefix}MaximumCapacity`] =
-          data[`${keyPrefix}MaximumCapacity`];
-        gradePayload[`${keyPrefix}NumberOfEnrolled`] =
-          data[`${keyPrefix}NumberOfEnrolled`];
-        gradePayload[`${keyPrefix}AvailableSlots`] =
-          data[`${keyPrefix}AvailableSlots`];
-      }
-    }
-
-    return gradePayload;
-  };
+  // ... (rest of the code remains unchanged)
 
   return (
     <CustomModal
@@ -201,212 +172,240 @@ const AddEducation = ({
       size="lg"
     >
       <form>
-        <CustomInput
-          label="Name"
-          className="formInputModal"
-          errors={errors}
-          {...register("name")}
-        />
-        <CustomInput
-          label="Barangay"
-          className="formInputModal"
-          errors={errors}
-          {...register("barangay")}
-        />
-        <CustomInput
-          label="Purok"
-          className="formInputModal"
-          errors={errors}
-          {...register("purok")}
-        />
-        <CustomInput
-          label="School Year"
-          className="formInputModal"
-          errors={errors}
-          {...register("schoolYear")}
-        />
+        <div style={{ overflowX: "auto" }}>
+          <CustomInput
+            label="Name"
+            className="formInputModal"
+            errors={errors}
+            {...register("name")}
+          />
+          <CustomInput
+            label="Barangay"
+            className="formInputModal"
+            errors={errors}
+            {...register("barangay")}
+          />
+          <CustomInput
+            label="Purok"
+            className="formInputModal"
+            errors={errors}
+            {...register("purok")}
+          />
+          <CustomInput
+            label="School Year"
+            className="formInputModal"
+            errors={errors}
+            {...register("schoolYear")}
+          />
 
-        <div className="checkboxGroups">
-          <label>Category</label>{" "}
-          <div className="checkboxGroupsInner">
-            {category.map((option) => {
-              if (option.value === "Elementary") {
-                columns[0] = { key: "Elementary", header: "Elementary" };
-              } else if (option.value === "Junior High School") {
-                columns[0] = {
-                  key: "Junior High School",
-                  header: "Junior High School",
-                };
-              } else if (option.value === "Senior High School") {
-                columns[0] = {
-                  key: "Senior High School",
-                  header: "Senior High School",
-                };
-              }
-              return (
-                <div key={option.value}>
-                  <Checkbox
-                    key={option.value}
-                    label={option.label}
-                    value={option.value}
-                    onChange={handleCategoryChange}
-                    checked={selectedCategories.includes(option.value)}
-                  />
-                  {selectedCategories.includes(option.value) && (
-                    <Table striped bordered responsive className="customTable">
-                      <thead>
-                        <tr>
-                          {columns.map((column) => (
-                            <th key={column.key}>{column.header}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {option.value === "Elementary" &&
-                          elementarySchoolGrades.map((gradeInfo, index) => (
-                            <tr key={index}>
-                              <td>{gradeInfo.grade}</td>
-                              <td>
-                                <input
-                                  {...register(`g${index + 1}MaximumCapacity`)}
-                                  type="text"
-                                  placeholder="Maximum Capacity"
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
-                                      "Elementary",
-                                      index,
-                                      "MaximumCapacity"
-                                    )
-                                  }
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  {...register(`g${index + 1}NumberOfEnrolled`)}
-                                  type="text"
-                                  placeholder="Number of Enrolled"
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
-                                      "Elementary",
-                                      index,
-                                      "NumberOfEnrolled"
-                                    )
-                                  }
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  {...register(`g${index + 1}AvailableSlots`)}
-                                  type="text"
-                                  placeholder="Available Slots"
-                                  value={calculateAvailableSlots(
-                                    "Elementary",
-                                    index
-                                  )}
-                                  disabled
-                                />
-                              </td>
-                            </tr>
-                          ))}
-                        {option.value === "Junior High School" &&
-                          juniorHighSchoolGrades.map((gradeInfo, index) => (
-                            <tr key={index}>
-                              <td>{gradeInfo.grade}</td>
-                              <td>
-                                <input
-                                  type="text"
-                                  placeholder="Maximum Capacity"
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
-                                      "Junior High School",
-                                      index,
-                                      "MaximumCapacity"
-                                    )
-                                  }
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  placeholder="Number of Enrolled"
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
-                                      "Junior High School",
-                                      index,
-                                      "NumberOfEnrolled"
-                                    )
-                                  }
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  placeholder="Available Slots"
-                                  value={calculateAvailableSlots(
-                                    "Junior High School",
-                                    index
-                                  )}
-                                  disabled
-                                />
-                              </td>
-                            </tr>
-                          ))}
+          <div className="checkboxGroups">
+            <label>Category</label>{" "}
+            <div className="checkboxGroupsInner">
+              {category.map((option) => {
+                if (option.value === "Elementary") {
+                  columns[0] = { key: "Elementary", header: "Elementary" };
+                } else if (option.value === "Junior High School") {
+                  columns[0] = {
+                    key: "Junior High School",
+                    header: "Junior High School",
+                  };
+                } else if (option.value === "Senior High School") {
+                  columns[0] = {
+                    key: "Senior High School",
+                    header: "Senior High School",
+                  };
+                }
+                return (
+                  <div key={option.value}>
+                    {/* <Checkbox
+                      key={option.value}
+                      label={option.label}
+                      value={option.value}
+                      onChange={handleCategoryChange}
+                      {...register("category")}
+                      checked={selectedCategories.includes(option.value)}
+                    /> */}
+                    <Checkbox
+                      type="checkbox"
+                      label={option.label}
+                      id={option.value}
+                      value={option.value}
+                      checked={selectedCategories.includes(option.value)}
+                      onChange={handleCategoryChange}
+                      {...register("category")}
+                    />
 
-                        {option.value === "Senior High School" &&
-                          seniorHighSchoolGrades.map((gradeInfo, index) => (
-                            <tr key={index}>
-                              <td>{gradeInfo.grade}</td>
-                              <td>
-                                <input
-                                  type="text"
-                                  placeholder="Maximum Capacity"
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
+                    {selectedCategories.includes(option.value) && (
+                      <Table
+                        striped
+                        bordered
+                        responsive
+                        className="customTable"
+                      >
+                        <thead>
+                          <tr>
+                            {columns.map((column) => (
+                              <th key={column.key}>{column.header}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {option.value === "Elementary" &&
+                            elementarySchoolGrades.map((gradeInfo, index) => (
+                              <tr key={index}>
+                                <td>{gradeInfo.grade}</td>
+                                <td>
+                                  <input
+                                    {...register(
+                                      `g${index + 1}MaximumCapacity`
+                                    )}
+                                    type="text"
+                                    placeholder="Maximum Capacity"
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "Elementary",
+                                        index,
+                                        "MaximumCapacity"
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    {...register(
+                                      `g${index + 1}NumberOfEnrolled`
+                                    )}
+                                    type="text"
+                                    placeholder="Number of Enrolled"
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "Elementary",
+                                        index,
+                                        "NumberOfEnrolled"
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    {...register(`g${index + 1}AvailableSlots`)}
+                                    type="text"
+                                    placeholder="Available Slots"
+                                    value={calculateAvailableSlots(
+                                      "Elementary",
+                                      index
+                                    )}
+                                    disabled
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          {option.value === "Junior High School" &&
+                            juniorHighSchoolGrades.map((gradeInfo, index) => (
+                              <tr key={index}>
+                                <td>{gradeInfo.grade}</td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    placeholder="Maximum Capacity"
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "Junior High School",
+                                        index,
+                                        "MaximumCapacity"
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    placeholder="Number of Enrolled"
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "Junior High School",
+                                        index,
+                                        "NumberOfEnrolled"
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    placeholder="Available Slots"
+                                    value={calculateAvailableSlots(
+                                      "Junior High School",
+                                      index
+                                    )}
+                                    disabled
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+
+                          {option.value === "Senior High School" &&
+                            seniorHighSchoolGrades.map((gradeInfo, index) => (
+                              <tr key={index}>
+                                <td>{gradeInfo.grade}</td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    placeholder="Maximum Capacity"
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "Senior High School",
+                                        index,
+                                        "MaximumCapacity"
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    {...register(
+                                      `g${index + 11}MaximumCapacity`
+                                    )}
+                                    type="text"
+                                    placeholder="Number of Enrolled"
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "Senior High School",
+                                        index,
+                                        "NumberOfEnrolled"
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    {...register(
+                                      `g${index + 12}MaximumCapacity`
+                                    )}
+                                    type="text"
+                                    placeholder="Available Slots"
+                                    value={calculateAvailableSlots(
                                       "Senior High School",
-                                      index,
-                                      "MaximumCapacity"
-                                    )
-                                  }
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  placeholder="Number of Enrolled"
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
-                                      "Senior High School",
-                                      index,
-                                      "NumberOfEnrolled"
-                                    )
-                                  }
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  placeholder="Available Slots"
-                                  value={calculateAvailableSlots(
-                                    "Senior High School",
-                                    index
-                                  )}
-                                  disabled
-                                />
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </Table>
-                  )}
-                </div>
-              );
-            })}
+                                      index
+                                    )}
+                                    disabled
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </Table>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </form>

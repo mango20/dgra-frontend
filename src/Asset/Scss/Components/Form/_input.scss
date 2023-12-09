@@ -133,7 +133,7 @@
 .formInputModalHouseholdCharacteristics {
   display: flex;
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: 1000px) {
     flex-direction: column;
   }
 
@@ -147,6 +147,9 @@
 
     @media screen and (max-width: 768px) {
       margin: 0;
+    }
+    @media screen and (max-width: 1000px) {
+      min-width: 100%;
     }
   }
 
@@ -220,4 +223,14 @@
   .inputMsg {
     width: 100%;
   }
+}
+
+.separatelabelForm {
+  font-weight: bold;
+  margin: 12px 0;
+  word-wrap: break-word;
+  white-space: pre-line;
+  margin-right: 10px;
+  font-family: $lato;
+  font-size: 20px;
 }

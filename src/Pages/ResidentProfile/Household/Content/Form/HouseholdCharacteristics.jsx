@@ -8,7 +8,7 @@ import SourceOfElectricity from "../../../../../Data/SourceOfElectricity.json";
 import buildingType from "../../../../../Data/buildingType.json";
 import waterSupply from "../../../../../Data/waterSupply.json";
 import toiletFacility from "../../../../../Data/toiletFacility.json";
-const HouseholdCharacteristics = ({ selectedHousehold }) => {
+const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
   const {
     register,
     setValue,
@@ -16,18 +16,59 @@ const HouseholdCharacteristics = ({ selectedHousehold }) => {
   } = useFormContext();
   console.log(errors);
   useEffect(() => {
-    if (selectedHousehold) {
+    if (selectedHousehold || edit) {
       // If editing an event, set form values using setValue
-      setValue("noFamilies", selectedHousehold.families);
-      setValue("noHouseholdMembers", selectedHousehold.members);
-      setValue("hasDisability", selectedHousehold.hasDisability);
-      setValue("noMembersDisability", selectedHousehold.noMembersDisability);
-      setValue("typeOfBuilding", selectedHousehold.typeOfBuilding);
-      setValue("mainWaterSupply", selectedHousehold.mainWaterSupply);
-      setValue("toiletFacType", selectedHousehold.toiletFacType);
-      setValue("hasWaterFiltration", selectedHousehold.hasWaterFiltration);
-      setValue("sourceOfElectricity", selectedHousehold.sourceOfElectricity);
-      setValue("hasPowerGenerator", selectedHousehold.hasPowerGenerator);
+      setValue(
+        "noFamilies",
+        selectedHousehold.householdCharacteristics[0].noFamilies
+      );
+      setValue(
+        "noHouseholdMembers",
+        selectedHousehold.householdCharacteristics[0].noHouseholdMembers
+      );
+      setValue(
+        "hasDisability",
+        selectedHousehold.householdCharacteristics[0].hasDisability
+      );
+      setValue(
+        "noMembersDisability",
+        selectedHousehold.householdCharacteristics[0].noMembersDisability
+      );
+      setValue(
+        "typeOfBuilding",
+        selectedHousehold.householdCharacteristics[0].typeOfBuilding
+      );
+      setValue(
+        "mainWaterSupply",
+        selectedHousehold.householdCharacteristics[0].mainWaterSupply
+      );
+      setValue(
+        "toiletFacType",
+        selectedHousehold.householdCharacteristics[0].toiletFacType
+      );
+      setValue(
+        "hasWaterFiltration",
+        selectedHousehold.householdCharacteristics[0].hasWaterFiltration
+      );
+      setValue(
+        "sourceOfElectricity",
+        selectedHousehold.householdCharacteristics[0].sourceOfElectricity
+      );
+      setValue(
+        "hasPowerGenerator",
+        selectedHousehold.householdCharacteristics[0].hasPowerGenerator
+      );
+    } else {
+      setValue("noFamilies", "");
+      setValue("noHouseholdMembers", "");
+      setValue("hasDisability", "");
+      setValue("noMembersDisability", "");
+      setValue("typeOfBuilding", "");
+      setValue("mainWaterSupply", "");
+      setValue("toiletFacType", "");
+      setValue("hasWaterFiltration", "");
+      setValue("sourceOfElectricity", "");
+      setValue("hasPowerGenerator", "");
     }
   }, [selectedHousehold, setValue]);
 

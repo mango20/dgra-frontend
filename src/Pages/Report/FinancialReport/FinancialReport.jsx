@@ -70,8 +70,9 @@ const FinancialReport = () => {
         </div>
 
         <div className="barchart">
-          <ResponsiveContainer width={800} height={500}>
+          <ResponsiveContainer width={500} height={500}>
             <BarChart
+              className="chart"
               width={700}
               height={500}
               data={modifiedData}

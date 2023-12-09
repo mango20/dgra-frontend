@@ -104,6 +104,7 @@ const AddHousehold = ({
     console.log(data);
   };
 
+  console.log(" Select ", selectedHousehold);
   return (
     <CustomModal
       size="lg"
@@ -114,8 +115,14 @@ const AddHousehold = ({
     >
       <FormProvider {...methods}>
         <form>
-          <HouseholdLocation selectedHousehold={selectedHousehold} />
-          <HouseholdCharacteristics selectedHousehold={selectedHousehold} />
+          <HouseholdLocation
+            selectedHousehold={selectedHousehold}
+            edit={editHouseholdModal}
+          />
+          <HouseholdCharacteristics
+            selectedHousehold={selectedHousehold}
+            edit={editHouseholdModal}
+          />
         </form>
       </FormProvider>
     </CustomModal>

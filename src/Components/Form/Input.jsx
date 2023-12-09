@@ -7,7 +7,7 @@ const CustomInput = React.forwardRef(
     return (
       <div className={`customInput ${className}`}>
         <div className=""></div>
-        <label>{label}</label>
+        {label && <label>{label}</label>}
         <div className="inputMsg">
           <input
             name={name}

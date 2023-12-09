@@ -6,7 +6,7 @@ import Card from "../../../Components/UI/Card/Card";
 import Select from "../../../Components/Form/Select";
 import landClassification from "../../../Data/landClassification.json";
 const EducationReport = () => {
-  const labels = ["Population At Risk", "Husehold At Risk", "Purok 2 At Risk"];
+  const labels = ["Population At Risk", "Household At Risk", "Purok 2 At Risk"];
   return (
     <PageContainer>
       <CustomContainer title={"Education"} className="reports">

@@ -5,7 +5,7 @@ import MapContainer from "../../../../../Utils/Map";
 import "../../../../../Asset/Scss/Pages/ResidenceProfile/_householdLocation.scss";
 import { fromLatLng, setKey, geocode, RequestType } from "react-geocode";
 setKey("AIzaSyBlApZPTcG_IhHgjWCLdp-PKMiiM4xBAAM");
-const HouseholdLocation = ({ selectedHousehold }) => {
+const HouseholdLocation = ({ selectedHousehold, edit }) => {
   const {
     register,
     setValue,
@@ -13,15 +13,28 @@ const HouseholdLocation = ({ selectedHousehold }) => {
   } = useFormContext();
 
   useEffect(() => {
-    if (selectedHousehold) {
+    if (selectedHousehold || edit) {
       setValue("province", selectedHousehold.province);
       setValue("cityOrMunicipality", selectedHousehold.cityOrMunicipality);
       setValue("barangay", selectedHousehold.barangay);
       setValue("purokOrSitio", selectedHousehold.purokOrSitio);
       setValue("street", selectedHousehold.street);
-      setValue("householdNo", selectedHousehold.id);
-      setValue("nameOfRespondent", selectedHousehold.lastUser);
-      setValue("contactNo", selectedHousehold.household.contact);
+      setValue("householdNo", selectedHousehold.householdNo);
+      setValue("nameOfRespondent", selectedHousehold.nameOfRespondent);
+      setValue("contactNo", selectedHousehold.contactNo);
+      setValue("latitude", selectedHousehold.coordinates[0].latitude);
+      setValue("longitude", selectedHousehold.coordinates[0].longitude);
+    } else {
+      setValue("province", "");
+      setValue("cityOrMunicipality", "");
+      setValue("barangay", "");
+      setValue("purokOrSitio", "");
+      setValue("street", "");
+      setValue("householdNo", "");
+      setValue("nameOfRespondent", "");
+      setValue("contactNo", "");
+      setValue("latitude", "");
+      setValue("longitude", "");
     }
   }, [selectedHousehold, setValue]);
 

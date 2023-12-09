@@ -6,7 +6,7 @@ import PageContainer from "../../../Layout/Container/PageContainer";
 import CustomContainer from "../../../Layout/Container/CustomContainer";
 import Card from "../../../Components/UI/Card/Card";
 const RiskArea = () => {
-  const labels = ["Population At Risk", "Husehold At Risk", "Purok 2 At Risk"];
+  const labels = ["Population At Risk", "Household At Risk", "Purok 2 At Risk"];
   return (
     <PageContainer>
       <CustomContainer title={"Risk Area"} className="reports">

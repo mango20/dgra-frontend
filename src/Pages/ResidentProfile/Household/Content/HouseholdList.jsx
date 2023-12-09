@@ -12,6 +12,7 @@ import SearchFilter from "../../../../Utils/SearchFilter";
 import CustomTable from "../../../../Components/UI/Table/Table";
 import AddHouseholdMember from "./Action/AddHouseholdMember";
 import { getReq } from "../../../../Service/API";
+import AddSurvey from "./Action/AddSurvey";
 
 const HouseholdList = ({
   searchTerm,
@@ -21,10 +22,13 @@ const HouseholdList = ({
 }) => {
   const [isAddHouseholdMemberModalOpen, setAddHouseholdMemberModalOpen] =
     useState(false);
+
+  const [isAddSurveyOpen, setIsAddSurveyOpen] = useState(false);
   const [households, setHouseholds] = useState([]);
 
   const closeModal = () => {
     setAddHouseholdMemberModalOpen(false);
+    setIsAddSurveyOpen(false);
   };
 
   const tableColumns = householdTC;
@@ -53,7 +57,7 @@ const HouseholdList = ({
         label: "Add Survey",
         icon: faPlus,
         handler: () => {
-          // Implement your edit logic here
+          setIsAddSurveyOpen(true);
         },
       });
 
@@ -121,6 +125,7 @@ const HouseholdList = ({
         addHouseholdMember={isAddHouseholdMemberModalOpen}
         closeModal={closeModal}
       />
+      <AddSurvey isAddSurveyOpen={isAddSurveyOpen} closeModal={closeModal} />
     </div>
   );
 };
