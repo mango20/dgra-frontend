@@ -80,7 +80,7 @@ export const expensesTC = [
 ];
 
 export const educationTC = [
-  { key: "schoolName", header: "School Name" },
+  { key: "name", header: "School Name" },
   { key: "purok", header: "Purok" },
   { key: "actions", header: "Actions" },
 ];

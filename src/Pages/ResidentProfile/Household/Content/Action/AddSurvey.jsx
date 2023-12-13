@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,49 +29,118 @@ const AddSurvey = ({
   editHouseholdModal,
   selectedEvent,
 }) => {
-  const schema = z.object({
-    year: z.string().nonempty("Year is required"),
-    a1: z.string(),
-    a2: z.string(),
-    a3: z.string(),
-    a4: z.string(),
-    a5: z.string(),
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4; // Total number of steps in the form
 
-    b1: z.string(),
-    b2: z.string(),
-    b3: z.string(),
-    b4: z.string(),
+  const [formData, setFormData] = useState({
+    step1: {
+      year: "",
+      a1: "",
+      a2: "",
+      a3: "",
+      a4: "",
+      a5: "",
+    },
+    step2: {
+      b1: "",
+      b2: "",
+      b3: "",
+      b4: "",
+    },
+    step3: {
+      c1: "",
+      c2: "",
+      c3: "",
+      c4: "",
+      c5: "",
+      c6: "",
+    },
+    step4: {
+      d1: "",
+      d2: "",
+      d3: "",
+      d4: "",
+      d5: "",
+      d1: "",
+      d2: "",
+      d3: "",
+      d4: "",
+      d5: "",
+    },
+  });
 
-    c1: z.string(),
-    c2: z.string(),
-    c3: z.string(),
-    c4: z.string(),
-    c5: z.string(),
-    c6: z.string(),
+  // Validation schema for each step
+  const validationSchema = {
+    step1: z.object({
+      year: z.string().nonempty("Year is required"),
+      a1: z.string(),
+      a2: z.string(),
+      a3: z.string(),
+      a4: z.string(),
+      a5: z.string(),
+      // Add other validations for step 1 as needed...
+    }),
+    step2: z.object({
+      b1: z.string(),
+      b2_1: z.string(),
+      b2_2: z.string(),
+      b2_3: z.string(),
+      b2_4: z.string(),
+      b2_5: z.string(),
+      b2_6: z.string(),
+      b2_7: z.string(),
+      b3: z.string(),
+      b4: z.string(),
+      // Add other validations for step 2 as needed...
+    }),
+    step3: z.object({
+      c1: z.string(),
+      c2: z.string(),
+      c3: z.string(),
+      c4: z.string(),
+      c5: z.string(),
+      c6: z.string(),
+      // Add other validations for step 3 as needed...
+    }),
+    step4: z.object({
+      d1: z.string(),
+      d2: z.string(),
+      d3: z.string(),
+      d4: z.string(),
+      d5: z.string(),
+      // Add other validations for step 4 as needed...
+    }),
+  };
 
-    d1: z.string(),
-    d2: z.string(),
-    d3: z.string(),
-    d4: z.string(),
-    d5: z.string(),
-    d6: z.string(),
-    d7: z.string(),
-    d8: z.string(),
-    d9: z.string(),
-    d10: z.string(),
+  const methods = useForm({
+    resolver: zodResolver(validationSchema[`step${currentStep}`]),
+    defaultValues: formData[`step${currentStep}`],
   });
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ resolver: zodResolver(schema) });
-  console.log(errors);
-  const onSubmit = (data) => {
-    console.log(data);
-    // closeModal();
-  };
+    setValue,
+  } = methods;
 
+  console.log(errors);
+  // Function to handle form submission for each step
+  const onSubmit = (data) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [`step${currentStep}`]: data,
+    }));
+
+    if (currentStep < totalSteps) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // Submit the entire form
+      console.log("Form submitted:", formData);
+      setCurrentStep(1); // Reset to the first step or closeModal();
+    }
+  };
+  console.log(formData);
   function generateFiscalYears() {
     const date = new Date();
     let currentYear = date.getFullYear();
@@ -96,313 +165,345 @@ const AddSurvey = ({
       handleAction={handleSubmit(onSubmit)}
     >
       <form>
-        <Select
-          label="Year"
-          errors={errors}
-          defaultOptionLabel="Please choose"
-          data={fiscalYears}
-          {...register("year")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        {/* first */}
-        <Select
-          label="A.1. Has the household experienced
+        {currentStep === 1 && (
+          <>
+            {" "}
+            <Select
+              label="Year"
+              errors={errors}
+              defaultOptionLabel="Please choose"
+              data={fiscalYears}
+              {...register("year")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            {/* first */}
+            <Select
+              label="A.1. Has the household experienced
           destructive calamity for the past 12
           months?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("a1")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Table striped bordered responsive>
-          <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th>Destructive calamity/ies experienced in the household</th>
-              <th>Number of calamities have occurred for the past 12 months</th>
-              <th>Did the household receive any assistance?</th>
-              <th>Source of assistance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {a2Item.map((item, index) => {
-              return (
-                <>
-                  <tr>
-                    <td>
-                      <Checkbox
-                        type="checkbox"
-                        label={item}
-                        value="1"
-                        {...register(`a2_${index + 1}`)}
-                      />
-                    </td>
-                    <td>
-                      <CustomInput
-                        {...register(`a3_${index + 1}`)}
-                        className="inputSurvey"
-                      />
-                    </td>{" "}
-                    <td>
-                      <Select
-                        {...register(`a4_${index + 1}`)}
-                        data={YesNo}
-                        defaultOptionLabel="Choose Option"
-                      />
-                    </td>
-                    <td>
-                      {sourceOfAssistanceItem.map((item, i) => {
-                        return (
-                          <>
-                            <Checkbox
-                              label={item}
-                              {...register(`a5_${index + 1}_${i + 1}`)}
-                              value="1"
-                            />
-                          </>
-                        );
-                      })}
-                    </td>{" "}
-                  </tr>
-                </>
-              );
-            })}
-          </tbody>
-        </Table>
-        {/* Second */}
-        <div className="mt-5">
-          <Select
-            label="B.1. Have you seen or heard information
-          encouraging people in your community to
-          be prepared for disaster situations in
-          the past 12 months?"
-            errors={errors}
-            defaultOptionLabel="Choose Option"
-            data={YesNo}
-            {...register("b1")}
-            className="formSelectModalAddHouseholdMember"
-          />
-          <label className="separatelabelForm">
-            B.2. Where did you receive information, attended meeting or training
-            about how to make your household and home safer from disaster?
-          </label>
-          {b2Item.map((keyName, i) => {
-            if (i < 7)
-              return (
-                <>
-                  <Checkbox
-                    // disabled={questionA1set1}
-                    {...register(`b2_${(i + 1).toString()}`)}
-                    label={keyName}
-                    value="1"
-                  />
-                  <Checkbox
-                    //    disabled={questionA1set1}
-                    {...register(`b2_${(i + 8).toString()}`)}
-                    label={b2Item[i + 7]}
-                    value="1"
-                  />
-                </>
-              );
-          })}
-        </div>
-        <label className="separatelabelForm">
-          B.3. What is your preferred way to receive information or training
-          about how to make your household and home safer from disaster?{" "}
-        </label>
-        {b3Item.map((keyName, i) => {
-          if (i < 8)
-            return (
-              <>
-                <Checkbox
-                  {...register(`b3_${(i + 1).toString()}`)}
-                  label={keyName}
-                  value="1"
-                />
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("a1")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Table striped bordered responsive>
+              <thead>
+                <tr style={{ textAlign: "center" }}>
+                  <th>Destructive calamity/ies experienced in the household</th>
+                  <th>
+                    Number of calamities have occurred for the past 12 months
+                  </th>
+                  <th>Did the household receive any assistance?</th>
+                  <th>Source of assistance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {a2Item.map((item, index) => {
+                  return (
+                    <>
+                      <tr>
+                        <td>
+                          <Checkbox
+                            type="checkbox"
+                            label={item}
+                            value="1"
+                            {...register(`a2_${index + 1}`)}
+                          />
+                        </td>
+                        <td>
+                          <CustomInput
+                            {...register(`a3_${index + 1}`)}
+                            className="inputSurvey"
+                          />
+                        </td>{" "}
+                        <td>
+                          <Select
+                            {...register(`a4_${index + 1}`)}
+                            data={YesNo}
+                            defaultOptionLabel="Choose Option"
+                          />
+                        </td>
+                        <td>
+                          {sourceOfAssistanceItem.map((item, i) => {
+                            return (
+                              <>
+                                <Checkbox
+                                  label={item}
+                                  {...register(`a5_${index + 1}_${i + 1}`)}
+                                  value="1"
+                                />
+                              </>
+                            );
+                          })}
+                        </td>{" "}
+                      </tr>
+                    </>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </>
+        )}
 
-                {i < 7 ? (
+        {currentStep === 2 && (
+          <>
+            {/* Second */}
+            <div className="mt-5">
+              <Select
+                label="B.1. Have you seen or heard information
+            encouraging people in your community to
+            be prepared for disaster situations in
+            the past 12 months?"
+                errors={errors}
+                defaultOptionLabel="Choose Option"
+                data={YesNo}
+                {...register("b1")}
+                className="formSelectModalAddHouseholdMember"
+              />
+              <label className="separatelabelForm">
+                B.2. Where did you receive information, attended meeting or
+                training about how to make your household and home safer from
+                disaster?
+              </label>
+              {b2Item.map((keyName, i) => {
+                if (i < 7)
+                  return (
+                    <>
+                      <Checkbox
+                        // disabled={questionA1set1}
+                        {...register(`b2_${(i + 1).toString()}`)}
+                        label={keyName}
+                        value="1"
+                      />
+                      {`b2_${(i + 1).toString()}`}
+                      <Checkbox
+                        //    disabled={questionA1set1}
+                        {...register(`b2_${(i + 8).toString()}`)}
+                        label={b2Item[i + 7]}
+                        value="1"
+                      />
+                    </>
+                  );
+              })}
+            </div>
+            <label className="separatelabelForm">
+              B.3. What is your preferred way to receive information or training
+              about how to make your household and home safer from disaster?{" "}
+            </label>
+            {b3Item.map((keyName, i) => {
+              if (i < 8)
+                return (
                   <>
                     <Checkbox
-                      id={keyName}
-                      {...register(`b3_${(i + 9).toString()}`)}
-                      label={b3Item[i + 8]}
+                      {...register(`b3_${(i + 1).toString()}`)}
+                      label={keyName}
+                      value="1"
+                    />
+
+                    {i < 7 ? (
+                      <>
+                        <Checkbox
+                          id={keyName}
+                          {...register(`b3_${(i + 9).toString()}`)}
+                          label={b3Item[i + 8]}
+                          value="1"
+                        />
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                );
+            })}
+            <Select
+              label="B.4. Have you or someone in your
+            household attended meetings,
+            received information or training
+            regarding disaster preparedness in
+            the past 12 months?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("b4")}
+              className="formSelectModalAddHouseholdMember"
+            />
+          </>
+        )}
+
+        {currentStep === 3 && (
+          <>
+            {" "}
+            {/* Third */}
+            <Select
+              label="C.1. Is your house secured enough and there is no need for you to
+           evacuate during calamity?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("c1")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="C.2. In the past 3 years, have you experience to evacuate because of calamity?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("c2")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="C.3. Are you aware of a place where to evacuate?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("c3")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <label className="separatelabelForm">
+              C.4. Where did you evacuate?
+            </label>
+            {c4Item.map((keyName, i) => {
+              if (i < 3)
+                return (
+                  <>
+                    <Checkbox
+                      {...register(`c4_${(i + 1).toString()}`)}
+                      label={keyName}
+                      value="1"
+                    />
+
+                    <Checkbox
+                      {...register(`c4_${(i + 4).toString()}`)}
+                      label={c4Item[i + 3]}
                       value="1"
                     />
                   </>
-                ) : (
-                  ""
-                )}
-              </>
-            );
-        })}
-        <Select
-          label="B.4. Have you or someone in your
-          household attended meetings,
-          received information or training
-          regarding disaster preparedness in
-          the past 12 months?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("b4")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        {/* Third */}
-        <Select
-          label="C.1. Is your house secured enough and there is no need for you to
-          evacuate during calamity?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("c1")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="C.2. In the past 3 years, have you experience to evacuate because of calamity?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("c2")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="C.3. Are you aware of a place where to evacuate?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("c3")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <label className="separatelabelForm">
-          C.4. Where did you evacuate?
-        </label>
-        {c4Item.map((keyName, i) => {
-          if (i < 3)
-            return (
-              <>
-                <Checkbox
-                  {...register(`c4_${(i + 1).toString()}`)}
-                  label={keyName}
-                  value="1"
-                />
+                );
+            })}
+            <Select
+              label="C.5. Are you willing to adopt an evacuee?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("c5")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <CustomInput
+              label="C.6. How many evacuees can you accommodate?"
+              {...register(`c6`)}
+              className="formInputModalHouseholdCharacteristics"
+            />
+          </>
+        )}
 
-                <Checkbox
-                  {...register(`c4_${(i + 4).toString()}`)}
-                  label={c4Item[i + 3]}
-                  value="1"
-                />
-              </>
-            );
-        })}
-        <Select
-          label="C.5. Are you willing to adopt an evacuee?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("c5")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <CustomInput
-          label="C.6. How many evacuees can you accommodate?"
-          {...register(`c6`)}
-          className="formInputModalHouseholdCharacteristics"
-        />
-
-        {/* Last */}
-        <Select
-          label="D.1. Did the family carefully select the construction site of the residential building?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d1")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.2. Did the family secure the house to its foundation/structure?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d2")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.3. Are typhoon guards installed on windows during disaster?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d3")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.4. Is the house reinforced in preparation for disaster occurrence?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d4")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.5. Does your family have a “Household/Family Emergency Plan” in case of calamity?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d5")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.6. If family or loved ones get separated during disaster, does your family have a communication plan?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d6")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.7. Are you aware of warning and monitoring activity of the concerned agency regarding calamity?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d7")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.8. Do you know the person or government agency to contact in case of calamity?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d8")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <Select
-          label="D.9. Do you have a preparedness kit?"
-          errors={errors}
-          defaultOptionLabel="Choose Option"
-          data={YesNo}
-          {...register("d9")}
-          className="formSelectModalAddHouseholdMember"
-        />
-        <label className="separatelabelForm">
-          D.10. Which of the following do you have in your preparedness kit?
-        </label>
-        {d10Item.map((keyName, i) => {
-          if (i < 7)
-            return (
-              <>
-                <Checkbox
-                  //   disabled={questionD8}
-                  {...register(`d10_${i + 1}`)}
-                  label={keyName}
-                  value="1"
-                />
-                <Checkbox
-                  //   disabled={questionD8}
-                  {...register(`d10_${i + 8}`)}
-                  label={d10Item[i + 7]}
-                  value="1"
-                />
-              </>
-            );
-        })}
+        {currentStep === 4 && (
+          <>
+            {/* Last */}
+            <Select
+              label="D.1. Did the family carefully select the construction site of the residential building?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d1")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.2. Did the family secure the house to its foundation/structure?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d2")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.3. Are typhoon guards installed on windows during disaster?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d3")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.4. Is the house reinforced in preparation for disaster occurrence?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d4")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.5. Does your family have a “Household/Family Emergency Plan” in case of calamity?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d5")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.6. If family or loved ones get separated during disaster, does your family have a communication plan?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d6")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.7. Are you aware of warning and monitoring activity of the concerned agency regarding calamity?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d7")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.8. Do you know the person or government agency to contact in case of calamity?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d8")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <Select
+              label="D.9. Do you have a preparedness kit?"
+              errors={errors}
+              defaultOptionLabel="Choose Option"
+              data={YesNo}
+              {...register("d9")}
+              className="formSelectModalAddHouseholdMember"
+            />
+            <label className="separatelabelForm">
+              D.10. Which of the following do you have in your preparedness kit?
+            </label>
+            {d10Item.map((keyName, i) => {
+              if (i < 7)
+                return (
+                  <>
+                    <Checkbox
+                      //   disabled={questionD8}
+                      {...register(`d10_${i + 1}`)}
+                      label={keyName}
+                      value="1"
+                    />
+                    <Checkbox
+                      //   disabled={questionD8}
+                      {...register(`d10_${i + 8}`)}
+                      label={d10Item[i + 7]}
+                      value="1"
+                    />
+                  </>
+                );
+            })}
+          </>
+        )}
+        {currentStep > 1 && (
+          <button onClick={() => setCurrentStep(currentStep - 1)}>
+            Previous
+          </button>
+        )}
+        {currentStep < totalSteps && (
+          <button onClick={handleSubmit(onSubmit)}>Next</button>
+        )}
       </form>
     </CustomModal>
   );

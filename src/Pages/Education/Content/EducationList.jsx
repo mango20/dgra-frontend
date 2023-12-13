@@ -18,7 +18,7 @@ const EducationList = ({
   alertMsg,
 }) => {
   const tableColumns = educationTC;
-  const [budget, setBudget] = useState([]);
+  const [education, setEducation] = useState([]);
   const getActionsForRow = (row) => {
     const actions = [];
 
@@ -48,14 +48,14 @@ const EducationList = ({
   const getBudget = async () => {
     try {
       const response = await getReq("/api/financial/education");
-      console.log("Budget : ", response);
-      // setBudget(response.education);
+      console.log("education : ", response);
+      setEducation(response.education);
     } catch (error) {
       console.log("Error Get User", error);
     }
   };
 
-  const dataFiltered = SearchFilter(budget, searchTerm);
+  const dataFiltered = SearchFilter(education, searchTerm);
 
   return (
     <div>

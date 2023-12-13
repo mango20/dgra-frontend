@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,20 +22,22 @@ const AddEducation = ({
     barangay: z.string().nonempty("Name is required"),
     purok: z.string().nonempty("Location is required"),
     schoolYear: z.string(),
-    category: z.array(z.string()),
+    // category: z.array(z.string()),
   });
 
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
+    reset,
+    getValues,
   } = useForm({ resolver: zodResolver(schema) });
 
   const [rowData, setRowData] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const handleCategoryChange = (e) => {
-    const value = e.target.value;
+  const handleCategoryChange = (value) => {
     const updatedCategories = selectedCategories.includes(value)
       ? selectedCategories.filter((category) => category !== value)
       : [...selectedCategories, value];
@@ -43,6 +45,7 @@ const AddEducation = ({
     setSelectedCategories(updatedCategories);
   };
 
+  console.log(selectedCategories);
   const category = [
     { label: "Elementary", value: "Elementary" },
     { label: "Junior High School", value: "Junior High School" },
@@ -96,7 +99,15 @@ const AddEducation = ({
 
     const { MaximumCapacity = 0, NumberOfEnrolled = 0 } = gradeData;
 
-    return parseInt(MaximumCapacity) - parseInt(NumberOfEnrolled) || 0;
+    // Ensure the values are parsed as integers
+    const maxCapacity = parseInt(MaximumCapacity);
+    const enrolled = parseInt(NumberOfEnrolled);
+
+    // Calculate the available slots
+    const availableSlots = maxCapacity - enrolled;
+
+    // Return the calculated available slots
+    return availableSlots >= 0 ? availableSlots : 0;
   };
 
   const setMissingToZero = (value) => (value ? parseInt(value) : "0");
@@ -112,19 +123,33 @@ const AddEducation = ({
       ? "/api/financial/education"
       : "/api/financial/education";
 
-    // Helper function to set missing values to 0
+    // const payload = {
+    //   name: data.name || "",
+    //   barangay: data.barangay || "",
+    //   purok: data.purok || "",
+    //   schoolYear: data.schoolYear || "",
+    //   category: selectedCategories,
+    //   ...generateGradePayload(data),
+    // };
 
-    // Create the payload with the specified structure
-    const payload = {
-      name: data.name || "",
-      barangay: data.barangay || "",
-      purok: data.purok || "",
-      schoolYear: data.schoolYear || "",
-      category: "Elementary",
-      // category: data.category || "",
-      ...generateGradePayload(data),
-    };
-
+    const payload = selectedEducation
+      ? {
+          _id: selectedEducation._id,
+          name: data.name || "",
+          barangay: data.barangay || "",
+          purok: data.purok || "",
+          schoolYear: data.schoolYear || "",
+          category: selectedCategories,
+          ...generateGradePayload(data),
+        }
+      : {
+          name: data.name || "",
+          barangay: data.barangay || "",
+          purok: data.purok || "",
+          schoolYear: data.schoolYear || "",
+          category: selectedCategories,
+          ...generateGradePayload(data),
+        };
     console.log(data);
     console.log(payload);
     try {
@@ -134,6 +159,8 @@ const AddEducation = ({
 
       alertMsg(response.message);
       onItemAddedOrUpdated();
+      reset();
+      closeModal();
     } catch (error) {
       console.error("Error Adding Users", error);
     }
@@ -143,25 +170,146 @@ const AddEducation = ({
   const generateGradePayload = () => {
     let gradePayload = {};
 
+    // Loop through all grades (Elementary, Junior High, Senior High)
     for (let i = 1; i <= 12; i++) {
       const keyPrefix = `g${i}`;
-      const gradeData = gradesData[i - 1] || {}; // Adjust index
+      const gradeData = gradesData[i - 1] || {};
 
       gradePayload[`${keyPrefix}MaximumCapacity`] = setMissingToZero(
         gradeData.MaximumCapacity
-      ).toString(); // Convert to string
+      ).toString();
       gradePayload[`${keyPrefix}NumberOfEnrolled`] = setMissingToZero(
         gradeData.NumberOfEnrolled
-      ).toString(); // Convert to string
-      gradePayload[`${keyPrefix}AvailableSlots`] = setMissingToZero(
-        gradeData.AvailableSlots
-      ).toString(); // Convert to string
+      ).toString();
+
+      const availableSlots = calculateAvailableSlots(
+        getGradeCategory(i),
+        i - 1
+      );
+      gradePayload[`${keyPrefix}AvailableSlots`] = availableSlots.toString();
     }
+
+    // Junior High School grades
+    const juniorHighGrades = ["g7", "g8", "g9", "g10"];
+    juniorHighGrades.forEach((gradeKey, index) => {
+      const gradeData = gradesData[index + 6] || {}; // 6 is the offset for Junior High
+
+      gradePayload[`${gradeKey}MaximumCapacity`] = setMissingToZero(
+        gradeData.MaximumCapacity
+      ).toString();
+      gradePayload[`${gradeKey}NumberOfEnrolled`] = setMissingToZero(
+        gradeData.NumberOfEnrolled
+      ).toString();
+
+      const availableSlots = calculateAvailableSlots(
+        "Junior High School",
+        index
+      );
+      gradePayload[`${gradeKey}AvailableSlots`] = availableSlots.toString();
+    });
+
+    // Senior High School grades
+    const seniorHighGrades = ["g11", "g12"];
+    seniorHighGrades.forEach((gradeKey, index) => {
+      const gradeData = gradesData[index + 10] || {}; // 10 is the offset for Senior High
+      gradePayload[`${gradeKey}MaximumCapacity`] = setMissingToZero(
+        gradeData.MaximumCapacity
+      ).toString();
+      gradePayload[`${gradeKey}NumberOfEnrolled`] = setMissingToZero(
+        gradeData.NumberOfEnrolled
+      ).toString();
+
+      const availableSlots = calculateAvailableSlots(
+        "Senior High School",
+        index
+      );
+      gradePayload[`${gradeKey}AvailableSlots`] = availableSlots.toString();
+    });
 
     return gradePayload;
   };
 
-  // ... (rest of the code remains unchanged)
+  const getGradeCategory = (gradeIndex) => {
+    if (gradeIndex <= 6) return "Elementary";
+    else if (gradeIndex <= 10) return "Junior High School";
+    else return "Senior High School";
+  };
+
+  useEffect(() => {
+    if (selectedEducation || editEducationModal) {
+      setValue("name", selectedEducation.name || "");
+      setValue("barangay", selectedEducation.barangay || "");
+      setValue("purok", selectedEducation.purok || "");
+      setValue("schoolYear", selectedEducation.schoolYear || "");
+
+      // Handling the 'category' field, assuming it's an array
+      if (selectedEducation.category && selectedEducation.category.length > 0) {
+        setSelectedCategories(selectedEducation.category);
+      }
+      for (let i = 1; i <= 6; i++) {
+        const keyPrefix = `g${i}`;
+        setValue(
+          `${keyPrefix}MaximumCapacity`,
+          selectedEducation[`${keyPrefix}MaximumCapacity`]
+        );
+        setValue(
+          `${keyPrefix}NumberOfEnrolled`,
+          selectedEducation[`${keyPrefix}NumberOfEnrolled`]
+        );
+        setValue(
+          `${keyPrefix}AvailableSlots`,
+          selectedEducation[`${keyPrefix}AvailableSlots`]
+        );
+      }
+
+      for (let i = 7; i <= 10; i++) {
+        const keyPrefix = `g${i}`;
+        setValue(
+          `${keyPrefix}juniorHighSchoolMaxCapacityMaximumCapacity`,
+          selectedEducation[`${keyPrefix}MaximumCapacity`] || ""
+        );
+        setValue(
+          `${keyPrefix}juniorHighSchoolMaxCapacityNumberOfEnrolled`,
+          selectedEducation[`${keyPrefix}NumberOfEnrolled`] || ""
+        );
+        setValue(
+          `${keyPrefix}juniorHighSchoolMaxCapacityAvailableSlots`,
+          selectedEducation[`${keyPrefix}AvailableSlots`] || ""
+        );
+      }
+
+      for (let i = 11; i <= 12; i++) {
+        const keyPrefix = `g${i}`;
+        setValue(
+          `${keyPrefix}seniorHighSchoolMaxCapacityMaximumCapacity`,
+          selectedEducation[`${keyPrefix}MaximumCapacity`] || ""
+        );
+        setValue(
+          `${keyPrefix}seniorHighSchoolMaxCapacityNumberOfEnrolled`,
+          selectedEducation[`${keyPrefix}NumberOfEnrolled`] || ""
+        );
+        setValue(
+          `${keyPrefix}seniorHighSchoolMaxCapacityAvailableSlots`,
+          selectedEducation[`${keyPrefix}AvailableSlots`] || ""
+        );
+      }
+    } else {
+      // Set default empty values for fields if there's no selectedEducation
+      setValue("name", "");
+      setValue("barangay", "");
+      setValue("purok", "");
+      setValue("schoolYear", "");
+      setSelectedCategories([]);
+      for (let i = 1; i <= 12; i++) {
+        const keyPrefix = `g${i}`;
+        setValue(`${keyPrefix}MaximumCapacity`, "");
+        setValue(`${keyPrefix}NumberOfEnrolled`, "");
+        setValue(`${keyPrefix}AvailableSlots`, "");
+      }
+    }
+  }, [selectedEducation, editEducationModal]);
+  getValues("category");
+  console.log(selectedEducation);
 
   return (
     <CustomModal
@@ -226,13 +374,13 @@ const AddEducation = ({
                       checked={selectedCategories.includes(option.value)}
                     /> */}
                     <Checkbox
+                      {...register("category")}
                       type="checkbox"
                       label={option.label}
                       id={option.value}
                       value={option.value}
                       checked={selectedCategories.includes(option.value)}
-                      onChange={handleCategoryChange}
-                      {...register("category")}
+                      onChange={() => handleCategoryChange(option.value)}
                     />
 
                     {selectedCategories.includes(option.value) && (
@@ -308,6 +456,11 @@ const AddEducation = ({
                                 <td>{gradeInfo.grade}</td>
                                 <td>
                                   <input
+                                    {...register(
+                                      `g${
+                                        index + 7
+                                      }juniorHighSchoolMaxCapacityMaximumCapacity`
+                                    )}
                                     type="text"
                                     placeholder="Maximum Capacity"
                                     onChange={(e) =>
@@ -322,6 +475,11 @@ const AddEducation = ({
                                 </td>
                                 <td>
                                   <input
+                                    {...register(
+                                      `g${
+                                        index + 7
+                                      }juniorHighSchoolMaxCapacityNumberOfEnrolled`
+                                    )}
                                     type="text"
                                     placeholder="Number of Enrolled"
                                     onChange={(e) =>
@@ -336,6 +494,11 @@ const AddEducation = ({
                                 </td>
                                 <td>
                                   <input
+                                    {...register(
+                                      `g${
+                                        index + 7
+                                      }juniorHighSchoolMaxCapacityAvailableSlots`
+                                    )}
                                     type="text"
                                     placeholder="Available Slots"
                                     value={calculateAvailableSlots(
@@ -354,6 +517,11 @@ const AddEducation = ({
                                 <td>{gradeInfo.grade}</td>
                                 <td>
                                   <input
+                                    {...register(
+                                      `g${
+                                        index + 11
+                                      }seniorHighSchoolMaxCapacityMaximumCapacity`
+                                    )}
                                     type="text"
                                     placeholder="Maximum Capacity"
                                     onChange={(e) =>
@@ -369,7 +537,9 @@ const AddEducation = ({
                                 <td>
                                   <input
                                     {...register(
-                                      `g${index + 11}MaximumCapacity`
+                                      `g${
+                                        index + 11
+                                      }seniorHighSchoolMaxCapacityNumberOfEnrolled`
                                     )}
                                     type="text"
                                     placeholder="Number of Enrolled"
@@ -386,7 +556,9 @@ const AddEducation = ({
                                 <td>
                                   <input
                                     {...register(
-                                      `g${index + 12}MaximumCapacity`
+                                      `g${
+                                        index + 11
+                                      }seniorHighSchoolMaxCapacityAvailableSlots`
                                     )}
                                     type="text"
                                     placeholder="Available Slots"
