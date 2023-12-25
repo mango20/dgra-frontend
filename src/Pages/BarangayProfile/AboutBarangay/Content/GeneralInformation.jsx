@@ -10,7 +10,8 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import { fromLatLng, setKey, geocode, RequestType } from "react-geocode";
 setKey("AIzaSyBlApZPTcG_IhHgjWCLdp-PKMiiM4xBAAM");
-const GeneralInformation = () => {
+const GeneralInformation = ({ data }) => {
+  console.log(data);
   const {
     setValue,
     register,
@@ -21,7 +22,17 @@ const GeneralInformation = () => {
 
   useEffect(() => {
     setCoordinates({ lat: 14.6090537, lng: 121.0222565 });
-  }, []);
+
+    if (data) {
+      setValue("address", data[0].address || "");
+      setValue("latitude", data[0].coordinates?.latitude || "");
+      setValue("longitude", data[0].coordinates?.longitude || "");
+      setValue("barangay", data[0].barangay || "");
+      setValue("municipality", data[0].municipality || "");
+      setValue("province", data[0].province || "");
+      setValue("region", data[0].region || "");
+    }
+  }, [data, setValue]);
 
   const handleLocationChange = ({ lat, lng }) => {
     setValue("latitude", lat.toString()); // Change "lat" to "latitude"
@@ -66,7 +77,7 @@ const GeneralInformation = () => {
         className="formInput"
       />
       <CustomInput
-        // label="Geographical Location"
+        customLabel="long"
         errors={errors}
         {...register("longitude")}
         type="text"

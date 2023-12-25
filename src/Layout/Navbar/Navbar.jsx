@@ -7,10 +7,14 @@ import Sidebar from "../Sidebar/Sidebar";
 import { useSelector } from "react-redux";
 const CustomNavbar = ({ setShowSidebar, show }) => {
   const [currentDate, setCurrentDate] = useState("");
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const username = useSelector(
     (state) => state.reducer.userInfo?.userInfo.username
   );
-
+  const useImg = useSelector(
+    (state) => state.reducer.brgyProfile.brgyProfile.brgyLogo
+  );
+  console.log(useImg);
   const updateCurrentDate = () => {
     const formattedDate = moment().format("M/D/YYYY, h:mm:ss A");
     setCurrentDate(formattedDate);
@@ -26,6 +30,19 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 667);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const toggleSidebar = () => {
     setShowSidebar((prevState) => !prevState); // Use setShowSidebar from props to toggle the Sidebar state
   };
@@ -33,7 +50,10 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
   return (
     <div className="navbar">
       <div className="navbarBrand">
-        <h1 className="brgName" style={{ display: show ? "block" : "none" }}>
+        <h1
+          className="brgName"
+          style={{ display: show && !isSmallScreen ? "block" : "none" }}
+        >
           Barangay Tanza 2
         </h1>
 
@@ -48,7 +68,7 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
       <div className="navbarUserInfo">
         <p>Welcome, {username}</p>
         <p>{currentDate}</p>
-        <img src={require("../../Asset/Image/sampleImg.png")} alt="img" />
+        <img src={useImg} alt="img" />
       </div>
       {/* Pass the state and handler */}
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import "../../../Asset/Scss/Components/UI/Modal/_modal.scss";
-const CustomModal = ({
+const SurveyModal = ({
   show,
   handleAction,
   handleClose,
@@ -25,9 +25,11 @@ const CustomModal = ({
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
-        <Button variant="success" onClick={handleAction} type="submit">
-          {isEditMode ? "Save" : "Add"}
-        </Button>
+        {hasAdd && (
+          <Button variant="success" onClick={handleAction} type="submit">
+            {isEditMode ? "Save" : "Add"}
+          </Button>
+        )}
         <Button variant="danger" onClick={handleClose}>
           Close
         </Button>
@@ -36,4 +38,4 @@ const CustomModal = ({
   );
 };
 
-export default CustomModal;
+export default SurveyModal;

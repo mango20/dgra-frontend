@@ -48,7 +48,7 @@ const PreparednessKit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getReq("/api/disasterAdmin/safetytips");
+        const response = await getReq("/api/disasterAdmin/preparednesskit");
 
         if (response && response.information) {
           try {

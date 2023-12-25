@@ -7,7 +7,11 @@ import GeneralInformation from "./GeneralInformation";
 import PhysicalInformation from "./PhysicalInformation";
 import { postReq } from "../../../../Service/API";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setBrgyProfile } from "../../../../Service/Action/BrgyProfileSlice";
+
 const Form = () => {
+  const dispatch = useDispatch();
   const schema = z.object({
     barangay: z.string().nonempty("Barangay is required"),
     municipality: z.string().nonempty("Municipality is required"),
@@ -26,65 +30,67 @@ const Form = () => {
     brgyLogo: z.any(),
   });
 
+  //no lat and long not updating
+
   const [base64, setBase64] = useState("");
   const methods = useForm({ resolver: zodResolver(schema) });
   const onSubmit = async (data) => {
-    const formData = new FormData();
-
-    // Assuming 'brgyLogo' holds the uploaded file
-
-    // Append 'brgyLogo' to FormData
-
-    // console.log(formData);
     const { latitude, longitude, ...restData } = data;
 
-    // console.log(data);
     const payload = {
       address: "sdfsdfs",
-      ...restData, // Spread the remaining form fields
       brgyLogo: base64,
-      coordinates: [{ latitude: latitude }, { longitude: longitude }],
-      // Include 'brgyLogo' in the payload
+      ...restData,
+      coordinates: { latitude, longitude },
     };
 
-    // Rest of your code for form data submission
-    console.log(payload);
+    const apiUrl =
+      "https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation";
 
     try {
-      const response = await axios.post(
-        "https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation",
-        payload
-      );
+      let response;
+
+      if (fetchedData && fetchedData.length > 0) {
+        const _id = fetchedData[0]._id;
+
+        response = await axios.patch(`${apiUrl}?_id=${_id}`, payload);
+      } else {
+        response = await axios.post(apiUrl, payload);
+      }
 
       console.log(response);
-      // Handle response
     } catch (error) {
       console.log(error);
-      // Handle error
     }
   };
 
+  const [fetchedData, setFetchedData] = useState(null);
   useEffect(() => {
     const getData = async () => {
-      const response = await axios.get(
-        "https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation"
-      );
-      console.log(response);
+      try {
+        const response = await axios.get(
+          `https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation`
+        );
+        console.log(response);
+        setFetchedData(response.data.getInfo);
+        dispatch(setBrgyProfile(response.data?.getInfo[0]));
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getData();
   }, []);
 
+  console.log(base64);
   return (
-    <>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <GeneralInformation />
-          <PhysicalInformation base64Img={setBase64} />
-          <CustomButton label={"Update"} type="Submit" />
-        </form>
-      </FormProvider>
-    </>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <GeneralInformation data={fetchedData} />
+        <PhysicalInformation base64Img={setBase64} data={fetchedData} />
+        <CustomButton label={"Update"} type="Submit" />
+      </form>
+    </FormProvider>
   );
 };
 

@@ -3,11 +3,24 @@ import "../../Asset/Scss/Components/Form/_input.scss";
 import Message from "../UI/Message/Message";
 
 const CustomInput = React.forwardRef(
-  ({ name, placeholder, label, errors, type, className, ...props }, ref) => {
+  (
+    {
+      name,
+      placeholder,
+      label,
+      errors,
+      type,
+      className,
+      customLabel,
+      ...props
+    },
+    ref
+  ) => {
     return (
       <div className={`customInput ${className}`}>
-        <div className=""></div>
-        {label && <label>{label}</label>}
+        <div className={`customLabel ${customLabel}`}>
+          {label && <label>{label}</label>}
+        </div>
         <div className="inputMsg">
           <input
             name={name}

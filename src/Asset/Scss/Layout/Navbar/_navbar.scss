@@ -1,6 +1,6 @@
 .navbar {
   display: flex;
-  --bs-navbar-padding-y: 0;
+  --bs-navbar-padding-y: 0px;
 
   @media screen and (max-width: 818px) {
     position: fixed;
@@ -14,7 +14,7 @@
   }
 
   @media screen and (max-width: 500px) {
-    padding: 16px 0;
+    padding: 0px 0;
   }
 
   .navbarBrand {
@@ -58,7 +58,7 @@
     }
 
     p {
-      @media screen and (max-width: 818px) {
+      @media screen and (max-width: 1031px) {
         display: none;
       }
     }
@@ -67,7 +67,7 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      @media screen and (max-width: 500px) {
+      @media screen and (max-width: 759px) {
         display: none;
       }
     }

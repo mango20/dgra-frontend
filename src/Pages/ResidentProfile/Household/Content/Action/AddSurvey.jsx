@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,8 +12,7 @@ import placeOfWork from "../../../../../Data/placeOfWork.json";
 import typeOfDisability from "../../../../../Data/typeOfDisability.json";
 import relationToHousehold from "../../../../../Data/relationToHousehold.json";
 import "../../../../../Asset/Scss/Pages/ResidenceProfile/_addHouseholdMember.scss";
-import { Col, Row, Table } from "react-bootstrap";
-
+import { Button, Col, Row, Table } from "react-bootstrap";
 import {
   a2Item,
   b2Item,
@@ -23,6 +22,9 @@ import {
   sourceOfAssistanceItem,
 } from "../../../../../Data/JsData/surveyItems";
 import Checkbox from "../../../../../Components/Form/Checkbox";
+import { validationSchemas } from "../../../../../Utils/SurveySchema";
+import SurveyModal from "../../../../../Components/UI/Modal/SurveyModal";
+import { getReq, postReq } from "../../../../../Service/API";
 const AddSurvey = ({
   isAddSurveyOpen,
   closeModal,
@@ -30,17 +32,122 @@ const AddSurvey = ({
   selectedEvent,
 }) => {
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 4; // Total number of steps in the form
+  const totalSteps = 4;
+  const initialStep1Data = {
+    year: "",
+    a1: "",
+
+    a2_1: false,
+    a2_2: false,
+    a2_3: false,
+    a2_4: false,
+    a2_5: false,
+    a2_6: false,
+    a2_7: false,
+    a2_8: false,
+    a2_9: false,
+    a2_10: false,
+    a2_11: false,
+    a2_12: false,
+    a2_13: false,
+
+    a3_1: "",
+    a3_2: "",
+    a3_3: "",
+    a3_4: "",
+    a3_5: "",
+    a3_6: "",
+    a3_7: "",
+    a3_8: "",
+    a3_9: "",
+    a3_10: "",
+    a3_11: "",
+    a3_12: "",
+
+    a3_13: "",
+    a4_1: "",
+    a4_2: "",
+    a4_3: "",
+    a4_4: "",
+    a4_5: "",
+    a4_6: "",
+    a4_7: "",
+    a4_8: "",
+    a4_9: "",
+    a4_10: "",
+    a4_11: "",
+    a4_12: "",
+    a4_13: "",
+
+    a5_1_1: false,
+    a5_1_2: false,
+    a5_1_3: false,
+    a5_1_4: false,
+    a5_1_5: false,
+    a5_2_1: false,
+    a5_2_2: false,
+    a5_2_3: false,
+    a5_2_4: false,
+    a5_2_5: false,
+    a5_3_1: false,
+    a5_3_2: false,
+    a5_3_3: false,
+    a5_3_4: false,
+    a5_3_5: false,
+    a5_4_1: false,
+    a5_4_2: false,
+    a5_4_3: false,
+    a5_4_4: false,
+    a5_4_5: false,
+    a5_5_1: false,
+    a5_5_2: false,
+    a5_5_3: false,
+    a5_5_4: false,
+    a5_5_5: false,
+    a5_6_1: false,
+    a5_6_2: false,
+    a5_6_3: false,
+    a5_6_4: false,
+    a5_6_5: false,
+    a5_7_1: false,
+    a5_7_2: false,
+    a5_7_3: false,
+    a5_7_4: false,
+    a5_7_5: false,
+    a5_8_1: false,
+    a5_8_2: false,
+    a5_8_3: false,
+    a5_8_4: false,
+    a5_8_5: false,
+    a5_9_1: false,
+    a5_9_2: false,
+    a5_9_3: false,
+    a5_9_4: false,
+    a5_9_5: false,
+    a5_10_1: false,
+    a5_10_2: false,
+    a5_10_3: false,
+    a5_10_4: false,
+    a5_10_5: false,
+    a5_11_1: false,
+    a5_11_2: false,
+    a5_11_3: false,
+    a5_11_4: false,
+    a5_11_5: false,
+    a5_12_1: false,
+    a5_12_2: false,
+    a5_12_3: false,
+    a5_12_4: false,
+    a5_12_5: false,
+    a5_13_1: false,
+    a5_13_2: false,
+    a5_13_3: false,
+    a5_13_4: false,
+    a5_13_5: false,
+  };
 
   const [formData, setFormData] = useState({
-    step1: {
-      year: "",
-      a1: "",
-      a2: "",
-      a3: "",
-      a4: "",
-      a5: "",
-    },
+    step1: { ...initialStep1Data },
     step2: {
       b1: "",
       b2: "",
@@ -69,77 +176,43 @@ const AddSurvey = ({
     },
   });
 
-  // Validation schema for each step
-  const validationSchema = {
-    step1: z.object({
-      year: z.string().nonempty("Year is required"),
-      a1: z.string(),
-      a2: z.string(),
-      a3: z.string(),
-      a4: z.string(),
-      a5: z.string(),
-      // Add other validations for step 1 as needed...
-    }),
-    step2: z.object({
-      b1: z.string(),
-      b2_1: z.string(),
-      b2_2: z.string(),
-      b2_3: z.string(),
-      b2_4: z.string(),
-      b2_5: z.string(),
-      b2_6: z.string(),
-      b2_7: z.string(),
-      b3: z.string(),
-      b4: z.string(),
-      // Add other validations for step 2 as needed...
-    }),
-    step3: z.object({
-      c1: z.string(),
-      c2: z.string(),
-      c3: z.string(),
-      c4: z.string(),
-      c5: z.string(),
-      c6: z.string(),
-      // Add other validations for step 3 as needed...
-    }),
-    step4: z.object({
-      d1: z.string(),
-      d2: z.string(),
-      d3: z.string(),
-      d4: z.string(),
-      d5: z.string(),
-      // Add other validations for step 4 as needed...
-    }),
-  };
-
   const methods = useForm({
-    resolver: zodResolver(validationSchema[`step${currentStep}`]),
+    resolver: zodResolver(validationSchemas[`step${currentStep}`]),
     defaultValues: formData[`step${currentStep}`],
   });
 
   const {
     register,
+    watch,
     formState: { errors },
     handleSubmit,
     setValue,
   } = methods;
 
   console.log(errors);
-  // Function to handle form submission for each step
-  const onSubmit = (data) => {
+
+  const onSubmit = async (data, event) => {
+    event.preventDefault();
+    console.log(data);
     setFormData((prevData) => ({
       ...prevData,
       [`step${currentStep}`]: data,
     }));
 
-    if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
+    const nextStep = currentStep + 1;
+
+    if (nextStep <= totalSteps) {
+      setCurrentStep(nextStep);
     } else {
-      // Submit the entire form
       console.log("Form submitted:", formData);
-      setCurrentStep(1); // Reset to the first step or closeModal();
+
+      const response = await postReq("/api/disastersurvey", formData);
+      console.log(response);
+
+      // setCurrentStep(1); // Reset
     }
   };
+
   console.log(formData);
   function generateFiscalYears() {
     const date = new Date();
@@ -148,7 +221,7 @@ const AddSurvey = ({
     let fiscalYears = [];
 
     while (currentYear >= 2016) {
-      fiscalYears.push(currentYear.toString()); // Convert the year to a string
+      fiscalYears.push(currentYear.toString());
       currentYear--;
     }
 
@@ -156,12 +229,23 @@ const AddSurvey = ({
   }
 
   const fiscalYears = generateFiscalYears();
+
+  useEffect(() => {
+    const getSurvey = async () => {
+      const response = await getReq("/api/disastersurvey");
+
+      console.log(response);
+    };
+
+    getSurvey();
+  }, []);
   return (
-    <CustomModal
+    <SurveyModal
       size="lg"
       show={isAddSurveyOpen}
       handleClose={closeModal}
       title="Add Surveys"
+      hasAdd={currentStep === totalSteps && true}
       handleAction={handleSubmit(onSubmit)}
     >
       <form>
@@ -207,7 +291,6 @@ const AddSurvey = ({
                           <Checkbox
                             type="checkbox"
                             label={item}
-                            value="1"
                             {...register(`a2_${index + 1}`)}
                           />
                         </td>
@@ -222,16 +305,19 @@ const AddSurvey = ({
                             {...register(`a4_${index + 1}`)}
                             data={YesNo}
                             defaultOptionLabel="Choose Option"
-                          />
+                          />{" "}
                         </td>
                         <td>
                           {sourceOfAssistanceItem.map((item, i) => {
                             return (
                               <>
                                 <Checkbox
+                                  type="checkbox"
                                   label={item}
+                                  defaultChecked={watch(
+                                    `a5_${index + 1}_${i + 1}`
+                                  )}
                                   {...register(`a5_${index + 1}_${i + 1}`)}
-                                  value="1"
                                 />
                               </>
                             );
@@ -248,7 +334,6 @@ const AddSurvey = ({
 
         {currentStep === 2 && (
           <>
-            {/* Second */}
             <div className="mt-5">
               <Select
                 label="B.1. Have you seen or heard information
@@ -271,18 +356,15 @@ const AddSurvey = ({
                   return (
                     <>
                       <Checkbox
-                        // disabled={questionA1set1}
+                        type="checkbox"
                         {...register(`b2_${(i + 1).toString()}`)}
                         label={keyName}
-                        value="1"
                       />
-                      {`b2_${(i + 1).toString()}`}
                       <Checkbox
-                        //    disabled={questionA1set1}
+                        type="checkbox"
                         {...register(`b2_${(i + 8).toString()}`)}
                         label={b2Item[i + 7]}
-                        value="1"
-                      />
+                      />{" "}
                     </>
                   );
               })}
@@ -296,19 +378,19 @@ const AddSurvey = ({
                 return (
                   <>
                     <Checkbox
+                      type="checkbox"
                       {...register(`b3_${(i + 1).toString()}`)}
                       label={keyName}
-                      value="1"
                     />
 
                     {i < 7 ? (
                       <>
                         <Checkbox
+                          type="checkbox"
                           id={keyName}
                           {...register(`b3_${(i + 9).toString()}`)}
                           label={b3Item[i + 8]}
-                          value="1"
-                        />
+                        />{" "}
                       </>
                     ) : (
                       ""
@@ -333,8 +415,6 @@ const AddSurvey = ({
 
         {currentStep === 3 && (
           <>
-            {" "}
-            {/* Third */}
             <Select
               label="C.1. Is your house secured enough and there is no need for you to
            evacuate during calamity?"
@@ -368,15 +448,15 @@ const AddSurvey = ({
                 return (
                   <>
                     <Checkbox
+                      type="checkbox"
                       {...register(`c4_${(i + 1).toString()}`)}
                       label={keyName}
-                      value="1"
                     />
 
                     <Checkbox
+                      type="checkbox"
                       {...register(`c4_${(i + 4).toString()}`)}
                       label={c4Item[i + 3]}
-                      value="1"
                     />
                   </>
                 );
@@ -399,7 +479,6 @@ const AddSurvey = ({
 
         {currentStep === 4 && (
           <>
-            {/* Last */}
             <Select
               label="D.1. Did the family carefully select the construction site of the residential building?"
               errors={errors}
@@ -479,33 +558,42 @@ const AddSurvey = ({
               if (i < 7)
                 return (
                   <>
+                    <Checkbox {...register(`d10_${i + 1}`)} label={keyName} />
                     <Checkbox
-                      //   disabled={questionD8}
-                      {...register(`d10_${i + 1}`)}
-                      label={keyName}
-                      value="1"
-                    />
-                    <Checkbox
-                      //   disabled={questionD8}
                       {...register(`d10_${i + 8}`)}
                       label={d10Item[i + 7]}
-                      value="1"
                     />
                   </>
                 );
             })}
           </>
         )}
-        {currentStep > 1 && (
-          <button onClick={() => setCurrentStep(currentStep - 1)}>
-            Previous
-          </button>
-        )}
-        {currentStep < totalSteps && (
-          <button onClick={handleSubmit(onSubmit)}>Next</button>
-        )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            margin: "10px",
+          }}
+        >
+          {currentStep > 1 && (
+            <Button
+              onClick={() => setCurrentStep(currentStep - 1)}
+              style={{ padding: "10px 20px" }}
+            >
+              Previous
+            </Button>
+          )}
+          {currentStep < totalSteps && (
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              style={{ padding: "10px 20px" }}
+            >
+              Next
+            </Button>
+          )}
+        </div>
       </form>
-    </CustomModal>
+    </SurveyModal>
   );
 };
 

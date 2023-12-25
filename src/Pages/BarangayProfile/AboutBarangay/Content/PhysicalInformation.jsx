@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import landClassification from "../../../../Data/landClassification.json";
 import CustomInput from "../../../../Components/Form/Input";
@@ -8,12 +8,26 @@ import Checkbox from "../../../../Components/Form/Checkbox";
 import CustomContainer from "../../../../Layout/Container/CustomContainer";
 import CustomTextArea from "../../../../Components/Form/TextArea";
 import InputImg from "../../../../Components/Form/InputImg";
-const PhysicalInformation = ({ base64Img }) => {
-  const [imageData, setImageData] = useState({
-    base64textString: "",
-    imageName: "",
-    showImage: false,
-  });
+const PhysicalInformation = ({ base64Img, data }) => {
+  const initialImageData = {
+    base64textString: data?.[0]?.brgyLogo || "",
+    imageName: data?.[0]?.brgyLogo ? "Logo Image" : "",
+    showImage: !!data?.[0]?.brgyLogo,
+  };
+
+  const [imageData, setImageData] = useState(initialImageData);
+
+  useEffect(() => {
+    if (data) {
+      console.log("BrgyLogo from data:", data[0]?.brgyLogo);
+      setImageData({
+        base64textString: data?.[0]?.brgyLogo || "",
+        imageName: data?.[0]?.brgyLogo ? "Logo Image" : "",
+        showImage: !!data?.[0]?.brgyLogo,
+      });
+      base64Img(data?.[0]?.brgyLogo || ""); // Ensure base64Img is called correctly
+    }
+  }, [data, base64Img]);
 
   const {
     register,
@@ -52,8 +66,9 @@ const PhysicalInformation = ({ base64Img }) => {
         imageName,
         showImage: true,
       });
-      // setValue("brgyLogo", base64textString);
+
       base64Img(base64textString);
+
       console.log("Image Base64 String:", base64textString);
       console.log("Image Name:", imageName);
     };
@@ -62,6 +77,19 @@ const PhysicalInformation = ({ base64Img }) => {
       console.log("Error: ", error);
     };
   };
+  console.log(data);
+  useEffect(() => {
+    if (data) {
+      setValue("totalLandArea", data[0].totalLandArea || "");
+      setValue("barangayCategory", data[0].barangayCategory || "");
+      setValue("landClassification", data[0].landClassification || "");
+      setValue("economic", data[0].economic || "");
+      setValue("mission", data[0].mission || "");
+      setValue("vision", data[0].vision || "");
+    }
+  }, [data, setValue]);
+  // console.log(data[0].brgyLogo);
+
   return (
     <CustomContainer title={"Physical Information"}>
       <CustomInput

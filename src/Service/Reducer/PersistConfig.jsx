@@ -3,6 +3,7 @@ import storage from "redux-persist/lib/storage";
 import authReducer from "../Action/AuthSlice";
 import userListReducer from "../Action/UserListSlice";
 import userInfoReducer from "../Action/UserInfo";
+import brgyProfileReducer from "../Action/BrgyProfileSlice";
 import { persistReducer } from "redux-persist";
 
 const persistConfig = {
@@ -17,6 +18,7 @@ const persistedReducer = persistReducer(
     auth: authReducer,
     users: userListReducer,
     userInfo: userInfoReducer,
+    brgyProfile: brgyProfileReducer,
   })
 );
 
