@@ -25,8 +25,8 @@ const GeneralInformation = ({ data }) => {
 
     if (data) {
       setValue("address", data[0].address || "");
-      setValue("latitude", data[0].coordinates?.latitude || "");
-      setValue("longitude", data[0].coordinates?.longitude || "");
+      setValue("latitude", data[0].coordinates[0]?.latitude || "");
+      setValue("longitude", data[0].coordinates[0]?.longitude || "");
       setValue("barangay", data[0].barangay || "");
       setValue("municipality", data[0].municipality || "");
       setValue("province", data[0].province || "");

@@ -7,7 +7,7 @@ import GeneralInformation from "./GeneralInformation";
 import PhysicalInformation from "./PhysicalInformation";
 import { postReq } from "../../../../Service/API";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setBrgyProfile } from "../../../../Service/Action/BrgyProfileSlice";
 
 const Form = () => {
@@ -31,7 +31,7 @@ const Form = () => {
   });
 
   //no lat and long not updating
-
+  const token = useSelector((state) => state.reducer.auth.authUser.token);
   const [base64, setBase64] = useState("");
   const methods = useForm({ resolver: zodResolver(schema) });
   const onSubmit = async (data) => {
@@ -52,10 +52,9 @@ const Form = () => {
 
       if (fetchedData && fetchedData.length > 0) {
         const _id = fetchedData[0]._id;
-        console.log("my edit payload ", payload);
-        response = await axios.patch(`${apiUrl}?_id=${_id}`, payload);
+
+        response = await axios.patch(`${apiUrl}?_id=${_id}`, payload, token);
       } else {
-        console.log("my post payload ", payload);
         response = await axios.post(apiUrl, payload);
       }
 
@@ -70,7 +69,9 @@ const Form = () => {
     const getData = async () => {
       try {
         const response = await axios.get(
-          `https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation`
+          `https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation`,
+          null,
+          token
         );
         console.log(response);
         setFetchedData(response.data.getInfo);
