@@ -14,7 +14,7 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
   const useImg = useSelector(
     (state) => state.reducer.brgyProfile?.brgyProfile?.brgyLogo
   );
-  console.log(useImg);
+  // console.log(useImg);
   const updateCurrentDate = () => {
     const formattedDate = moment().format("M/D/YYYY, h:mm:ss A");
     setCurrentDate(formattedDate);

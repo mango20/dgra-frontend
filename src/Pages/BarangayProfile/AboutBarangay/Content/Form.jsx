@@ -52,9 +52,10 @@ const Form = () => {
 
       if (fetchedData && fetchedData.length > 0) {
         const _id = fetchedData[0]._id;
-
+        console.log("my edit payload ", payload);
         response = await axios.patch(`${apiUrl}?_id=${_id}`, payload);
       } else {
+        console.log("my post payload ", payload);
         response = await axios.post(apiUrl, payload);
       }
 
@@ -82,13 +83,13 @@ const Form = () => {
     getData();
   }, []);
 
-  console.log(base64);
+  // console.log(base64);
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <GeneralInformation data={fetchedData} />
         <PhysicalInformation base64Img={setBase64} data={fetchedData} />
-        <CustomButton label={"Update"} type="Submit" />
+        <CustomButton label={"Update"} type="submit" />
       </form>
     </FormProvider>
   );
