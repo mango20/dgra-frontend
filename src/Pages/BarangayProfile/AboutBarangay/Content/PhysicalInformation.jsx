@@ -10,22 +10,21 @@ import CustomTextArea from "../../../../Components/Form/TextArea";
 import InputImg from "../../../../Components/Form/InputImg";
 const PhysicalInformation = ({ base64Img, data }) => {
   const initialImageData = {
-    base64textString: data?.[0]?.brgyLogo || "",
-    imageName: data?.[0]?.brgyLogo ? "Logo Image" : "",
-    showImage: !!data?.[0]?.brgyLogo,
+    base64textString: "",
+    imageName: "",
+    showImage: false,
   };
 
   const [imageData, setImageData] = useState(initialImageData);
 
   useEffect(() => {
-    if (data) {
-      console.log("BrgyLogo from data:", data[0]?.brgyLogo);
+    if (data && data.length > 0 && data[0]?.brgyLogo) {
       setImageData({
-        base64textString: data?.[0]?.brgyLogo || "",
-        imageName: data?.[0]?.brgyLogo ? "Logo Image" : "",
-        showImage: !!data?.[0]?.brgyLogo,
+        base64textString: data[0].brgyLogo,
+        imageName: "Logo Image",
+        showImage: true,
       });
-      base64Img(data?.[0]?.brgyLogo || ""); // Ensure base64Img is called correctly
+      base64Img(data[0].brgyLogo);
     }
   }, [data, base64Img]);
 
