@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../Asset/Scss/Components/Form/_inputImg.scss";
 import Message from "../UI/Message/Message";
-
+import sampleImg from "../../Asset/Image/sampleImg.png";
 const InputImg = React.forwardRef(
   (
     {
@@ -20,8 +20,12 @@ const InputImg = React.forwardRef(
     const [showImage, setShowImage] = useState(false);
 
     useEffect(() => {
-      setShowImage(imageData.showImage);
-    }, [imageData.showImage]);
+      if (imageData && imageData.showImage) {
+        setShowImage(true);
+      } else {
+        setShowImage(false);
+      }
+    }, [imageData]);
 
     const handleFileChange = (event) => {
       onChange(event); // Trigger the parent's onChange function (convertToBase64 in your case)
@@ -32,9 +36,12 @@ const InputImg = React.forwardRef(
       <div className="inputImg">
         <label>{label}</label>
         <div className="inputImgContent">
-          {showImage && (
+          {showImage && imageData && (
             <div>
-              <img src={imageData.base64textString} alt={imageData.imageName} />
+              <img
+                src={imageData.base64textString || sampleImg}
+                alt={imageData.imageName || "Default Logo"}
+              />
             </div>
           )}
           <input

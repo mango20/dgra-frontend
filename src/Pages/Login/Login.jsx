@@ -55,9 +55,16 @@ const Login = () => {
       dispatch(setUserInfo(profileResponse.user));
       navigate("/barangay-profile/about-barangay");
     } catch (error) {
-      setErrorMsg(error.response.statusText);
+      // setErrorMsg(error.response.statusText);
       dispatch(loginFailure());
       console.error("Error login:", error);
+      if (error.response.status === 500) {
+        setErrorMsg("Internal Server Error");
+      } else {
+        setErrorMsg(
+          "Login unsuccessful. Please verify your credentials and try again."
+        );
+      }
     }
   };
 
