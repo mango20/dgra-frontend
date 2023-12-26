@@ -9,7 +9,7 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
   const [currentDate, setCurrentDate] = useState("");
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const username = useSelector(
-    (state) => state.reducer.userInfo?.userInfo.username
+    (state) => state.reducer.userInfo?.userInfo?.username
   );
   const useImg = useSelector(
     (state) => state.reducer.brgyProfile?.brgyProfile?.brgyLogo
