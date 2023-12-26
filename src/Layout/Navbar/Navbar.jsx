@@ -12,7 +12,7 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
     (state) => state.reducer.userInfo?.userInfo.username
   );
   const useImg = useSelector(
-    (state) => state.reducer.brgyProfile?.brgyProfile.brgyLogo
+    (state) => state.reducer.brgyProfile?.brgyProfile?.brgyLogo
   );
   console.log(useImg);
   const updateCurrentDate = () => {
