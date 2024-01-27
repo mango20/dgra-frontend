@@ -9,7 +9,8 @@ const defaultCenter = {
   lat: 0, // default latitude
   lng: 0, // default longitude
 };
-const MapContainer = ({ coordinates, onLocationChange }) => {
+const MapContainer = ({ coordinates, onLocationChange, readOnly }) => {
+  console.log(readOnly);
   const [mapCenter, setMapCenter] = useState(defaultCenter);
   const [mapZoom, setMapZoom] = useState(10);
 
@@ -38,11 +39,13 @@ const MapContainer = ({ coordinates, onLocationChange }) => {
   }
 
   const onMarkerDragEnd = (event) => {
-    const { latLng } = event;
-    const lat = latLng.lat();
-    const lng = latLng.lng();
-    onLocationChange({ lat, lng });
-    setCoordinates({ lat, lng });
+    if (!readOnly) {
+      const { latLng } = event;
+      const lat = latLng.lat();
+      const lng = latLng.lng();
+      onLocationChange({ lat, lng });
+      setCoordinates({ lat, lng });
+    }
   };
 
   return (
@@ -55,7 +58,7 @@ const MapContainer = ({ coordinates, onLocationChange }) => {
         {coordinates && (
           <Marker
             position={coordinates}
-            draggable={true}
+            draggable={!readOnly}
             onDragEnd={onMarkerDragEnd}
           />
         )}

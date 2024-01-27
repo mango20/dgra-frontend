@@ -14,6 +14,7 @@ const Form = () => {
   const dispatch = useDispatch();
   const schema = z.object({
     barangay: z.string().nonempty("Barangay is required"),
+    address: z.string().nonempty("Address is required"),
     municipality: z.string().nonempty("Municipality is required"),
     province: z.string().nonempty("Province is required"),
     region: z.string().nonempty("Region is required"),
@@ -34,11 +35,23 @@ const Form = () => {
   const token = useSelector((state) => state.reducer.auth.authUser.token);
   const [base64, setBase64] = useState("");
   const methods = useForm({ resolver: zodResolver(schema) });
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        `https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation`
+      );
+      console.log(response);
+      setFetchedData(response.data.getInfo);
+      dispatch(setBrgyProfile(response.data?.getInfo[0]));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSubmit = async (data) => {
     const { latitude, longitude, ...restData } = data;
 
     const payload = {
-      address: "sdfsdfs",
       brgyLogo: base64,
       ...restData,
       coordinates: { latitude, longitude },
@@ -59,28 +72,15 @@ const Form = () => {
       }
 
       console.log(response);
+      await getData();
     } catch (error) {
       console.log(error);
     }
   };
 
   const [fetchedData, setFetchedData] = useState(null);
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(
-          `https://dgra-system-e3fdea1a7cab.herokuapp.com/api/barangayprofile/barangayProfileInformation`,
-          null,
-          token
-        );
-        console.log(response);
-        setFetchedData(response.data.getInfo);
-        dispatch(setBrgyProfile(response.data?.getInfo[0]));
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
+  useEffect(() => {
     getData();
   }, []);
 

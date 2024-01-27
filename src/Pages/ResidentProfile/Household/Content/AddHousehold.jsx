@@ -15,6 +15,8 @@ const AddHousehold = ({
   selectedHousehold,
   alertMsg,
   onItemAddedOrUpdated,
+  viewHousehold,
+  viewOnly,
 }) => {
   const schema = z.object({
     province: z.string().nonempty("Province is required"),
@@ -105,21 +107,30 @@ const AddHousehold = ({
   };
 
   console.log(" Select ", selectedHousehold);
+  console.log(viewOnly);
+  let modalTitle = selectedHousehold ? "Edit Household" : "Add Household";
+  if (viewOnly && selectedHousehold && selectedHousehold.householdNo) {
+    modalTitle = `View ${selectedHousehold.householdNo}`;
+  }
+
   return (
     <CustomModal
       size="lg"
-      show={addHousehold || editHouseholdModal}
+      show={addHousehold || editHouseholdModal || (viewHousehold && viewOnly)}
       handleClose={closeModal}
-      title={selectedHousehold ? "Edit Household" : "Add Household"}
+      title={modalTitle}
+      viewOnly={viewOnly}
       handleAction={methods.handleSubmit(onSubmit)}
     >
       <FormProvider {...methods}>
         <form>
           <HouseholdLocation
+            viewOnly={viewOnly}
             selectedHousehold={selectedHousehold}
             edit={editHouseholdModal}
           />
           <HouseholdCharacteristics
+            viewOnly={viewOnly}
             selectedHousehold={selectedHousehold}
             edit={editHouseholdModal}
           />

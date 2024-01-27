@@ -5,7 +5,7 @@ import MapContainer from "../../../../../Utils/Map";
 import "../../../../../Asset/Scss/Pages/ResidenceProfile/_householdLocation.scss";
 import { fromLatLng, setKey, geocode, RequestType } from "react-geocode";
 setKey("AIzaSyBlApZPTcG_IhHgjWCLdp-PKMiiM4xBAAM");
-const HouseholdLocation = ({ selectedHousehold, edit }) => {
+const HouseholdLocation = ({ selectedHousehold, edit, viewOnly }) => {
   const {
     register,
     setValue,
@@ -14,16 +14,16 @@ const HouseholdLocation = ({ selectedHousehold, edit }) => {
 
   useEffect(() => {
     if (selectedHousehold || edit) {
-      setValue("province", selectedHousehold.province);
-      setValue("cityOrMunicipality", selectedHousehold.cityOrMunicipality);
-      setValue("barangay", selectedHousehold.barangay);
-      setValue("purokOrSitio", selectedHousehold.purokOrSitio);
-      setValue("street", selectedHousehold.street);
-      setValue("householdNo", selectedHousehold.householdNo);
-      setValue("nameOfRespondent", selectedHousehold.nameOfRespondent);
+      setValue("province", selectedHousehold?.province);
+      setValue("cityOrMunicipality", selectedHousehold?.cityOrMunicipality);
+      setValue("barangay", selectedHousehold?.barangay);
+      setValue("purokOrSitio", selectedHousehold?.purokOrSitio);
+      setValue("street", selectedHousehold?.street);
+      setValue("householdNo", selectedHousehold?.householdNo);
+      setValue("nameOfRespondent", selectedHousehold?.nameOfRespondent);
       setValue("contactNo", selectedHousehold.contactNo);
-      setValue("latitude", selectedHousehold.coordinates[0].latitude);
-      setValue("longitude", selectedHousehold.coordinates[0].longitude);
+      setValue("latitude", selectedHousehold?.coordinates[0]?.latitude);
+      setValue("longitude", selectedHousehold?.coordinates[0]?.longitude);
     } else {
       setValue("province", "");
       setValue("cityOrMunicipality", "");
@@ -75,66 +75,77 @@ const HouseholdLocation = ({ selectedHousehold, edit }) => {
           className="formInputModalHousehold"
           errors={errors}
           {...register("province")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.2 Municipality"
           className="formInputModalHousehold"
           errors={errors}
           {...register("cityOrMunicipality")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.3 Barangay"
           className="formInputModalHousehold"
           errors={errors}
           {...register("barangay")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.4 Purok/Sitio"
           className="formInputModalHousehold"
           errors={errors}
           {...register("purokOrSitio")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.5 Street"
           className="formInputModalHousehold"
           errors={errors}
           {...register("street")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.6 House Identification Number"
           className="formInputModalHousehold"
           errors={errors}
           {...register("householdNo")}
+          readOnly={viewOnly}
         />
         {/* Map */}
         <label id="a7Label">A.7 Coordinates</label>
         <MapContainer
           coordinates={coordinates}
           onLocationChange={handleLocationChange}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="Latitude"
           className="formInputModalHousehold"
           errors={errors}
           {...register("latitude")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="Longitude"
           className="formInputModalHousehold"
           errors={errors}
           {...register("longitude")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.8 Name of Respondent"
           className="formInputModalHousehold"
           errors={errors}
           {...register("nameOfRespondent")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="A.9 Household Contact Number add"
           className="formInputModalHousehold"
           errors={errors}
           {...register("contactNo")}
+          readOnly={viewOnly}
         />
       </div>
     </div>

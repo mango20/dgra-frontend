@@ -51,7 +51,7 @@ const menu = [
   },
   {
     label: "System Tools",
-    subLabel: ["Change Password", "System Users", "Request Change Password"],
+    subLabel: ["Change Password", "System Users"],
   },
   {
     label: "Logout",

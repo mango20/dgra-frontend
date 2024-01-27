@@ -27,6 +27,7 @@ import HouseholdMembers from "./Pages/ResidentProfile/HouseholdMembers/Household
 import BarangayProfileReport from "./Pages/Report/BaragayProfileReport/BarangayProfileReport";
 import Supply from "./Pages/Financial/Supplies/Supplies";
 import Equipment from "./Pages/Financial/Equipment/Equipment";
+import AddSurvey from "./Pages/ResidentProfile/Household/Content/Action/AddSurvey";
 
 const App = () => {
   return (
@@ -46,6 +47,10 @@ const App = () => {
           <Route
             path="/resident-profile/household-members"
             element={<HouseholdMembers />}
+          />
+          <Route
+            path="/resident-profile/household/add-survey/:id"
+            element={<AddSurvey />}
           />
           <Route path="/disaster-admin/advisory" element={<Advisory />} />
           <Route path="/disaster-admin/safety-tips" element={<SafetyTips />} />

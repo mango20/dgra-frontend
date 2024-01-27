@@ -12,6 +12,7 @@ const CustomInput = React.forwardRef(
       type,
       className,
       customLabel,
+      readOnly,
       ...props
     },
     ref
@@ -28,6 +29,7 @@ const CustomInput = React.forwardRef(
             ref={ref}
             {...props}
             type={type}
+            disabled={readOnly}
           />
           {errors && errors[name] && (
             <Message label={errors[name].message} className={"error"} />

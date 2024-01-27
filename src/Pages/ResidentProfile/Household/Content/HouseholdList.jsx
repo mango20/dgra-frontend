@@ -13,18 +13,23 @@ import CustomTable from "../../../../Components/UI/Table/Table";
 import AddHouseholdMember from "./Action/AddHouseholdMember";
 import { getReq } from "../../../../Service/API";
 import AddSurvey from "./Action/AddSurvey";
+import { useNavigate } from "react-router-dom";
 
 const HouseholdList = ({
   searchTerm,
   onEdit,
   onItemAddedOrUpdated,
   alertMsg,
+  setAddHousehold,
+  onView,
 }) => {
+  const navigate = useNavigate();
   const [isAddHouseholdMemberModalOpen, setAddHouseholdMemberModalOpen] =
     useState(false);
 
   const [isAddSurveyOpen, setIsAddSurveyOpen] = useState(false);
   const [households, setHouseholds] = useState([]);
+  const [viewHousehold, setViewHousehold] = useState(null);
 
   const closeModal = () => {
     setAddHouseholdMemberModalOpen(false);
@@ -57,7 +62,11 @@ const HouseholdList = ({
         label: "Add Survey",
         icon: faPlus,
         handler: () => {
-          setIsAddSurveyOpen(true);
+          console.log(row);
+          navigate(`/resident-profile/household/add-survey/${row._id}`, {
+            state: row,
+          });
+          // setIsAddSurveyOpen(true);
         },
       });
 
@@ -65,7 +74,7 @@ const HouseholdList = ({
         label: "View Household",
         icon: faEye,
         handler: () => {
-          // Implement your edit logic here
+          onView(row);
         },
       });
 
@@ -73,7 +82,7 @@ const HouseholdList = ({
         label: "View Household Member",
         icon: faEye,
         handler: () => {
-          // Implement your edit logic here
+          setViewHousehold(row);
         },
       });
 
@@ -112,7 +121,7 @@ const HouseholdList = ({
   };
 
   const dataFiltered = SearchFilter(households, searchTerm);
-
+  console.log(viewHousehold);
   return (
     <div>
       <CustomTable
@@ -122,10 +131,11 @@ const HouseholdList = ({
         itemsPerPage={5}
       />
       <AddHouseholdMember
+        household={viewHousehold}
         addHouseholdMember={isAddHouseholdMemberModalOpen}
         closeModal={closeModal}
       />
-      <AddSurvey isAddSurveyOpen={isAddSurveyOpen} closeModal={closeModal} />
+      {/* <AddSurvey isAddSurveyOpen={isAddSurveyOpen} closeModal={closeModal} /> */}
     </div>
   );
 };

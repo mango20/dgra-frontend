@@ -172,3 +172,57 @@
     }
   }
 }
+
+.formSelectModalAddSurvey {
+  display: flex;
+  // justify-content: space-between;
+  flex-wrap: wrap;
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+    min-width: 200px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 15px;
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  select {
+    width: 250px;
+
+    @media screen and (max-width: 768px) {
+      // min-width: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.formSelectModalAddSurveyOther {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  // justify-content: space-between;
+
+  label {
+    font-weight: bold;
+    margin: 15px 0;
+    min-width: 200px;
+    word-wrap: break-word;
+    white-space: pre-line;
+    margin-right: 15px;
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
+
+  select {
+    width: 250px;
+
+    @media screen and (max-width: 768px) {
+      // min-width: 100%;
+      width: 100%;
+    }
+  }
+}

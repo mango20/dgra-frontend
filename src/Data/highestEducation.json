@@ -1,0 +1,11 @@
+[
+  { "key": 1, "value": "No Education" },
+  { "key": 2, "value": "Elementary School" },
+  { "key": 3, "value": "Junior High School" },
+  { "key": 4, "value": "Senior High School" },
+  { "key": 5, "value": "Vocational Training" },
+  { "key": 6, "value": "Associate's Degree" },
+  { "key": 7, "value": "Bachelor's Degree" },
+  { "key": 8, "value": "Master's Degree" },
+  { "key": 9, "value": "Doctorate or Professional Degree" }
+]

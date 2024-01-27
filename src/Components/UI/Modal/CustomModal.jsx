@@ -10,7 +10,9 @@ const CustomModal = ({
   title,
   children,
   hasAdd,
+  viewOnly,
 }) => {
+  console.log(viewOnly);
   const isEditMode = title.includes("Edit");
   return (
     <Modal
@@ -25,9 +27,12 @@ const CustomModal = ({
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
-        <Button variant="success" onClick={handleAction} type="submit">
-          {isEditMode ? "Save" : "Add"}
-        </Button>
+        {!viewOnly && (
+          <Button variant="success" onClick={handleAction} type="submit">
+            {isEditMode ? "Save" : "Add"}
+          </Button>
+        )}
+
         <Button variant="danger" onClick={handleClose}>
           Close
         </Button>

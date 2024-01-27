@@ -12,6 +12,7 @@ const Select = React.forwardRef(
       data,
       className,
       onChange,
+      readOnly,
       ...props
     },
     ref
@@ -26,6 +27,7 @@ const Select = React.forwardRef(
             ref={ref}
             {...props}
             onChange={onChange}
+            disabled={readOnly}
           >
             <option value="" disabled>
               {defaultOptionLabel}

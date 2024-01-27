@@ -8,7 +8,7 @@ import SourceOfElectricity from "../../../../../Data/SourceOfElectricity.json";
 import buildingType from "../../../../../Data/buildingType.json";
 import waterSupply from "../../../../../Data/waterSupply.json";
 import toiletFacility from "../../../../../Data/toiletFacility.json";
-const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
+const HouseholdCharacteristics = ({ selectedHousehold, edit, viewOnly }) => {
   const {
     register,
     setValue,
@@ -20,43 +20,43 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
       // If editing an event, set form values using setValue
       setValue(
         "noFamilies",
-        selectedHousehold.householdCharacteristics[0].noFamilies
+        selectedHousehold.householdCharacteristics[0]?.noFamilies
       );
       setValue(
         "noHouseholdMembers",
-        selectedHousehold.householdCharacteristics[0].noHouseholdMembers
+        selectedHousehold.householdCharacteristics[0]?.noHouseholdMembers
       );
       setValue(
         "hasDisability",
-        selectedHousehold.householdCharacteristics[0].hasDisability
+        selectedHousehold.householdCharacteristics[0]?.hasDisability
       );
       setValue(
         "noMembersDisability",
-        selectedHousehold.householdCharacteristics[0].noMembersDisability
+        selectedHousehold.householdCharacteristics[0]?.noMembersDisability
       );
       setValue(
         "typeOfBuilding",
-        selectedHousehold.householdCharacteristics[0].typeOfBuilding
+        selectedHousehold.householdCharacteristics[0]?.typeOfBuilding
       );
       setValue(
         "mainWaterSupply",
-        selectedHousehold.householdCharacteristics[0].mainWaterSupply
+        selectedHousehold.householdCharacteristics[0]?.mainWaterSupply
       );
       setValue(
         "toiletFacType",
-        selectedHousehold.householdCharacteristics[0].toiletFacType
+        selectedHousehold.householdCharacteristics[0]?.toiletFacType
       );
       setValue(
         "hasWaterFiltration",
-        selectedHousehold.householdCharacteristics[0].hasWaterFiltration
+        selectedHousehold.householdCharacteristics[0]?.hasWaterFiltration
       );
       setValue(
         "sourceOfElectricity",
-        selectedHousehold.householdCharacteristics[0].sourceOfElectricity
+        selectedHousehold.householdCharacteristics[0]?.sourceOfElectricity
       );
       setValue(
         "hasPowerGenerator",
-        selectedHousehold.householdCharacteristics[0].hasPowerGenerator
+        selectedHousehold.householdCharacteristics[0]?.hasPowerGenerator
       );
     } else {
       setValue("noFamilies", "");
@@ -81,12 +81,14 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           className="formInputModalHouseholdCharacteristics"
           errors={errors}
           {...register("noFamilies")}
+          readOnly={viewOnly}
         />
         <CustomInput
           label="B.2 How many household member are there in the household?"
           className="formInputModalHouseholdCharacteristics"
           errors={errors}
           {...register("noHouseholdMembers")}
+          readOnly={viewOnly}
         />
         {/* B3 Select */}
         <Select
@@ -96,12 +98,14 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={YesNo}
           {...register("hasDisability")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
         <CustomInput
           label="B.4 [If Yes in Question No B.3] How many?"
           className="formInputModalHouseholdCharacteristics"
           errors={errors}
           {...register("noMembersDisability")}
+          readOnly={viewOnly}
         />
         <Select
           label="B.5 In what type of building does the household reside?"
@@ -110,6 +114,7 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={buildingType}
           {...register("typeOfBuilding")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
         <Select
           label="B.6 What is the household's main sourse of water supply?"
@@ -118,6 +123,7 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={waterSupply}
           {...register("mainWaterSupply")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
         <Select
           label="B.7 What type of toilet facility does the household have?"
@@ -126,6 +132,7 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={toiletFacility}
           {...register("toiletFacType")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
         <Select
           label="B.8 Does the household have water filtration?"
@@ -134,6 +141,7 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={YesNo}
           {...register("hasWaterFiltration")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
 
         <Select
@@ -143,6 +151,7 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={SourceOfElectricity}
           {...register("sourceOfElectricity")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
         <Select
           label="B.10 Is there a back-up power generator/battery?"
@@ -151,6 +160,7 @@ const HouseholdCharacteristics = ({ selectedHousehold, edit }) => {
           data={YesNo}
           {...register("hasPowerGenerator")}
           className="formSelectModalHouseholdCharacteristics"
+          readOnly={viewOnly}
         />
       </div>
     </div>

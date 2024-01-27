@@ -12,22 +12,31 @@ const Household = () => {
   const [editHouseholdModal, setEditHouseholdModal] = useState(false);
   const [selectedHousehold, setSelectedHousehold] = useState(null);
   const [alertLabel, setAlertLabel] = useState("");
-
+  const [viewOnly, setViewOnly] = useState(false);
   const handleAdd = () => {
     setAddHousehold(true);
     setSelectedHousehold(null);
+    setViewOnly(false); // Set viewOnly to false when adding a new household
   };
 
   const handleEdit = (event) => {
     setSelectedHousehold(event);
     setEditHouseholdModal(true);
     setAddHousehold(true);
+    setViewOnly(false); // Set viewOnly to false when editing
+  };
+
+  const handleViewDetails = (household) => {
+    setSelectedHousehold(household);
+    setAddHousehold(true);
+    setViewOnly(true); // Set viewOnly to true to show details only
   };
 
   const closeModal = () => {
     setAddHousehold(false);
     setEditHouseholdModal(false);
     setSelectedHousehold(null);
+    setViewOnly(false); // Reset viewOnly when closing the modal
   };
 
   const handleSearch = (searchTerm) => {
@@ -65,6 +74,8 @@ const Household = () => {
           onEdit={handleEdit}
           alertMsg={(label) => setAlertLabel(label)}
           onItemAddedOrUpdated={() => {}}
+          setAddHousehold={setAddHousehold}
+          onView={handleViewDetails}
         />
       </ContentContainer>
       <AddHousehold
@@ -74,6 +85,7 @@ const Household = () => {
         selectedHousehold={selectedHousehold}
         alertMsg={(label) => setAlertLabel(label)}
         onItemAddedOrUpdated={() => {}}
+        viewOnly={viewOnly}
       />
     </PageContainer>
   );

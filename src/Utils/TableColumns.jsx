@@ -23,7 +23,7 @@ export const householdTC = [
   { key: "householdNo", header: "Household Identification Number" },
   { key: "household", header: "Households" },
   { key: "purokOrSitio", header: "Purok No./Sitio" },
-  { key: "noFamilies", header: "Number of Family Members" },
+  { key: "noHouseholdMembers", header: "Number of Family Members" },
   { key: "lastUser", header: "Last User" },
   { key: "updatedAt", header: "Last Update" },
   { key: "status", header: "Status" },

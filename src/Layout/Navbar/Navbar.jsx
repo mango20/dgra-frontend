@@ -14,7 +14,11 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
   const useImg = useSelector(
     (state) => state.reducer.brgyProfile?.brgyProfile?.brgyLogo
   );
-  // console.log(useImg);
+
+  const brgyName = useSelector(
+    (state) => state.reducer.brgyProfile?.brgyProfile?.barangay
+  );
+
   const updateCurrentDate = () => {
     const formattedDate = moment().format("M/D/YYYY, h:mm:ss A");
     setCurrentDate(formattedDate);
@@ -54,7 +58,7 @@ const CustomNavbar = ({ setShowSidebar, show }) => {
           className="brgName"
           style={{ display: show && !isSmallScreen ? "block" : "none" }}
         >
-          Barangay Tanza 2
+          {brgyName}
         </h1>
 
         <FontAwesomeIcon
