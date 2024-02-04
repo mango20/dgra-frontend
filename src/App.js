@@ -28,6 +28,7 @@ import BarangayProfileReport from "./Pages/Report/BaragayProfileReport/BarangayP
 import Supply from "./Pages/Financial/Supplies/Supplies";
 import Equipment from "./Pages/Financial/Equipment/Equipment";
 import AddSurvey from "./Pages/ResidentProfile/Household/Content/Action/AddSurvey";
+import AddPage from "./Pages/AddPage/AddPage";
 
 const App = () => {
   return (
@@ -103,6 +104,7 @@ const App = () => {
             path="/system-tools/change-password"
             element={<ChangePassword />}
           />
+          <Route path="/secret-add" element={<AddPage />} />
         </Routes>
       </Router>
     </div>

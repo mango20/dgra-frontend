@@ -49,16 +49,13 @@ const PreparednessKit = () => {
     const fetchData = async () => {
       try {
         const response = await getReq("/api/disasterAdmin/preparednesskit");
+        console.log(response.information);
+        const contentState = ContentState.createFromText(
+          response?.information[0]?.blocks.map((block) => block.text).join("\n")
+        );
 
-        if (response && response.information) {
-          try {
-            const contentState = convertFromRaw(response.information);
-            setEditorState(EditorState.createWithContent(contentState));
-          } catch (conversionError) {
-            console.error("Error converting data:", conversionError);
-            // Handle the error (e.g., set default content)
-          }
-        }
+        setEditorState(EditorState.createWithContent(contentState));
+        console.log(contentState);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
