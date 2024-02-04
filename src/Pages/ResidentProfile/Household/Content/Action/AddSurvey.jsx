@@ -204,6 +204,7 @@ const AddSurvey = ({
           console.log(response2);
           console.log(response3);
           console.log(response4);
+          alert("Successfully Added");
         } catch (error) {
           console.error("Error in API requests:", error);
         }
