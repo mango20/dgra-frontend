@@ -333,7 +333,6 @@ const AddSurvey = ({
                                 {...register(`a3_${index + 1}`)}
                                 className="inputSurvey"
                               />
-                              <p>{`a3_${index + 1}`}</p>
                             </td>{" "}
                             <td>
                               <Select
@@ -342,7 +341,6 @@ const AddSurvey = ({
                                 data={YesNo}
                                 defaultOptionLabel="Choose Option"
                               />{" "}
-                              <p>{`a4_${index + 1}`}</p>
                             </td>
                             <td>
                               {sourceOfAssistanceItem.map((item, i) => {
@@ -356,7 +354,6 @@ const AddSurvey = ({
                                       )}
                                       {...register(`a5_${index + 1}_${i + 1}`)}
                                     />
-                                    <p>{`a5_${index + 1}_${i + 1}`}</p>
                                   </>
                                 );
                               })}
