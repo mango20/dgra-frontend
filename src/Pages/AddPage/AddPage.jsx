@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import usertype from "../../Data/useAdmin.json";
 import Select from "../../Components/Form/Select";
 import { postReq } from "../../Service/API";
+import "../../Asset/Scss/Pages/AdPage/_adPage.scss";
 const AddPage = () => {
   const {
     register,
@@ -31,7 +32,7 @@ const AddPage = () => {
     }
   };
   return (
-    <div>
+    <div className="adPage">
       <div>
         <form onSubmit={handleSubmit(handleAdd)}>
           <h1>Add Admin</h1>
@@ -41,6 +42,7 @@ const AddPage = () => {
             label="Last Name"
             type="text"
             errors={errors}
+            className="formInput"
           />
 
           <CustomInput
@@ -49,6 +51,7 @@ const AddPage = () => {
             label="First Name"
             type="text"
             errors={errors}
+            className="formInput"
           />
 
           <CustomInput
@@ -57,6 +60,7 @@ const AddPage = () => {
             label="Middle Name"
             type="text"
             errors={errors}
+            className="formInput"
           />
 
           <CustomInput
@@ -65,12 +69,13 @@ const AddPage = () => {
             label="Email"
             type="email"
             errors={errors}
+            className="formInput"
           />
 
           <Select
             data={usertype}
             label="Usertype"
-            className="formSelectBlockModal"
+            className="formSelect"
             defaultOptionLabel="Select User Type"
             errors={errors}
             {...register("userType")}
