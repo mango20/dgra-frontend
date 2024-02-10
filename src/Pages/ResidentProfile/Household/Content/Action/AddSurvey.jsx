@@ -170,40 +170,80 @@ const AddSurvey = ({
         formData.step4
       ) {
         console.log("first");
-        console.log("Payload:", { ...formData.step2, id: id });
+        console.log("Payload:", { formData, id: id });
+        const addDisasterSurveyPayload = {
+          setA: {
+            0: {
+              questiona1: formData.step1.a1,
+            },
+          },
+          setB: {
+            0: {
+              questionb1: formData.step2.b1,
+              questionb2: formData.step2.b2,
+              questionb3: formData.step2.b3,
+              questionb4: formData.step2.b4,
+            },
+          },
+          setC: {
+            0: {
+              questionc1: formData.step3.c1,
+              questionc2: formData.step3.c2,
+              questionc3: formData.step3.c3,
+              questionc4: formData.step3.c4,
+              questionc5: formData.step3.c5,
+              questionc6: formData.step3.c6,
+            },
+          },
+          setD: {
+            0: {
+              questiond1: formData.step4.d1,
+              questiond2: formData.step4.d2,
+              questiond3: formData.step4.d3,
+              questiond4: formData.step4.d4,
+              questiond5: formData.step4.d5,
+              questiond6: formData.step4.d6,
+              questiond7: formData.step4.d7,
+              questiond8: formData.step4.d8,
+              questiond9: formData.step4.d9,
+              questiond10: formData.step4.d10,
+            },
+          },
+        };
 
+        console.log("adsp", addDisasterSurveyPayload);
         try {
-          console.log("first");
-          console.log("Payload:", { ...formData.step2, id: id });
+          //   console.log("first");
+          //   console.log("Payload:", { ...formData.step2, id: id });
 
-          const response1 = await postReq("/api/getdisastersurveyAS", {
-            ...formData.step1,
-            id: id,
-          });
+          //   const response1 = await postReq("/api/getdisastersurveyAS", {
+          //     ...formData.step1,
+          //     id: id,
+          //   });
 
-          const response2 = await postReq("/api/getdisastersurveyBS", {
-            ...formData.step2,
-            id: id,
-            year: year,
-          });
+          //   const response2 = await postReq("/api/getdisastersurveyBS", {
+          //     ...formData.step2,
+          //     id: id,
+          //     year: year,
+          //   });
 
-          const response3 = await postReq("/api/getdisastersurveyCS", {
-            ...formData.step3,
-            id: id,
-            year: year,
-          });
+          //   const response3 = await postReq("/api/getdisastersurveyCS", {
+          //     ...formData.step3,
+          //     id: id,
+          //     year: year,
+          //   });
 
-          const response4 = await postReq("/api/getdisastersurveyDS", {
-            ...formData.step4,
-            id: id,
-            year: year,
-          });
+          //   const response4 = await postReq("/api/getdisastersurveyDS", {
+          //     ...formData.step4,
+          //     id: id,
+          //     year: year,
+          //   });
 
-          console.log("Payload:", { ...formData.step2, id: id });
-          console.log(response1);
-          console.log(response2);
-          console.log(response3);
-          console.log(response4);
+          //   console.log("Payload:", { ...formData.step2, id: id });
+          //   console.log(response1);
+          //   console.log(response2);
+          //   console.log(response3);
+          //   console.log(response4);
           alert("Successfully Added");
         } catch (error) {
           console.error("Error in API requests:", error);
