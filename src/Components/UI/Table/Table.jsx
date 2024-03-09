@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, DropdownButton, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../Asset/Scss/Components/UI/Table/_table.scss";
@@ -6,6 +6,7 @@ import Pagination from "../Pagination/Pagination";
 import CustomButton from "../../Form/Button";
 import { formatDate } from "../../../Utils/FormatDate";
 import moment from "moment";
+import { ThreeDots } from "react-loader-spinner";
 
 const CustomTable = ({
   data,
@@ -18,6 +19,13 @@ const CustomTable = ({
   console.log("Columns:", columns);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -27,6 +35,27 @@ const CustomTable = ({
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const sortedData = data.slice().reverse();
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+
+  if (isLoading) {
+    return (
+      <>
+        <ThreeDots
+          visible={true}
+          height="80"
+          width="80"
+          color="#4fa94d"
+          radius="9"
+          ariaLabel="three-dots-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </>
+    );
+  }
+
+  if (data.length === 0) {
+    return <div>No data available</div>;
+  }
 
   return (
     <>

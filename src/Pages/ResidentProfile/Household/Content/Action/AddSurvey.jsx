@@ -36,7 +36,6 @@ const AddSurvey = ({
 }) => {
   const location = useLocation();
   const houseHoldData = location.state;
-  // console.log(houseHoldData);
   const [currentStep, setCurrentStep] = useState(1);
   const [showTable, setShowTable] = useState(false);
   const [showB2, setShowB2] = useState(false);
@@ -63,28 +62,24 @@ const AddSurvey = ({
   } = methods;
 
   console.log(errors);
-
+  console.log(currentStep);
   const onSubmit = async (data, event) => {
     event.preventDefault();
 
-    // Function to convert checkbox values to strings
     const convertCheckboxValuesToString = (formData) => {
       const newData = {};
       for (const key in formData) {
         if (typeof formData[key] === "boolean") {
-          // Convert true to "0" and false to "1"
           newData[key] = formData[key] ? "0" : "1";
         } else {
-          newData[key] = formData[key] || ""; // Set empty string if value is falsy
+          newData[key] = formData[key] || "";
         }
       }
       return newData;
     };
 
-    // Convert boolean values to strings for all checkboxes
     const mappedData = convertCheckboxValuesToString(data);
 
-    // Update the form data
     setFormData((prevData) => ({
       ...prevData,
       [`step${currentStep}`]: mappedData,
@@ -94,14 +89,13 @@ const AddSurvey = ({
 
     if (nextStep <= totalSteps) {
       console.log("formdata ", {
-        ...formData, // Original form data
-        [`step${currentStep}`]: mappedData, // Mapped data for the current step
+        ...formData,
+        [`step${currentStep}`]: mappedData,
       });
       setCurrentStep(nextStep);
     } else {
-      // Capture and log the latest form data
       console.log("Form submitted:", {
-        ...formData, // Original form data
+        ...formData,
         [`step${currentStep}`]: mappedData,
       });
       const step4Data = formData.step4;
@@ -111,48 +105,46 @@ const AddSurvey = ({
       console.log("Step 2:", formData.step2);
       console.log("Step 3:", formData.step3);
       console.log("Step 4:", formData.step4);
+      console.log(currentStep);
+      const year = formData.step1.year;
+      const id = houseHoldData.householdNo;
+      console.log("ID:", id);
+      console.log(year);
+      if (currentStep === 4) {
+        console.log("first func");
 
-      // const year = formData.step1.year;
-      // const id = houseHoldData.householdNo;
-      // console.log("ID:", id);
-      // console.log(year);
-      // if (formData.step1 && formData.step2 && formData.step3 && step4Data) {
-      //   console.log("first");
-      //   console.log("Payload:", { ...formData.step2, id: id });
+        const response1 = await postReq("/api/getdisastersurveyAS", {
+          ...formData.step1,
+          id: id,
+        });
 
-      //   const response1 = await postReq("/api/getdisastersurveyAS", {
-      //     ...formData.step1,
-      //     id: id,
-      //   });
+        const response2 = await postReq("/api/getdisastersurveyBS", {
+          ...formData.step2,
+          id: id,
+          year: year,
+        });
 
-      //   const response2 = await postReq("/api/getdisastersurveyBS", {
-      //     ...formData.step2,
-      //     id: id,
-      //     year: year,
-      //   });
+        const response3 = await postReq("/api/getdisastersurveyCS", {
+          ...formData.step3,
+          id: id,
+          year: year,
+        });
 
-      //   const response3 = await postReq("/api/getdisastersurveyCS", {
-      //     ...formData.step3,
-      //     id: id,
-      //     year: year,
-      //   });
+        const response4 = await postReq("/api/getdisastersurveyDS", {
+          ...formData.step4,
+          id: id,
+          year: year,
+        });
 
-      //   const response4 = await postReq("/api/getdisastersurveyDS", {
-      //     ...formData.step4,
-      //     id: id,
-      //     year: year,
-      //   });
+        console.log(response1);
+        console.log(response2);
+        console.log(response3);
+        console.log(response4);
+        // console.log(response);
 
-      //   console.log("Payload:", { ...formData.step2, id: id });
-      //   console.log(response1);
-      //   console.log(response2);
-      //   console.log(response3);
-      //   console.log(response4);
-      // console.log(response);
-
-      // Reset the form or perform other actions if needed
-      // setCurrentStep(1);
-      // }
+        // Reset the form
+        setCurrentStep(1);
+      }
     }
   };
 
@@ -163,13 +155,46 @@ const AddSurvey = ({
       console.log("ID:", id);
       console.log(year);
 
-      if (
-        formData.step1 &&
-        formData.step2 &&
-        formData.step3 &&
-        formData.step4
-      ) {
-        console.log("first");
+      const selectedB2Labels = [];
+      if (formData.step2 && typeof formData.step2 === "object") {
+        for (let i = 1; i <= 14; i++) {
+          if (formData.step2[`b2_${i}`] === "0") {
+            selectedB2Labels.push(b2Item[i - 1]);
+          }
+        }
+      }
+
+      const selectedB3Labels = [];
+      if (formData.step2 && typeof formData.step2 === "object") {
+        for (let i = 1; i <= 15; i++) {
+          if (formData.step2[`b3_${i}`] === "0") {
+            selectedB3Labels.push(b2Item[i - 1]);
+          }
+        }
+      }
+
+      const selectedC4Labels = [];
+      if (formData.step3 && typeof formData.step3 === "object") {
+        for (let i = 1; i <= 6; i++) {
+          if (formData.step3[`c4_${i}`] === "0") {
+            selectedC4Labels.push(c4Item[i - 1]);
+          }
+        }
+      }
+
+      const selectedD10Labels = [];
+      if (formData.step4 && typeof formData.step4 === "object") {
+        for (let i = 1; i <= 14; i++) {
+          if (formData.step4[`d10_${i}`] === "0") {
+            selectedD10Labels.push(d10Item[i - 1]);
+          }
+        }
+      }
+
+      console.log("Selected B2 Labels:", selectedB2Labels);
+
+      if (currentStep === 4) {
+        console.log("sec");
         console.log("Payload:", { formData, id: id });
         const addDisasterSurveyPayload = {
           setA: {
@@ -180,8 +205,8 @@ const AddSurvey = ({
           setB: {
             0: {
               questionb1: formData.step2.b1,
-              questionb2: formData.step2.b2,
-              questionb3: formData.step2.b3,
+              questionb2: selectedB2Labels,
+              questionb3: selectedB3Labels,
               questionb4: formData.step2.b4,
             },
           },
@@ -190,7 +215,7 @@ const AddSurvey = ({
               questionc1: formData.step3.c1,
               questionc2: formData.step3.c2,
               questionc3: formData.step3.c3,
-              questionc4: formData.step3.c4,
+              questionc4: selectedC4Labels,
               questionc5: formData.step3.c5,
               questionc6: formData.step3.c6,
             },
@@ -206,45 +231,20 @@ const AddSurvey = ({
               questiond7: formData.step4.d7,
               questiond8: formData.step4.d8,
               questiond9: formData.step4.d9,
-              questiond10: formData.step4.d10,
+              questiond10: selectedD10Labels,
             },
           },
+          year: year,
+          householdNo: id,
         };
 
         console.log("adsp", addDisasterSurveyPayload);
         try {
-          //   console.log("first");
-          //   console.log("Payload:", { ...formData.step2, id: id });
-
-          //   const response1 = await postReq("/api/getdisastersurveyAS", {
-          //     ...formData.step1,
-          //     id: id,
-          //   });
-
-          //   const response2 = await postReq("/api/getdisastersurveyBS", {
-          //     ...formData.step2,
-          //     id: id,
-          //     year: year,
-          //   });
-
-          //   const response3 = await postReq("/api/getdisastersurveyCS", {
-          //     ...formData.step3,
-          //     id: id,
-          //     year: year,
-          //   });
-
-          //   const response4 = await postReq("/api/getdisastersurveyDS", {
-          //     ...formData.step4,
-          //     id: id,
-          //     year: year,
-          //   });
-
-          //   console.log("Payload:", { ...formData.step2, id: id });
-          //   console.log(response1);
-          //   console.log(response2);
-          //   console.log(response3);
-          //   console.log(response4);
-          alert("Successfully Added");
+          const response = await postReq(
+            "api/disastersurvey",
+            addDisasterSurveyPayload
+          );
+          alert("Submited");
         } catch (error) {
           console.error("Error in API requests:", error);
         }
@@ -272,15 +272,15 @@ const AddSurvey = ({
   const fiscalYears = generateFiscalYears();
 
   const cValidation = () => {
-    setValue("c2", ""); // Reset c2
-    setValue("c3", ""); // Reset c3
-    setValue("c4_1", ""); // Reset c4_1
-    setValue("c4_2", ""); // Reset c4_2
-    setValue("c4_3", ""); // Reset c4_3
-    setValue("c4_4", ""); // Reset c4_4
-    setValue("c4_5", ""); // Reset c4_5
-    setValue("c4_6", ""); // Reset c4_6
-    setValue("c5", ""); // Reset c5
+    setValue("c2", "");
+    setValue("c3", "");
+    setValue("c4_1", "");
+    setValue("c4_2", "");
+    setValue("c4_3", "");
+    setValue("c4_4", "");
+    setValue("c4_5", "");
+    setValue("c4_6", "");
+    setValue("c5", "");
     setValue("c6", "");
   };
 
