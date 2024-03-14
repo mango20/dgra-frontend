@@ -9,7 +9,7 @@ import YesNo from "../../../../../Data/YesNo.json";
 import civilStatus from "../../../../../Data/civilStatus.json";
 import placeOfWork from "../../../../../Data/placeOfWork.json";
 import gradeYear from "../../../../../Data/gradeYear.json";
-
+import gender from "../../../../../Data/gender.json";
 import highestEducation from "../../../../../Data/highestEducation.json";
 import familyBelong from "../../../../../Data/familyBelong.json";
 import typeOfDisability from "../../../../../Data/typeOfDisability.json";
@@ -140,16 +140,16 @@ const AddHouseholdMember = ({
           className="formSelectModalAddHouseholdMember"
         />
         <Select
-          label="C.5 Is the member Deleted or Active?"
+          label="C.5 Is the member male or female?"
           errors={errors}
           defaultOptionLabel="Choose Option"
-          data={YesNo}
+          data={gender}
           {...register("c5")}
           className="formSelectModalAddHouseholdMember"
         />
         <CustomInput
           type="date"
-          label="What is the birth date of the family member?"
+          label="C.6 What is the birth date of the family member?"
           placeholder="Middle Name"
           className="formSelectModalAddHouseholdMember"
           errors={errors}
@@ -199,7 +199,7 @@ const AddHouseholdMember = ({
           className="formSelectModalAddHouseholdMember"
         />
         <Select
-          label="C.11 If Active, is she pregnant?"
+          label="C.11 If female, is she pregnant?"
           errors={errors}
           defaultOptionLabel="Choose Option"
           data={YesNo}
