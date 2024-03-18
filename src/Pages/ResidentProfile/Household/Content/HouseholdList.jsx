@@ -11,7 +11,7 @@ import { householdTC } from "../../../../Utils/TableColumns";
 import SearchFilter from "../../../../Utils/SearchFilter";
 import CustomTable from "../../../../Components/UI/Table/Table";
 import AddHouseholdMember from "./Action/AddHouseholdMember";
-import { getReq } from "../../../../Service/API";
+import { deleteReq, getReq, putReq } from "../../../../Service/API";
 import AddSurvey from "./Action/AddSurvey";
 import { useNavigate } from "react-router-dom";
 
@@ -41,11 +41,13 @@ const HouseholdList = ({
   const getActionsForRow = (row) => {
     const actions = [];
 
-    if (row.status === "Deleted") {
+    if (row.status === "Inactive") {
       actions.push({
         label: "Restore",
         icon: faRotate, // Add your specific icon here
         handler: () => {
+          console.log(row);
+          restoreHousehold(row._id);
           // Your restore logic goes here
         },
       });
@@ -82,7 +84,12 @@ const HouseholdList = ({
         label: "View Household Member",
         icon: faEye,
         handler: () => {
-          setViewHousehold(row);
+          console.log(row);
+          // setViewHousehold(row);
+
+          navigate(`/resident-profile/household-members`, {
+            state: row._id,
+          });
         },
       });
 
@@ -97,8 +104,17 @@ const HouseholdList = ({
       actions.push({
         label: "Delete Household",
         icon: faTrash,
-        handler: () => {
-          console.log("Deleted");
+        handler: async () => {
+          console.log("Deleted", row);
+          try {
+            const response = await deleteReq(`/api/household?_id=${row._id}`);
+
+            console.log(response);
+            alertMsg(response.message);
+            onItemAddedOrUpdated();
+          } catch (error) {
+            console.log("Error Deleting User", error);
+          }
         },
       });
     }
@@ -117,6 +133,20 @@ const HouseholdList = ({
       setHouseholds(response.household);
     } catch (error) {
       console.log("Error Get User", error);
+    }
+  };
+
+  const restoreHousehold = async (id) => {
+    try {
+      const response = await putReq(`/api/household`, {
+        _id: id,
+      });
+
+      console.log(response);
+      alertMsg(response.message);
+      onItemAddedOrUpdated();
+    } catch (error) {
+      console.log("Error Restoring User", error);
     }
   };
 

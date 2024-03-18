@@ -16,7 +16,7 @@ const deepSearch = (obj, term) => {
 const SearchFilter = (data, param) => {
   const searchTermLower = param.toLowerCase();
 
-  return data.filter((item) => deepSearch(item, searchTermLower));
+  return data?.filter((item) => deepSearch(item, searchTermLower));
 };
 
 export default SearchFilter;

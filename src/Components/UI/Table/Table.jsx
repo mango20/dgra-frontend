@@ -33,8 +33,8 @@ const CustomTable = ({
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const sortedData = data.slice().reverse();
-  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+  const sortedData = data?.slice().reverse();
+  const currentItems = sortedData?.slice(indexOfFirstItem, indexOfLastItem);
 
   if (isLoading) {
     return (
@@ -69,7 +69,8 @@ const CustomTable = ({
         </thead>
         <tbody>
           {currentItems.map((row, rowIndex) => {
-            const isDeleted = row.status === "Deleted";
+            const isDeleted =
+              row.status === "Deleted" || row.status === "Inactive";
             return (
               <tr
                 key={rowIndex}
