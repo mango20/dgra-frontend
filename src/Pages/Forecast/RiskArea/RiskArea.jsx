@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "../../../Components/Form/Select";
 import report from "../../../Data/SampleData/report.json";
 import PageContainer from "../../../Layout/Container/PageContainer";
@@ -6,6 +6,7 @@ import CustomContainer from "../../../Layout/Container/CustomContainer";
 import Card from "../../../Components/UI/Card/Card";
 import { a2Item } from "../../../Data/JsData/surveyItems";
 import { PieChart, Pie } from "recharts";
+import { getReq } from "../../../Service/API";
 
 const RiskArea = () => {
   const [selectedDisaster, setSelectedDisaster] = useState(null);
@@ -51,11 +52,24 @@ const RiskArea = () => {
     ];
   };
 
+  const [householdAtRisk, setHouseholdAtRisk] = useState(null);
+
+  const getHouseholdAtRisk = async () => {
+    try {
+      const response = await getReq("/api/typeOfrelief");
+      setHouseholdAtRisk([60, response.householdAtRisk, 70]);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getHouseholdAtRisk();
+  }, []);
+
   return (
     <PageContainer>
       <CustomContainer title={"Risk Area"} className="reports">
         <Card
-          data={report}
+          data={householdAtRisk}
           label={labels}
           hasPeso={false}
           borderColors={["purple", "lightgreen", "lightblue"]}

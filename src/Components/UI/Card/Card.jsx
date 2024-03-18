@@ -4,7 +4,7 @@ const Card = ({ data, hasPeso, label, borderColors }) => {
   return (
     <div className="cardContainer">
       <div className="cards">
-        {data.map((val, index) => {
+        {data?.map((val, index) => {
           return (
             <div
               key={index}

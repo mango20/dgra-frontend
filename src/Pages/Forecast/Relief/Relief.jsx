@@ -1,28 +1,17 @@
-import React, { useState } from "react";
-import landClassification from "../../../Data/landClassification.json";
-import report2 from "../../../Data/SampleData/report2.json";
+import React, { useEffect, useState } from "react";
 import PageContainer from "../../../Layout/Container/PageContainer";
 import CustomContainer from "../../../Layout/Container/CustomContainer";
 import Card from "../../../Components/UI/Card/Card";
 import Select from "../../../Components/Form/Select";
-import { b2Item, d10Item } from "../../../Data/JsData/surveyItems";
-import { Pie, PieChart } from "recharts";
+import { d10Item } from "../../../Data/JsData/surveyItems";
+import { Pie, PieChart, Cell, Tooltip, Legend } from "recharts";
+import { getReq } from "../../../Service/API";
+
 const Relief = () => {
   const [selectedRelief, setSelectedRelief] = useState(null);
-  const [pieChartData, setPieChartData] = useState([
-    {
-      name: "Water",
-      value: 30,
-    },
-    {
-      name: "Matches",
-      value: 40,
-    },
-    {
-      name: "Purok 2 At Risk",
-      value: 20,
-    },
-  ]);
+  const [reliefData, setReliefData] = useState(null);
+  const [pieChartData, setPieChartData] = useState([]);
+  const [householdTotal, setHouseholdDataTotal] = useState(null);
 
   const labels = [
     "Household with Preparednes Kit",
@@ -31,36 +20,67 @@ const Relief = () => {
 
   const handleReliefSelect = (selectedOption) => {
     setSelectedRelief(selectedOption);
-
-    // Fetch data based on the selected disaster type
-    const newData = fetchDataBasedOnDisaster(selectedOption);
-
-    // Update the Pie Chart data
+    const newData = fetchDataBasedOnDisaster(selectedOption.target.value);
     setPieChartData(newData);
   };
 
   const fetchDataBasedOnDisaster = (selectedRelief) => {
-    return [
-      {
-        name: labels[0],
-        value: Math.floor(Math.random() * 50) + 1,
-      },
-      {
-        name: labels[1],
-        value: Math.floor(Math.random() * 50) + 1,
-      },
-      {
-        name: labels[2],
-        value: Math.floor(Math.random() * 50) + 1,
-      },
-    ];
+    if (!reliefData) return [];
+
+    const reliefDataKeys = {
+      Water: "water",
+      "Food (canned goods, biscuits, bread)": [
+        { name: "Rice", valueKey: "rice" },
+        { name: "Noodles", valueKey: "noodles" },
+        { name: "Coffee", valueKey: "coffee" },
+        { name: "Canned Food", valueKey: "cannedFood" },
+      ],
+      "Matches/Lighter": "matches",
+      "Flashlight/Emergency Light": "flashlight",
+      "Candle ": "candle",
+      Whistle: "whistle",
+    };
+
+    let data = [];
+    if (Array.isArray(reliefDataKeys[selectedRelief])) {
+      reliefDataKeys[selectedRelief].forEach((item) => {
+        data.push({
+          name: item.name,
+          value: reliefData[item.valueKey],
+        });
+      });
+    } else {
+      data.push({
+        name: selectedRelief,
+        value: reliefData[reliefDataKeys[selectedRelief]],
+      });
+    }
+
+    return data;
   };
+
+  const getRelief = async () => {
+    try {
+      const response = await getReq("/api/typeOfrelief");
+      setHouseholdDataTotal([
+        response.householdWitPreparednessKit,
+        response.householdWithoutPreparednessKit,
+      ]);
+      setReliefData(response);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getRelief();
+  }, []);
+
+  const colors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
     <PageContainer>
       <CustomContainer title={"Relief"} className="reports">
         <Card
-          data={report2}
+          data={householdTotal}
           label={labels}
           hasPeso={false}
           borderColors={["purple", "lightgreen"]}
@@ -75,19 +95,40 @@ const Relief = () => {
           />
           {selectedRelief && (
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <PieChart width={300} height={350}>
-                <Pie
-                  data={pieChartData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  fill="#82ca9d"
-                  label
-                />
-              </PieChart>
+              {Array.isArray(pieChartData) &&
+              pieChartData.length > 0 &&
+              !pieChartData.some((entry) => entry.value === undefined) ? (
+                <PieChart width={350} height={350}>
+                  <Pie
+                    data={pieChartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    fill="#82ca9d"
+                    label
+                  >
+                    {pieChartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={colors[index % colors.length]}
+                      />
+                    ))}
+                    <Tooltip />
+                  </Pie>
+                  <Legend
+                    align="center"
+                    iconType="circle"
+                    layout="horizontal"
+                    verticalAlign="bottom"
+                    height={36}
+                  />
+                </PieChart>
+              ) : (
+                <p style={{ marginTop: "30px" }}>No data available</p>
+              )}
             </div>
           )}
         </div>
